@@ -4,9 +4,9 @@ public class ConsumerGoods extends Product{
 	
 	private String category;
 
-	public ConsumerGoods( String productName, String description, double unitPrice,
+	public ConsumerGoods(String productId, String productName, String description, double unitPrice,
 			String supplierName, String supplierAddress, String category) {
-		super(productName, description, unitPrice, supplierName, supplierAddress);
+		super(productId, productName, description, unitPrice, supplierName, supplierAddress);
 		this.category = category;
 	}
 

@@ -1,5 +1,5 @@
 package com.model;
-import com.util.ApplicationUtil;
+
 
 public class Product {
 
@@ -10,10 +10,10 @@ public class Product {
 	private String supplierName;
 	private String supplierAddress;
 	
-	public Product(String productName, String description, double unitPrice,
+	public Product(String productId, String productName, String description, double unitPrice,
 			String supplierName, String supplierAddress) {
 		super();
-		this.productId = "PROD"+new ApplicationUtil().generateUniqueId();
+		this.productId = productId;
 		this.productName = productName;
 		this.description = description;
 		this.unitPrice = unitPrice;

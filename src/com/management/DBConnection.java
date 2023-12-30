@@ -1,4 +1,4 @@
-package com.util;
+package com.management;
 import java.sql.*;
 import java.util.*;
 import java.io.*;
@@ -9,7 +9,7 @@ public class DBConnection {
 	private static Properties prop = new Properties();
 	
 	@SuppressWarnings("resource")
-	public static Connection getConnectio() throws ClassNotFoundException, SQLException {
+	public static Connection getConnection() throws ClassNotFoundException, SQLException {
 		try {
 			FileInputStream file = null;
 			file = new FileInputStream("C:\\Users\\wwwvs\\Desktop\\Eclipse SSRTIC\\SupplyChainManagementSystem\\src\\DB.properties");
@@ -22,12 +22,6 @@ public class DBConnection {
 			e.printStackTrace();
 		}
 		return con;
-	}
-	
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		getConnectio();
-	}
-	
-	
+	}	
 
 }
