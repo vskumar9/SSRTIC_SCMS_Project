@@ -1,5 +1,4 @@
 package com.model;
-import com.util.ApplicationUtil;
 
 public class Supplier {
 
@@ -8,9 +7,9 @@ public class Supplier {
 	private String contactPerson;
 	private String email;
 	private long phone;
-	public Supplier(String supplierName, String contactPerson, String email, long phone) {
+	public Supplier(String supplierId, String supplierName, String contactPerson, String email, long phone) {
 		super();
-		this.supplierId = "SUPP"+new ApplicationUtil().generateUniqueId();
+		this.supplierId = supplierId;
 		this.supplierName = supplierName;
 		this.contactPerson = contactPerson;
 		this.email = email;
@@ -49,6 +48,6 @@ public class Supplier {
 				+ contactPerson + ", email=" + email + ", phone=" + phone + "]";
 	}
 	
-
+//	"SUPP"+new ApplicationUtil().generateUniqueId(); -- > Generating supplierID;
 
 }

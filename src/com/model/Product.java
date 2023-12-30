@@ -59,6 +59,7 @@ public class Product {
 				+ description + ", unitPrice=" + unitPrice + ", supplierName=" + supplierName + ", supplierAddress="
 				+ supplierAddress + "]";
 	}
+	
 
 
 }
