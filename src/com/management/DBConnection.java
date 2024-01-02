@@ -16,7 +16,6 @@ public class DBConnection {
 			prop.load(file);
 			Class.forName(prop.getProperty("DB_DRIVER_CLASS"));
 			con = DriverManager.getConnection(prop.getProperty("DB_URL"), prop.getProperty("DB_USERNAME"), prop.getProperty("DB_PASSWORD"));
-			System.out.println("Successfully connect DB.");
 		}
 		catch(IOException e) {
 			e.printStackTrace();

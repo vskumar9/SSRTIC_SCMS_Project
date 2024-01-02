@@ -17,5 +17,12 @@ public class ConsumerGoods extends Product{
 	public void setCategory(String category) {
 		this.category = category;
 	}
+	
+	@Override
+	public String toString() {
+		super.toString();
+		System.out.printf("%15s",category);
+		return "";
+	}
 
 }

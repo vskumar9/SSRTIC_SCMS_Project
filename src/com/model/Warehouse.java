@@ -9,7 +9,7 @@ public class Warehouse {
 	private int capacity;
 	public Warehouse(String warehouseName, String location, int capacity) {
 		super();
-		this.warehouseId = "WAH"+new ApplicationUtil().generateUniqueId();
+//		this.warehouseId = "WAH"+new ApplicationUtil().generateUniqueId();
 		this.warehouseName = warehouseName;
 		this.location = location;
 		this.capacity = capacity;

@@ -10,7 +10,7 @@ public class Transportation {
 	private String shipmentStatus;
 	public Transportation(String orderId, String carrierId) {
 		super();
-		this.shipmentId = "SHP"+new ApplicationUtil().generateUniqueId();
+//		this.shipmentId = "SHP"+new ApplicationUtil().generateUniqueId();
 		this.orderId = orderId;
 		this.carrierId = carrierId;
 		this.shipmentStatus = "Pending...";

@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
+import java.sql.CallableStatement;
 import java.util.ArrayList;
 
 import com.model.Supplier;
@@ -38,25 +40,25 @@ public class SupplierManagement {
 		}
 	}
 		
-	public boolean updateSupplier(String supplierId, String supplierName, String contactPerson, String email, long phone ) throws ClassNotFoundException, SQLException	{
+	public boolean updateSupplier(Supplier supplier) throws ClassNotFoundException, SQLException	{
 		
 		try(
 				Connection con = DBConnection.getConnection();
 				PreparedStatement st = con.prepareStatement("UPDATE supplier SET supplierName = ?, contactPerson = ?, email = ?, phone = ? WHERE LOWER(supplierId) = LOWER(?)");
 			){
 			
-			st.setString(1,supplierName);
-			st.setString(2, contactPerson);
-			st.setString(3, email);
-			st.setLong(4, phone);
-			st.setString(5, supplierId);	
+			st.setString(1, supplier.getSupplierName());
+			st.setString(2, supplier.getContactPerson());
+			st.setString(3, supplier.getEmail());
+			st.setLong(4, supplier.getPhone());	
+			st.setString(5,supplier.getSupplierId());
 			
 			return st.executeUpdate()>0;
 			
 		}
 	}
 
-	public ArrayList<Supplier> searchSupplier() throws SQLException, ClassNotFoundException{
+	public ArrayList<Supplier> viewSuppliers() throws SQLException, ClassNotFoundException{
 		
 		ArrayList<Supplier> list = new ArrayList<Supplier>();
 		
@@ -105,5 +107,7 @@ public class SupplierManagement {
 		}
 		return list;
 	}
+	
+
 	
 }

@@ -1,11 +1,15 @@
 package com.management;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+
+import com.exception.InvalidProduct;
 import com.model.ConsumerGoods;
 import com.model.IndustrialGoods;
 import com.model.Product;
@@ -90,38 +94,40 @@ public class ProductManagement {
 		return false;
 	}
 	
-	public boolean updateProduct(String goodsType, String id, String productName, String description, double unitPrice,
-			String supplierName, String supplierAddress, String industryOrConsumer) throws ClassNotFoundException, SQLException {
+	public boolean updateProduct(Product productObj) throws ClassNotFoundException, SQLException {
 		
 		try(Connection con = DBConnection.getConnection();){
-			if("IndustrialGoods".equalsIgnoreCase(goodsType)) {
+			if(productObj instanceof IndustrialGoods) {
 				
 				try(PreparedStatement st = con.prepareStatement("UPDATE industrial_goods SET productName = ?, description = ?, unitPrice = ?, supplierName = ?, supplierAddress = ? industrialGoods = ? WHERE productId = ?"))
 				{
+					IndustrialGoods ig = (IndustrialGoods) productObj;
 					
-					st.setString(1, productName);
-					st.setString(2, description);
-					st.setDouble(3, unitPrice);
-					st.setString(4, supplierName);
-					st.setString(5, supplierAddress);
-					st.setString(6, industryOrConsumer);
-					st.setString(7, id);
+					st.setString(1, ig.getProductName());
+					st.setString(2, ig.getDescription());
+					st.setDouble(3, ig.getUnitPrice());
+					st.setString(4, ig.getSupplierName());
+					st.setString(5, ig.getSupplierAddress());
+					st.setString(6, ig.getIndustry());
+					st.setString(7, ig.getProductId());
 					
 					return st.executeUpdate() > 0;
 				}
 				
 				
-			} else if("ConsumerGoods".equalsIgnoreCase(goodsType)) {
+			} else if(productObj instanceof ConsumerGoods) {
 				
 				try(PreparedStatement st = con.prepareStatement("UPDATE consumer_goods SET productName = ?, description = ?, unitPrice = ?, supplierName = ?, supplierAddress = ? consumerGoods = ? WHERE productId = ?"))
 				{
-					st.setString(1, productName);
-					st.setString(2, description);
-					st.setDouble(3, unitPrice);
-					st.setString(4, supplierName);
-					st.setString(5, supplierAddress);
-					st.setString(6, industryOrConsumer);
-					st.setString(7, id);
+					ConsumerGoods cg = (ConsumerGoods) productObj;
+					
+					st.setString(1, cg.getProductName());
+					st.setString(2, cg.getDescription());
+					st.setDouble(3, cg.getUnitPrice());
+					st.setString(4, cg.getSupplierName());
+					st.setString(5, cg.getSupplierAddress());
+					st.setString(6, cg.getCategory());
+					st.setString(7, cg.getProductId());
 					return st.executeUpdate() > 0;
 				}
 				
@@ -131,9 +137,8 @@ public class ProductManagement {
 		
 		return false;
 	}
-	
-	
-	public ArrayList<Product> viewProducts(String goodsType) throws ClassNotFoundException, SQLException{
+		
+	public ArrayList<Product> viewProducts(String goodsType) throws ClassNotFoundException, SQLException, InvalidProduct{
 		
 		ArrayList<Product> list = new ArrayList<Product>();
 		
@@ -187,9 +192,8 @@ public class ProductManagement {
 		Collections.sort(list, Comparator.comparing(Product::getProductId));	
 		return list;
 	}
-
 	
-	public ArrayList<Product> serachByProductId(String prouctId) throws ClassNotFoundException, SQLException{
+	public ArrayList<Product> serachByProductId(String prouctId) throws ClassNotFoundException, SQLException, InvalidProduct{
 
 		ArrayList<Product> list = new ArrayList<Product>();
 
@@ -197,7 +201,7 @@ public class ProductManagement {
 		
 		try(Connection con = DBConnection.getConnection();){
 			
-			try(PreparedStatement st = con.prepareStatement("SELECT * FROM industrial_goods WHERE productId = ?"))
+			try(PreparedStatement st = con.prepareStatement("SELECT * FROM industrial_goods WHERE LOWER(productId) = LOWER(?)"))
 			{
 				st.setString(1, prouctId);
 				ResultSet rs = st.executeQuery();
@@ -206,7 +210,7 @@ public class ProductManagement {
 					list.add(new ProductService().parseProductDetails(productDetails));
 				}
 			}
-			try(PreparedStatement st = con.prepareStatement("SELECT * FROM consumer_goods WHERE productId = ?"))
+			try(PreparedStatement st = con.prepareStatement("SELECT * FROM consumer_goods WHERE LOWER(productId) = LOWER(?)"))
 			{
 				st.setString(1, prouctId);
 				ResultSet rs = st.executeQuery();
@@ -221,7 +225,7 @@ public class ProductManagement {
 		
 	}
 	
-	public ArrayList<Product> serachByProductName(String prouctName) throws ClassNotFoundException, SQLException{
+	public ArrayList<Product> serachByProductName(String prouctName) throws ClassNotFoundException, SQLException, InvalidProduct{
 
 		ArrayList<Product> list = new ArrayList<Product>();
 
@@ -253,8 +257,7 @@ public class ProductManagement {
 		
 	}
 	
-	
-	public ArrayList<Product> serachBySupplierName(String supplierName) throws ClassNotFoundException, SQLException{
+	public ArrayList<Product> serachBySupplierName(String supplierName) throws ClassNotFoundException, SQLException, InvalidProduct{
 
 		ArrayList<Product> list = new ArrayList<Product>();
 
@@ -288,5 +291,80 @@ public class ProductManagement {
 		
 	}
 	
+	public boolean searchSupplierByNameInProductAdd(String supplierName) throws SQLException, ClassNotFoundException{
+		
+		try(
+				Connection con = DBConnection.getConnection();
+				CallableStatement callableStatement = con.prepareCall("{ ? = call check_supplier_exists(?) }");			
+			){
+			
+			callableStatement.registerOutParameter(1, Types.BOOLEAN);
+            callableStatement.setString(2, supplierName);
+            callableStatement.execute();
+
+            return callableStatement.getBoolean(1);	
+				
+		}
+	}
+	
+	public ArrayList<Product> serachByIndustryOrCategory(String industryOrCategory) throws ClassNotFoundException, SQLException, InvalidProduct{
+
+		ArrayList<Product> list = new ArrayList<Product>();
+
+		
+		
+		try(Connection con = DBConnection.getConnection();){
+			
+			try(PreparedStatement st = con.prepareStatement("SELECT * FROM industrial_goods WHERE LOWER(productId) = LOWER(?)"))
+			{
+				st.setString(1, industryOrCategory);
+				ResultSet rs = st.executeQuery();
+				while(rs.next()) {
+					String productDetails = rs.getString(1)+":"+rs.getString(2)+":"+rs.getString(3)+":"+rs.getDouble(4)+":"+rs.getString(5)+":"+rs.getString(6)+":"+rs.getString(7)+":"+"IndustrialGoods";
+					list.add(new ProductService().parseProductDetails(productDetails));
+				}
+			}
+			try(PreparedStatement st = con.prepareStatement("SELECT * FROM consumer_goods WHERE LOWER(productId) = LOWER(?)"))
+			{
+				st.setString(1, industryOrCategory);
+				ResultSet rs = st.executeQuery();
+				while(rs.next()) {
+					String productDetails = rs.getString(1)+":"+rs.getString(2)+":"+rs.getString(3)+":"+rs.getDouble(4)+":"+rs.getString(5)+":"+rs.getString(6)+":"+rs.getString(7)+":"+"ConsumerGoods";
+					list.add(new ProductService().parseProductDetails(productDetails));
+				}
+			}
+		}
+		
+		return list;
+		
+	}
+	
 
 }
+
+
+/*
+
+.....SUPPLIER IS EXISTS OR NOT CHECKING SQL PROCEDURE STORAGE.....
+DELIMITER //
+
+-- Drop the existing function if it exists
+DROP FUNCTION IF EXISTS check_supplier_exists //
+
+CREATE FUNCTION check_supplier_exists(supplierName VARCHAR(255)) RETURNS BOOLEAN
+BEGIN
+    DECLARE supplierCount INT;
+
+    -- Check if the supplier with the given name exists (case-insensitive)
+    SELECT COUNT(*) INTO supplierCount
+    FROM suppliers
+    WHERE LOWER(supplier_name) = LOWER(supplierName);
+
+    -- Return true if the supplier exists, false otherwise
+    RETURN supplierCount > 0;
+END //
+
+DELIMITER ;
+ 
+
+*/

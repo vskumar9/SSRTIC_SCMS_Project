@@ -17,5 +17,14 @@ public class IndustrialGoods extends Product{
 	public void setIndustry(String industry) {
 		this.industry = industry;
 	}
+
+	@Override
+	public String toString() {
+		super.toString();
+		System.out.printf("%15s",industry);
+		return "";
+	}
+	
+	
 	
 }

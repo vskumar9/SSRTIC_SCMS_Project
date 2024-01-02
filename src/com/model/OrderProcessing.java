@@ -13,7 +13,7 @@ public class OrderProcessing {
 	private String status;
 	public OrderProcessing(String customerId, double totalAmount) {
 		super();
-		this.orderId = "ORD"+new ApplicationUtil().generateUniqueId();
+//		this.orderId = "ORD"+new ApplicationUtil().generateUniqueId();
 		this.customerId = customerId;
 		this.orderDate = new Date();
 		this.totalAmount = totalAmount;

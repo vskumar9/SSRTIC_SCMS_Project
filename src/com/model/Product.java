@@ -55,9 +55,8 @@ public class Product {
 	}
 	@Override
 	public String toString() {
-		return "ProductManagement [productId=" + productId + ", productName=" + productName + ", description="
-				+ description + ", unitPrice=" + unitPrice + ", supplierName=" + supplierName + ", supplierAddress="
-				+ supplierAddress + "]";
+		System.out.printf("%-15s%-15s%-15s%-15.2f%-15s%-30s", productId, productName, description, unitPrice, supplierName, supplierAddress);
+		return "";
 	}
 	
 
