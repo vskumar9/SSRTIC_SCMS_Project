@@ -40,7 +40,7 @@ public class SupplierService {
 		
 	}
 	
-	public boolean updateProduct(String supplierDetails) throws ClassNotFoundException, SQLException {
+	public boolean updateSupplier(String supplierDetails) throws ClassNotFoundException, SQLException {
 		try {
 			if(util.validateSupplierId(supplierDetails)) return new SupplierManagement().updateSupplier(parseSupplierDetails(supplierDetails));
 		} catch(InvalidEmailId | InvalidPhoneNumber | InvalidSupplierId e) {
@@ -50,19 +50,22 @@ public class SupplierService {
 		
 	}
 	
-	public ArrayList<Supplier> viewProducts() throws ClassNotFoundException, SQLException, InvalidProduct{
+	public ArrayList<Supplier> viewSuppliers() throws ClassNotFoundException, SQLException{
 		return new SupplierManagement().viewSuppliers();			
 	}
 	
-	public ArrayList<Supplier> searchByProductId(String supplierId) throws ClassNotFoundException, SQLException, InvalidProduct{
-		return new SupplierManagement().searchSupplierById(supplierId);
+	public ArrayList<Supplier> searchBySupplierId(String supplierId) throws ClassNotFoundException, SQLException{
+		try{
+			if(util.validateSupplierId(supplierId))return new SupplierManagement().searchSupplierById(supplierId);
+		} catch(InvalidSupplierId e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
 	}
 	
-	public ArrayList<Supplier> searchByProductName(String supplierName) throws ClassNotFoundException, SQLException, InvalidProduct{
+	public ArrayList<Supplier> searchBySupplierName(String supplierName) throws ClassNotFoundException, SQLException{
 		return new SupplierManagement().searchSupplierByName(supplierName);
 	}
-	
-	
 	
 	public Supplier parseSupplierDetails(String supplierDetails) throws ClassNotFoundException, SQLException, InvalidEmailId, InvalidPhoneNumber {
 		
