@@ -3,9 +3,8 @@ package com.client;
 import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.exception.InvalidProduct;
+
 import com.exception.InvalidSupplierId;
-import com.service.ProductService;
 import com.service.SupplierService;
 import com.util.ApplicationUtil;
 
