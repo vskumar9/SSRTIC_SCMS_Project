@@ -6,7 +6,7 @@ public class UserInterface {
 
     public static void main(String[] args) {
     	// call userInterface method
-    	System.out.println("----------WELCOME TO MAIN DASHBOARD----------");
+    	System.out.println("----------WELCOME TO ADMIN DASHBOARD----------");
     	userInterface();
     }
     
@@ -16,7 +16,7 @@ public class UserInterface {
     		try {
     			int choice;
     			do {
-    				System.out.print("1. Products\n2. Suppliers\nEnter your choice: ");
+    				System.out.print("1. Products\n2. Suppliers\n3. Exit\nEnter your choice: ");
     				choice = sc.nextInt();
     				
     				switch(choice) {
@@ -28,15 +28,17 @@ public class UserInterface {
     					// Call the supplierUserInterface class method supplier
     					new SupplierUerInterface().supplier();
     					break;	
+    				case 3:
+    					System.out.println("Closing Application.......\nThank you.");
+    					return;
+    					
     				}
     			}while(choice!=6);    			
     		} catch(Exception e) {
     			System.out.println();
     			System.out.println("Something error. Please try again.....");
     			System.out.println();
-    		} finally {
     			userInterface();
-    		}
-		}
+    		} 		}
     }
 }
