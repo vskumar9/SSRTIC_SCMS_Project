@@ -1,6 +1,4 @@
 package com.model;
-import com.util.*;
-import java.util.*;
 
 public class Transportation {
 

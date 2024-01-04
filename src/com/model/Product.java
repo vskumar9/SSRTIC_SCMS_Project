@@ -7,21 +7,21 @@ public class Product {
 	private String productName;
 	private String description;
 	private double unitPrice;
-	private String supplierName;
-	private String supplierAddress;
+	private String supplierInfo;
 	
-	public Product(String productId, String productName, String description, double unitPrice,
-			String supplierName, String supplierAddress) {
+	public Product(String productId, String productName, String description, double unitPrice, String supplierInfo) {
 		super();
 		this.productId = productId;
 		this.productName = productName;
 		this.description = description;
 		this.unitPrice = unitPrice;
-		this.supplierName = supplierName;
-		this.supplierAddress = supplierAddress;
+		this.supplierInfo = supplierInfo;
 	}
 	public String getProductId() {
 		return productId;
+	}
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 	public String getProductName() {
 		return productName;
@@ -41,21 +41,16 @@ public class Product {
 	public void setUnitPrice(double unitPrice) {
 		this.unitPrice = unitPrice;
 	}
-	public String getSupplierName() {
-		return supplierName;
+	public String getSupplierInfo() {
+		return supplierInfo;
 	}
-	public void setSupplierName(String supplierName) {
-		this.supplierName = supplierName;
+	public void setSupplierInfo(String supplierInfo) {
+		this.supplierInfo = supplierInfo;
 	}
-	public String getSupplierAddress() {
-		return supplierAddress;
-	}
-	public void setSupplierAddress(String supplierAddress) {
-		this.supplierAddress = supplierAddress;
-	}
-	@Override
+	
+	@Override 
 	public String toString() {
-		System.out.printf("%-15s%-15s%-15s%-15.2f%-15s%-30s", productId, productName, description, unitPrice, supplierName, supplierAddress);
+		System.out.printf("%-15s%-15s%-15s%-15.2f%-15s%-30s", productId, productName, description, unitPrice, supplierInfo);
 		return "";
 	}
 	

@@ -1,5 +1,4 @@
 package com.model;
-import com.util.ApplicationUtil;
 
 public class Warehouse {
 

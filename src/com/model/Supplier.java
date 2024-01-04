@@ -13,7 +13,7 @@ public class Supplier {
 		this.supplierName = supplierName;
 		this.contactPerson = contactPerson;
 		this.email = email;
-		this.phone = phone;
+		this.phone = phone; 
 	}
 	public String getSupplierId() {
 		return supplierId;
@@ -44,8 +44,8 @@ public class Supplier {
 	}
 	@Override
 	public String toString() {
-		return "SupplierManagement [supplierId=" + supplierId + ", supplierName=" + supplierName + ", contactPerson="
-				+ contactPerson + ", email=" + email + ", phone=" + phone + "]";
+		System.out.printf("%-25s%-30s%-30s%-30s%-15s", supplierId, supplierName, contactPerson, email, phone);
+		return "";
 	}
 	
 //	"SUPP"+new ApplicationUtil().generateUniqueId(); -- > Generating supplierID;

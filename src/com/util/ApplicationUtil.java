@@ -1,7 +1,5 @@
 package com.util;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.exception.InvalidEmailId;
 import com.exception.InvalidPhoneNumber;
@@ -9,6 +7,7 @@ import com.exception.InvalidProduct;
 import com.exception.InvalidSupplierId;
 import com.exception.InvaliedSupplierName;
 import com.management.ProductManagement;
+import com.management.SupplierManagement;
 
 public class ApplicationUtil {
 	
@@ -27,19 +26,29 @@ public class ApplicationUtil {
 	public boolean supplierValidateName(String supplierName) throws InvaliedSupplierName, ClassNotFoundException, SQLException {
 		
 		if(new ProductManagement().searchSupplierByNameInProductAdd(supplierName)) {return true;}
-		throw new InvaliedSupplierName(supplierName+"Supplier is not exits");
+		throw new InvaliedSupplierName(supplierName+"Supplier is not exists");
+	}
+	
+	public boolean emailValidate(String email) throws ClassNotFoundException, SQLException, InvalidEmailId {
+		if(new SupplierManagement().searchEmail(email))return true;
+		throw new InvalidEmailId("Already exists email id: "+email);
+	}
+	
+	public boolean phoneNumberValidate(long phone) throws ClassNotFoundException, SQLException, InvalidEmailId {
+		if(new SupplierManagement().searchPhoneNumber(phone)) return true;
+		throw new InvalidEmailId("Already exists phone number: "+phone);
 	}
 		
 	public boolean validateProductId(String productDetails) throws ClassNotFoundException, SQLException, InvalidProduct {
 		String[] product = productDetails.split(":");
-		if(product[0].matches("^PROD\\d{15}$")) {return true;};
-		throw new InvalidProduct("Product id: "+product[0]+" is not exits");
+		if(product[0].matches("^PROD\\d{13,15}$")) {return true;};
+		throw new InvalidProduct("Product id: "+product[0]+" is not exists");
 	}
 	
 	public boolean validateSupplierId(String supplierDetails) throws ClassNotFoundException, SQLException, InvalidSupplierId {
 		String[] supplier = supplierDetails.split(":");
-		if(supplier[0].matches("^SUPP\\d{15}$")) {return true;};
-		throw new InvalidSupplierId("Supplier id: "+supplier[0]+" is not exits");
+		if(supplier[0].matches("^SUPP\\d{13,15}$")) {return true;};
+		throw new InvalidSupplierId("Supplier id: "+supplier[0]+" is not exists");
 	}
 	
 

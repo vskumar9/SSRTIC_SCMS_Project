@@ -22,40 +22,38 @@ public class ProductManagement {
 		try(Connection con = DBConnection.getConnection();){
 			if(productObj instanceof IndustrialGoods) {
 				try(
-						PreparedStatement st = con.prepareStatement("INSERT INTO industrial_goods VALUES ( ?, ?, ?, ?, ?, ?, ?)");
+						PreparedStatement pro = con.prepareStatement("INSERT INTO products(productId, productName, productDescription, unitPrice, supplierId, industryId) VALUES ( ?, ?, ?, ?, ?, ?)");
 					){
 					
 					IndustrialGoods ig = (IndustrialGoods)productObj;
 					
-					st.setString(1, ig.getProductId());
-					st.setString(2, ig.getProductName());
-					st.setString(3, ig.getDescription());
-					st.setDouble(4, ig.getUnitPrice());
-					st.setString(5, ig.getSupplierName());
-					st.setString(6, ig.getSupplierAddress());
-					st.setString(7, ig.getIndustry());
+					pro.setString(1, ig.getProductId());
+					pro.setString(2, ig.getProductName());
+					pro.setString(3, ig.getDescription());
+					pro.setDouble(4, ig.getUnitPrice());
+					pro.setString(5, ig.getSupplierInfo());
+					pro.setString(6, ig.getIndustryId());
 					
-					return st.executeUpdate() > 0;
+					return pro.executeUpdate() > 0;
 					
 				}
 				
 			}
 			else if(productObj instanceof ConsumerGoods) {
 				try(
-						PreparedStatement st = con.prepareStatement("INSERT INTO consumer_goods VALUES ( ?, ?, ?, ?, ?, ?, ?)");
+						PreparedStatement pro = con.prepareStatement("INSERT INTO products(productId, productName, productDescription, unitPrice, supplierId, consumerId) VALUES ( ?, ?, ?, ?, ?, ?)");
 					){
 					
-					ConsumerGoods ig = (ConsumerGoods)productObj;
+					ConsumerGoods cg = (ConsumerGoods)productObj;
 					
-					st.setString(1, ig.getProductId());
-					st.setString(2, ig.getProductName());
-					st.setString(3, ig.getDescription());
-					st.setDouble(4, ig.getUnitPrice());
-					st.setString(5, ig.getSupplierName());
-					st.setString(6, ig.getSupplierAddress());
-					st.setString(7, ig.getCategory());
+					pro.setString(1, cg.getProductId());
+					pro.setString(2, cg.getProductName());
+					pro.setString(3, cg.getDescription());
+					pro.setDouble(4, cg.getUnitPrice());
+					pro.setString(5, cg.getSupplierInfo());
+					pro.setString(6, cg.getConsumerId());
 					
-					return st.executeUpdate() > 0;
+					return pro.executeUpdate() > 0;
 					
 				}
 				
@@ -72,7 +70,7 @@ public class ProductManagement {
 		try(Connection con = DBConnection.getConnection();){
 			if("IndustrialGoods".equalsIgnoreCase(goodsType)) {
 				
-				try(PreparedStatement st = con.prepareStatement("DELETE FROM industrial_goods WHERE productId = ?"))
+				try(PreparedStatement st = con.prepareStatement("DELETE FROM products WHERE LOWER(productId) = LOWER(?)"))
 				{
 					st.setString(1, id);
 					return st.executeUpdate() > 0;
@@ -81,7 +79,7 @@ public class ProductManagement {
 				
 			} else if("ConsumerGoods".equalsIgnoreCase(goodsType)) {
 				
-				try(PreparedStatement st = con.prepareStatement("DELETE FROM consumer_goods WHERE productId = ?"))
+				try(PreparedStatement st = con.prepareStatement("DELETE FROM products WHERE LOWER(productId) = LOWER(?)"))
 				{
 					st.setString(1, id);
 					return st.executeUpdate() > 0;
@@ -99,36 +97,34 @@ public class ProductManagement {
 		try(Connection con = DBConnection.getConnection();){
 			if(productObj instanceof IndustrialGoods) {
 				
-				try(PreparedStatement st = con.prepareStatement("UPDATE industrial_goods SET productName = ?, description = ?, unitPrice = ?, supplierName = ?, supplierAddress = ? industrialGoods = ? WHERE productId = ?"))
+				try(PreparedStatement pro = con.prepareStatement("UPDATE products SET productName = ?, description = ?, unitPrice = ?, supplierId = ?, industryId = ? WHERE LOWER(productId) = LOWER(?)"))
 				{
 					IndustrialGoods ig = (IndustrialGoods) productObj;
 					
-					st.setString(1, ig.getProductName());
-					st.setString(2, ig.getDescription());
-					st.setDouble(3, ig.getUnitPrice());
-					st.setString(4, ig.getSupplierName());
-					st.setString(5, ig.getSupplierAddress());
-					st.setString(6, ig.getIndustry());
-					st.setString(7, ig.getProductId());
+					pro.setString(1, ig.getProductName());
+					pro.setString(2, ig.getDescription());
+					pro.setDouble(3, ig.getUnitPrice());
+					pro.setString(4, ig.getSupplierInfo());
+					pro.setString(5, ig.getIndustryId());
+					pro.setString(6, ig.getProductId());
 					
-					return st.executeUpdate() > 0;
+					return pro.executeUpdate() > 0;
 				}
 				
 				
 			} else if(productObj instanceof ConsumerGoods) {
 				
-				try(PreparedStatement st = con.prepareStatement("UPDATE consumer_goods SET productName = ?, description = ?, unitPrice = ?, supplierName = ?, supplierAddress = ? consumerGoods = ? WHERE productId = ?"))
+				try(PreparedStatement pro = con.prepareStatement("UPDATE products SET productName = ?, description = ?, unitPrice = ?, supplierId = ?, consumerId = ? WHERE LOWER(productId) = LOWER(?)"))
 				{
 					ConsumerGoods cg = (ConsumerGoods) productObj;
 					
-					st.setString(1, cg.getProductName());
-					st.setString(2, cg.getDescription());
-					st.setDouble(3, cg.getUnitPrice());
-					st.setString(4, cg.getSupplierName());
-					st.setString(5, cg.getSupplierAddress());
-					st.setString(6, cg.getCategory());
-					st.setString(7, cg.getProductId());
-					return st.executeUpdate() > 0;
+					pro.setString(1, cg.getProductName());
+					pro.setString(2, cg.getDescription());
+					pro.setDouble(3, cg.getUnitPrice());
+					pro.setString(4, cg.getSupplierInfo());
+					pro.setString(5, cg.getConsumerId());
+					pro.setString(6, cg.getProductId());
+					return pro.executeUpdate() > 0;
 				}
 				
 			}
@@ -339,7 +335,10 @@ public class ProductManagement {
 		
 	}
 	
-
+//	public String checkingIndustry(String industry) {
+//		try(Connection con = DBConnection.getConnection();)
+//	}
+	
 }
 
 

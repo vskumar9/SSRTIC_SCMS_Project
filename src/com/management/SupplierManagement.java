@@ -4,14 +4,13 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
-import java.sql.CallableStatement;
 import java.util.ArrayList;
 
 import com.model.Supplier;
 
 public class SupplierManagement {
 	
+	//Helper method to add new supplier details
 	public boolean addSupplier(Supplier supplierDetails) throws ClassNotFoundException, SQLException {
 		
 		try(
@@ -28,6 +27,7 @@ public class SupplierManagement {
 		}
 	}
 	
+	// Helper method to delete already exists supplier details
 	public boolean deleteSupplier(String supplierId) throws ClassNotFoundException, SQLException {
 		
 		try(
@@ -39,7 +39,8 @@ public class SupplierManagement {
 			return st.executeUpdate()>0;
 		}
 	}
-		
+	
+	// Helper method to update already exists supplier details
 	public boolean updateSupplier(Supplier supplier) throws ClassNotFoundException, SQLException	{
 		
 		try(
@@ -58,6 +59,7 @@ public class SupplierManagement {
 		}
 	}
 
+	// Helper method to retrieve the all supplier details
 	public ArrayList<Supplier> viewSuppliers() throws SQLException, ClassNotFoundException{
 		
 		ArrayList<Supplier> list = new ArrayList<Supplier>();
@@ -74,6 +76,7 @@ public class SupplierManagement {
 		return list;
 	}
 	
+	// Helper method to retrieve the supplier details specific supplier id 
 	public ArrayList<Supplier> searchSupplierById(String supplierId) throws SQLException, ClassNotFoundException{
 		
 		ArrayList<Supplier> list = new ArrayList<Supplier>();
@@ -91,6 +94,7 @@ public class SupplierManagement {
 		return list;
 	}
 	
+	// Helper method to retrieve the supplier details specific supplier name
 	public ArrayList<Supplier> searchSupplierByName(String supplierName) throws SQLException, ClassNotFoundException{
 		
 		ArrayList<Supplier> list = new ArrayList<Supplier>();
@@ -106,6 +110,30 @@ public class SupplierManagement {
 			}	
 		}
 		return list;
+	}
+	
+	// Helper method to return boolean values opposite of already exists email id exists or not
+	public boolean searchEmail(String email) throws SQLException, ClassNotFoundException {
+		try (
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM supplier WHERE LOWER(email) = LOWER(?)");				
+			){
+			st.setString(1, email);
+			ResultSet rs = st.executeQuery();
+			return !rs.next();
+		}
+	}
+
+	// Helper method to return boolean values opposite of already exists phone number exists or not
+	public boolean searchPhoneNumber(long phone) throws SQLException, ClassNotFoundException {
+		try (
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM supplier WHERE phone = ?");				
+			){
+			st.setLong(1, phone);
+			ResultSet rs = st.executeQuery();
+			return !rs.next();
+		}
 	}
 	
 

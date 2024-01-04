@@ -73,6 +73,7 @@ public class ProductService {
 			if(productArray.length == 8) {
 				if(util.supplierValidateName(productArray[4])) {
 					if("IndustrialGoods".equals(productArray[7])) {
+						
 						IndustrialGoods product = new IndustrialGoods(productArray[0], productArray[1], productArray[2], Double.parseDouble(productArray[3]), productArray[4],productArray[5], productArray[6]);
 						return product;
 					} 
@@ -89,6 +90,12 @@ public class ProductService {
 		return null;
 	}
 	
+	
+//	public String checkingIndustry(String industry) {
+//		return new ProductManagement().
+//	}
+	
+	
 	public String generateUniqueId() {
 	       return "PROD"+generateSCMId();
 	    }
@@ -98,7 +105,9 @@ public class ProductService {
 	    int randomSuffix = (int) (Math.random() * 1000); // Add a random suffix for uniqueness
 	    return timestamp + String.format("%03d", randomSuffix);
 	    }
-
+	
+	
+	
 
 
 }

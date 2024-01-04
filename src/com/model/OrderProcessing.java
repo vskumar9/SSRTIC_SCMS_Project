@@ -2,8 +2,6 @@ package com.model;
 
 import java.util.Date;
 
-import com.util.ApplicationUtil;
-
 public class OrderProcessing {
 
 	private String orderId;
