@@ -134,9 +134,8 @@ public class SupplierUerInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
-		} finally {
 			searchSupplier();
-		}
+		} 
 		
 	}
 
