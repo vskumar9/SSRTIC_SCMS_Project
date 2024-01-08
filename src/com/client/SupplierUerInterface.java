@@ -15,7 +15,7 @@ public class SupplierUerInterface {
 	ApplicationUtil util = new ApplicationUtil();
 	
 	// Helper method to dashboard of supplier interface
-	public void supplier() {
+	public void supplierSection() {
 		
 		try {
 			char supplierChoice;
@@ -69,7 +69,7 @@ public class SupplierUerInterface {
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
 			sc.nextLine();
-			supplier();
+			supplierSection();
 		}
 	}
 

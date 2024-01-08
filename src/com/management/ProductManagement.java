@@ -136,13 +136,14 @@ public class ProductManagement {
 		}
 	}
 	
-	public String searchProduct(String productName) throws ClassNotFoundException, SQLException {
+	public String searchProduct(String productName, double unitPrice) throws ClassNotFoundException, SQLException {
 		
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement pro = con.prepareStatement("SELECT productId FROM products WHERE LOWER(productName) = LOWER(?)")
+				PreparedStatement pro = con.prepareStatement("SELECT productId FROM products WHERE LOWER(productName) = LOWER(?) and unitPrice = ?")
 			){
 			pro.setString(1, productName);
+			pro.setDouble(2, unitPrice);
 			ResultSet rs = pro.executeQuery();
 			if(rs.next())
 				return rs.getString(1);
@@ -227,7 +228,6 @@ public class ProductManagement {
 		
 	}
 	
-	
 	public ArrayList<Product> viewProductInfo(String goodsType) throws ClassNotFoundException, SQLException, InvalidProduct{
 		
 		ArrayList<Product> list = new ArrayList<Product>();
@@ -241,6 +241,9 @@ public class ProductManagement {
 							+ "    productDescription,\r\n"
 							+ "    unitPrice,\r\n"
 							+ "    supplierName,\r\n"
+							+ "    email ,\r\n"
+							+ "    phone,\r\n"
+							+ "    industryId,\r\n"
 							+ "    industry,\r\n"
 							+ "    industry_description\r\n"
 							+ "FROM \r\n"
@@ -255,7 +258,8 @@ public class ProductManagement {
 				){
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+rs.getString("supplierName")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
+					String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
 				
@@ -269,6 +273,9 @@ public class ProductManagement {
 							+ "    productDescription,\r\n"
 							+ "    unitPrice,\r\n"
 							+ "    supplierName,\r\n"
+							+ "    email ,\r\n"
+							+ "    phone,\r\n"
+							+ "    consumerId,\r\n"
 							+ "    consumerGoods,\r\n"
 							+ "    consumer_description\r\n"
 							+ "FROM \r\n"
@@ -283,7 +290,8 @@ public class ProductManagement {
 				){
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+rs.getString("supplierName")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
+					String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
 			}
@@ -298,6 +306,9 @@ public class ProductManagement {
 							+ "    productDescription,\r\n"
 							+ "    unitPrice,\r\n"
 							+ "    supplierName,\r\n"
+							+ "    email ,\r\n"
+							+ "    phone,\r\n"
+							+ "    industryId,\r\n"
 							+ "    industry,\r\n"
 							+ "    industry_description\r\n"
 							+ "FROM \r\n"
@@ -312,7 +323,8 @@ public class ProductManagement {
 				){
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+rs.getString("supplierName")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
+					String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
 				
@@ -329,6 +341,9 @@ public class ProductManagement {
 							+ "    productDescription,\r\n"
 							+ "    unitPrice,\r\n"
 							+ "    supplierName,\r\n"
+							+ "    email ,\r\n"
+							+ "    phone,\r\n"
+							+ "    consumerId,\r\n"
 							+ "    consumerGoods,\r\n"
 							+ "    consumer_description\r\n"
 							+ "FROM \r\n"
@@ -343,7 +358,8 @@ public class ProductManagement {
 				){
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+rs.getString("supplierName")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
+					String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
 			}
@@ -354,8 +370,7 @@ public class ProductManagement {
 
 	}
 	
-	
-	public ArrayList<Product> searchByProductIdInfo(String productInfoId) throws ClassNotFoundException, SQLException, InvalidProduct{
+	public ArrayList<Product> searchProductInfoByProductInfoId(String productInfoId) throws ClassNotFoundException, SQLException{
 
 		ArrayList<Product> list = new ArrayList<Product>();
 		
@@ -369,6 +384,7 @@ public class ProductManagement {
 					+ "    s.supplierName,\r\n"
 					+ "    s.email ,\r\n"
 					+ "    s.phone,\r\n"
+					+ "    industryId,\r\n"
 					+ "    ig.industry,\r\n"
 					+ "    ig.industry_description\r\n"
 					+ "FROM \r\n"
@@ -387,7 +403,7 @@ public class ProductManagement {
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
 					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
 			}
@@ -399,6 +415,7 @@ public class ProductManagement {
 					+ "    s.supplierName,\r\n"
 					+ "    s.email ,\r\n"
 					+ "    s.phone,\r\n"
+					+ "    cg.consumerId,\r\n"
 					+ "    cg.consumerGoods,\r\n"
 					+ "    cg.consumer_description\r\n"
 					+ "FROM \r\n"
@@ -417,16 +434,15 @@ public class ProductManagement {
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
 					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productDetails = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
-					list.add(new ProductService().parseProductDetails(productDetails));
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
+					list.add(new ProductService().parseProductDetails(productInfo));
 					}
 				}
 			}
 		return list;
 		}
-		
-		
-	public ArrayList<Product> searchProductInfoByProductName(String productName) throws ClassNotFoundException, SQLException, InvalidProduct{
+			
+	public ArrayList<Product> searchProductInfoByProductName(String productName) throws ClassNotFoundException, SQLException {
 
 		ArrayList<Product> list = new ArrayList<Product>();
 		
@@ -440,6 +456,7 @@ public class ProductManagement {
 					+ "    s.supplierName,\r\n"
 					+ "    s.email,\r\n"
 					+ "    s.phone,\r\n"
+					+ "    industryId,\r\n"
 					+ "    ig.industry,\r\n"
 					+ "    ig.industry_description\r\n"
 					+ "FROM \r\n"
@@ -458,7 +475,7 @@ public class ProductManagement {
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
 					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
 			}
@@ -470,6 +487,7 @@ public class ProductManagement {
 					+ "    s.supplierName,\r\n"
 					+ "    s.email ,\r\n"
 					+ "    s.phone,\r\n"
+					+ "    cg.consumerId,\r\n"
 					+ "    cg.consumerGoods,\r\n"
 					+ "    cg.consumer_description\r\n"
 					+ "FROM \r\n"
@@ -488,15 +506,15 @@ public class ProductManagement {
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
 					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productDetails = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
-					list.add(new ProductService().parseProductDetails(productDetails));
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
+					list.add(new ProductService().parseProductDetails(productInfo));
 					}
 				}
 			}
 		return list;
 		}
 		
-	public ArrayList<Product> searchProductInfoBysupplierName(String supplierName) throws ClassNotFoundException, SQLException, InvalidProduct{
+	public ArrayList<Product> searchProductInfoBysupplierName(String supplierName) throws ClassNotFoundException, SQLException {
 
 		ArrayList<Product> list = new ArrayList<Product>();
 		
@@ -510,6 +528,7 @@ public class ProductManagement {
 					+ "    s.supplierName,\r\n"
 					+ "    s.email,\r\n"
 					+ "    s.phone,\r\n"
+					+ "    industryId,\r\n"
 					+ "    ig.industry,\r\n"
 					+ "    ig.industry_description\r\n"
 					+ "FROM \r\n"
@@ -528,7 +547,7 @@ public class ProductManagement {
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
 					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
 			}
@@ -540,6 +559,7 @@ public class ProductManagement {
 					+ "    s.supplierName,\r\n"
 					+ "    s.email ,\r\n"
 					+ "    s.phone,\r\n"
+					+ "    cg.consumerId,\r\n"
 					+ "    cg.consumerGoods,\r\n"
 					+ "    cg.consumer_description\r\n"
 					+ "FROM \r\n"
@@ -558,15 +578,15 @@ public class ProductManagement {
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
 					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productDetails = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
-					list.add(new ProductService().parseProductDetails(productDetails));
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
+					list.add(new ProductService().parseProductDetails(productInfo));
 					}
 				}
 			}
 		return list;
 		}
 		
-	public ArrayList<Product> searchProductInfoByIndustry(String industry) throws ClassNotFoundException, SQLException, InvalidProduct{
+	public ArrayList<Product> searchProductInfoByIndustry(String industry) throws ClassNotFoundException, SQLException {
 
 		ArrayList<Product> list = new ArrayList<Product>();
 		
@@ -580,6 +600,7 @@ public class ProductManagement {
 						+ "    s.supplierName,\r\n"
 						+ "    s.email,\r\n"
 						+ "    s.phone,\r\n"
+						+ "    industryId,\r\n"
 						+ "    ig.industry,\r\n"
 						+ "    ig.industry_description\r\n"
 						+ "FROM \r\n"
@@ -599,15 +620,14 @@ public class ProductManagement {
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
 					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
+					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
 				return list;
 			}
 		}	
-
 	
-	public ArrayList<Product> searchProductInfoByConsumer(String consumer) throws ClassNotFoundException, SQLException, InvalidProduct{
+	public ArrayList<Product> searchProductInfoByConsumer(String consumer) throws ClassNotFoundException, SQLException {
 
 		ArrayList<Product> list = new ArrayList<Product>();
 		
@@ -621,6 +641,7 @@ public class ProductManagement {
 						+ "    s.supplierName,\r\n"
 						+ "    s.email ,\r\n"
 						+ "    s.phone,\r\n"
+						+ "    cg.consumerId,\r\n"
 						+ "    cg.consumerGoods,\r\n"
 						+ "    cg.consumer_description\r\n"
 						+ "FROM \r\n"
@@ -640,8 +661,8 @@ public class ProductManagement {
 			ResultSet rs = st.executeQuery();
 			while(rs.next()) {
 				String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-				String productDetails = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
-				list.add(new ProductService().parseProductDetails(productDetails));
+				String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
+				list.add(new ProductService().parseProductDetails(productInfo));
 				}
 				return list;
 			}

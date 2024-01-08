@@ -1,12 +1,13 @@
 package com.util;
 import java.sql.SQLException;
 
+import com.exception.InvalidException;
 import com.exception.InvalidEmailId;
 import com.exception.InvalidPhoneNumber;
 import com.exception.InvalidProduct;
 import com.exception.InvalidSupplierId;
-import com.exception.InvaliedSupplierName;
-import com.management.ProductManagement;
+//import com.exception.InvaliedSupplierName;
+//import com.management.ProductManagement;
 import com.management.SupplierManagement;
 
 public class ApplicationUtil {
@@ -22,12 +23,16 @@ public class ApplicationUtil {
 		throw new InvalidPhoneNumber("Invalid Phone number: "+phoneNumber);
 	}
 	
-	
-	public boolean supplierValidateName(String supplierName) throws InvaliedSupplierName, ClassNotFoundException, SQLException {
-		
-		if(new ProductManagement().searchSupplierByNameInProductAdd(supplierName)) {return true;}
-		throw new InvaliedSupplierName(supplierName+"Supplier is not exists");
+	public boolean validProductInfoId(String productInfoId) throws InvalidException {
+		if(productInfoId.matches("^PROI\\d{13,15}$")) return true;
+		throw new InvalidException("Product Inforamtion Id: "+productInfoId+" is invalid.");
 	}
+	
+//	public boolean supplierValidateName(String supplierName) throws InvaliedSupplierName, ClassNotFoundException, SQLException {
+//		
+//		if(new ProductManagement().searchSupplierByNameInProductAdd(supplierName)) {return true;}
+//		throw new InvaliedSupplierName(supplierName+"Supplier is not exists");
+//	}
 	
 	public boolean emailValidate(String email) throws ClassNotFoundException, SQLException, InvalidEmailId {
 		if(new SupplierManagement().searchEmail(email))return true;
@@ -51,6 +56,12 @@ public class ApplicationUtil {
 		throw new InvalidSupplierId("Supplier id: "+supplier[0]+" is not exists");
 	}
 	
+	
+	public boolean validateProductinfoId(String productDetails) throws ClassNotFoundException, SQLException, InvalidProduct {
+		String[] product = productDetails.split(":");
+		if(product[0].matches("^PROI\\d{13,15}$")) {return true;};
+		throw new InvalidProduct("Product id: "+product[0]+" is not exists");
+	}
 
 
 }

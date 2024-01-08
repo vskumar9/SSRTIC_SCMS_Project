@@ -22,11 +22,11 @@ public class UserInterface {
     				switch(choice) {
     				case 1:
     					// Call the productUserInterface class method product
-    					new ProductUserInterface().product();
+    					new ProductUserInterface().productSection();
     					break;
     				case 2:
     					// Call the supplierUserInterface class method supplier
-    					new SupplierUerInterface().supplier();
+    					new SupplierUerInterface().supplierSection();
     					break;	
     				case 3:
     					System.out.println("Closing Application.......\nThank you.");
