@@ -153,7 +153,174 @@ public class ProductService {
 	
 	
 	
+	public String addProduct(String productDetails) {
+		
+		try {
+			String[] product = productDetails.split(":");
+			if(product.length == 3) {
+				String productId = "PROD"+generateUniqueId();
+				if(pm.searchProduct(product[0], Double.valueOf(product[2])) == null) {
+					pm.addProduct(productId, product[0], product[1], Double.valueOf(product[2]));
+					return "Product Id: "+productId;					
+				}
+				else {
+					System.out.println("Product is already exists.");
+				}
+			}			
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 	
+	public boolean deleteProduct(String productId) {
+		try {
+			if(util.validateProductId(productId) && !pm.searchProductInfoByProductId(productId)) {
+				return pm.deleteProduct(productId);
+			}
+			else {
+				System.out.println("The product couldn't be deleted. You first delete the product from the product information as it is in the product information list.");
+			}
+		} catch(ClassNotFoundException | SQLException | InvalidProduct e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public boolean updateProduct(String productDetails) {
+		try{
+			String[] product = productDetails.split(":");
+			if(util.validateProductId(product[0]) && product.length == 4) {
+				pm.updateProduct(product[0], product[1], product[2], Double.valueOf(product[3]));
+				return true;
+			}
+			System.out.println("Invalid Product Details.");
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		} catch(NumberFormatException | InvalidProduct e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public ArrayList<String> viewProduct(){
+		try {
+			return pm.viewProduct();
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e);
+		}
+		return null;
+	}
+
+	public String addIndustry(String industry, String desc) {
+		try {
+			if(pm.searchIndustry(industry) == null) {
+				String industryId = "INST"+generateUniqueId();
+				if(new ProductManagement().addIndustry(industryId, industry, desc)) {
+					return industryId;
+				}							
+			}
+			System.out.println(industry+" industry is already exists.");
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
+	public boolean deleteIndustry(String industryId) {
+		
+		try {
+			if(util.validIndustryId(industryId) && !pm.searchProductInfoByIndustryId(industryId)) {
+				return pm.deleteIndustry(industryId);
+			}
+			else {
+				System.out.println("The industry couldn't be deleted. You first delete the industry from the product information as it is in the product information list.");
+			}
+		} catch(ClassNotFoundException | SQLException | InvalidException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+		
+	}
+	
+	public boolean updateIndustry(String industryDetails) {
+		try {
+			String[] industry = industryDetails.split(":");
+			if(util.validIndustryId(industry[0]) && industry.length == 3) {
+				pm.updateIndustry(industry[0], industry[1], industry[3]);
+				return true;
+			}
+			System.out.println("Invalid industry details.");
+		} catch(ClassNotFoundException | SQLException | InvalidException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public ArrayList<String> viewIndustry(){
+		try {
+			return pm.viewIndustry();
+			
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
+	public String addConsumer(String consumer, String desc) {
+		try {
+			if(pm.searchConsumer(consumer) == null) {
+				String consumerId = "CONS"+generateUniqueId();
+				if(new ProductManagement().addConsumer(consumerId, consumer, desc)) {
+					return consumerId;				
+			}
+			}
+			System.out.println(consumer+" consumer is already exists.");
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
+	public boolean deleteConsumer(String consumerId) {
+		
+		try {
+			if(util.validConsumerId(consumerId) && !pm.searchProductInfoByConsumerId(consumerId)) {
+				return pm.deleteConsumer(consumerId);
+			}
+			else {
+				System.out.println("The consumer couldn't be deleted. You first delete the consumer from the product information as it is in the product information list.");
+			}
+		} catch(ClassNotFoundException | SQLException | InvalidException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+		
+	}
+	
+	public boolean updateConsumer(String consumerDetails) {
+		try {
+			String[] consumer = consumerDetails.split(":");
+			if(util.validIndustryId(consumer[0]) && consumer.length == 3) {
+				pm.updateIndustry(consumer[0], consumer[1], consumer[3]);
+				return true;
+			}
+			System.out.println("Invalid consumer details.");
+		} catch(ClassNotFoundException | SQLException | InvalidException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public ArrayList<String> viewConsumer(){
+		try {
+			return pm.viewConsumer();
+			
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
 	
 	
  	public Product parseProductDetails(String productDetails) throws ClassNotFoundException, SQLException {
@@ -171,30 +338,6 @@ public class ProductService {
 						}
 					}
 			return null;
-	}
-	
-	public String addIndustry(String industry, String desc) {
-		try {
-			String industryId = "INST"+generateUniqueId();
-			if(new ProductManagement().addIndustry(industryId, industry, desc)) {
-				return industryId;
-			}			
-		} catch(ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		return null;
-	}
-	
-	public String addConsumer(String consumer, String desc) {
-		try {
-			String consumerId = "INST"+generateUniqueId();
-			if(new ProductManagement().addConsumer(consumerId, consumer, desc)) {
-				return consumerId;
-			}			
-		} catch(ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		return null;
 	}
 	
 	

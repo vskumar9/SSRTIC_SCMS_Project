@@ -155,7 +155,7 @@ public class ProductManagement {
 		
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement pro = con.prepareStatement("SELECT industryId FROM products WHERE LOWER(industry) = LOWER(?)")
+				PreparedStatement pro = con.prepareStatement("SELECT industryId FROM industrial_goods WHERE LOWER(industry) = LOWER(?)")
 			){
 			pro.setString(1, industry);
 			ResultSet rs = pro.executeQuery();
@@ -169,7 +169,7 @@ public class ProductManagement {
 		
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement pro = con.prepareStatement("SELECT consumerId FROM products WHERE LOWER(consumerGoods) = LOWER(?)")
+				PreparedStatement pro = con.prepareStatement("SELECT consumerId FROM consumer_goods WHERE LOWER(consumerGoods) = LOWER(?)")
 			){
 			pro.setString(1, consumer);
 			ResultSet rs = pro.executeQuery();
@@ -179,8 +179,52 @@ public class ProductManagement {
 		}
 	}
 	
+	public ArrayList<String> viewProduct() throws ClassNotFoundException, SQLException{
+		ArrayList<String> list = new ArrayList<String>();
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement pro = con.prepareStatement("SELECT * FROM products");
+			){
+			ResultSet rs = pro.executeQuery();
+			while(rs.next()) {
+				String product = "%-30s%-30s%-30s%-30.2f%"+":"+rs.getString(1)+":"+rs.getString(2)+":"+rs.getString(3)+":"+rs.getString(4);
+				list.add(product);
+			}
+		}
+		return list;
+	}
 	
+	public ArrayList<String> viewIndustry() throws ClassNotFoundException, SQLException{
+		ArrayList<String> list = new ArrayList<String>();
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement in = con.prepareStatement("SELECT * FROM industrial_goods");
+			){
+			ResultSet rs = in.executeQuery();
+			while(rs.next()) {
+				String industry = "%-30s%-30s%-30s"+":"+rs.getString(1)+":"+rs.getString(2)+":"+rs.getString(3);
+				list.add(industry);
+			}
+		}
+		return list;
+		
+	}
 	
+	public ArrayList<String> viewConsumer() throws ClassNotFoundException, SQLException{
+		ArrayList<String> list = new ArrayList<String>();
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement in = con.prepareStatement("SELECT * FROM consumer_goods");
+			){
+			ResultSet rs = in.executeQuery();
+			while(rs.next()) {
+				String industry = "%-30s%-30s%-30s"+":"+rs.getString(1)+":"+rs.getString(2)+":"+rs.getString(3);
+				list.add(industry);
+			}
+		}
+		return list;
+		
+	}
 	
 	public boolean addProductInfo(String productInfoId, String productId, String supplierId, String industryId, String consumerId) throws ClassNotFoundException, SQLException {
 		
@@ -600,7 +644,7 @@ public class ProductManagement {
 						+ "    s.supplierName,\r\n"
 						+ "    s.email,\r\n"
 						+ "    s.phone,\r\n"
-						+ "    industryId,\r\n"
+						+ "    ig.industryId,\r\n"
 						+ "    ig.industry,\r\n"
 						+ "    ig.industry_description\r\n"
 						+ "FROM \r\n"
@@ -667,8 +711,64 @@ public class ProductManagement {
 				return list;
 			}
 		}	
- 
 	
+	public boolean searchProductInfoByProductId(String productId) throws ClassNotFoundException, SQLException {
+
+		try(Connection con = DBConnection.getConnection();){
+		
+			try(PreparedStatement st = con.prepareStatement("SELECT \r\n"
+					+ "    *\r\n"
+					+ "FROM \r\n"
+					+ "    products_information \r\n"
+					+ "WHERE \r\n"
+					+ "    productId= '?'\r\n"
+					+ "");)
+			{
+				st.setString(1, productId);
+				ResultSet rs = st.executeQuery();
+				return rs.next();
+			}
+		}
+	}
+	
+	public boolean searchProductInfoByIndustryId(String industryId) throws ClassNotFoundException, SQLException {
+
+		try(Connection con = DBConnection.getConnection();){
+		
+			try(PreparedStatement st = con.prepareStatement("SELECT \r\n"
+					+ "    *\r\n"
+					+ "FROM \r\n"
+					+ "    products_information \r\n"
+					+ "WHERE \r\n"
+					+ "    industryId= '?'\r\n"
+					+ "");)
+			{
+				st.setString(1, industryId);
+				ResultSet rs = st.executeQuery();
+				return rs.next();
+			}
+		}
+	}
+		
+	public boolean searchProductInfoByConsumerId(String industryId) throws ClassNotFoundException, SQLException {
+
+		try(Connection con = DBConnection.getConnection();){
+		
+			try(PreparedStatement st = con.prepareStatement("SELECT \r\n"
+					+ "    *\r\n"
+					+ "FROM \r\n"
+					+ "    products_information \r\n"
+					+ "WHERE \r\n"
+					+ "    consumerId= '?'\r\n"
+					+ "");)
+			{
+				st.setString(1, industryId);
+				ResultSet rs = st.executeQuery();
+				return rs.next();
+			}
+		}
+	}
+ 
 }
 
 

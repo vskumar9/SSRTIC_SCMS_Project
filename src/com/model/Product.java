@@ -50,7 +50,7 @@ public class Product {
 	
 	@Override 
 	public String toString() {
-		System.out.printf("%-15s%-15s%-15s%-15.2f%-15s%-50s", productId, productName, description, unitPrice, supplierInfo);
+		System.out.printf("%-30s%-30s%-30s%-30.2f%-30s%-50s", productId, productName, description, unitPrice, supplierInfo);
 		return "";
 	}
 	

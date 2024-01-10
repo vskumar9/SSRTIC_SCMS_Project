@@ -28,6 +28,16 @@ public class ApplicationUtil {
 		throw new InvalidException("Product Inforamtion Id: "+productInfoId+" is invalid.");
 	}
 	
+	public boolean validIndustryId(String industryId) throws InvalidException {
+		if(industryId.matches("^INST\\d{13,15}")) return true;
+		throw new InvalidException("Industry Id: "+industryId+" is invalid.");
+	}
+	
+	public boolean validConsumerId(String consumerId) throws InvalidException {
+		if(consumerId.matches("^CONS\\d{13,15}")) return true;
+		throw new InvalidException("Consumer Id: "+consumerId+" is invalid.");
+	}
+	
 //	public boolean supplierValidateName(String supplierName) throws InvaliedSupplierName, ClassNotFoundException, SQLException {
 //		
 //		if(new ProductManagement().searchSupplierByNameInProductAdd(supplierName)) {return true;}
@@ -56,12 +66,13 @@ public class ApplicationUtil {
 		throw new InvalidSupplierId("Supplier id: "+supplier[0]+" is not exists");
 	}
 	
-	
 	public boolean validateProductinfoId(String productDetails) throws ClassNotFoundException, SQLException, InvalidProduct {
 		String[] product = productDetails.split(":");
 		if(product[0].matches("^PROI\\d{13,15}$")) {return true;};
 		throw new InvalidProduct("Product id: "+product[0]+" is not exists");
 	}
+	
+	
 
 
 }

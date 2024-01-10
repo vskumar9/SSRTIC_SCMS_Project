@@ -50,23 +50,7 @@ public class ProductUserInterface {
 		
 	}
 	
-	
-	
-	private void product() {
-		
-	}
-	
-	private void industry() {
-		
-	}
-	
-	private void consumer() {
-		
-	}
-	
-	
-	
- 	private void productInfo() {
+	private void productInfo() {
 		char productInfoChoice;
 		do {
 			System.out.print("--------------PRODUCT INFORMATION(PRODUCT, SUPPLIER, AND INDUSTRY/CONSUMER) SECTION--------------\nA. Add Product Information\nB. Delete Product Information\nC. Update Product Information\nD. Show Producs Information\nE. Search Product Information\nF. <- Go to Main Section");
@@ -105,6 +89,508 @@ public class ProductUserInterface {
 			
 		}while(productInfoChoice != 'F' || productInfoChoice != 'f');
 		
+		
+		
+	}
+	
+	
+	
+	private void product() {
+		
+		char productChoice;
+		do {
+			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Product \nB. Delete Product \nC. Update Product \nD. Show Producs \nE. Search Product \nF. <- Go to Main Section");
+			System.out.print("\nEnter your option: ");
+			productChoice = sc.next().charAt(0);
+			
+			switch(productChoice) {
+			case 'A':
+			case 'a':
+				addProduct();
+				break;
+			case 'B':
+			case 'b':
+				deleteProduct();
+				break;
+			case 'C':
+			case 'c':
+				updateProduct();
+				break;
+			case 'D':
+			case 'd':
+				viewProduct();
+				break;
+			case 'E':
+			case 'e':
+				System.out.println("-----Complete Product Section-----");
+				return;
+			default:
+				System.out.println("Your choice is wrong. ");
+				
+			}
+			
+		}while(productChoice != 'E' || productChoice != 'e');
+		
+		
+		
+	}
+	
+	private void industry() {
+		char industryChoice;
+		do {
+			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Product \nB. Delete Product \nC. Update Product \nD. Show Producs \nE. Search Product \nF. <- Go to Main Section");
+			System.out.print("\nEnter your option: ");
+			industryChoice = sc.next().charAt(0);
+			
+			switch(industryChoice) {
+			case 'A':
+			case 'a':
+				addIndustry();
+				break;
+			case 'B':
+			case 'b':
+				deleteIndustry();
+				break;
+			case 'C':
+			case 'c':
+				updateIndustry();
+				break;
+			case 'D':
+			case 'd':
+				viewIndustry();
+				break;
+			case 'E':
+			case 'e':
+				System.out.println("-----Complete Industry Section-----");
+				return;
+			default:
+				System.out.println("Your choice is wrong. ");
+				
+			}
+			
+		}while(industryChoice != 'E' || industryChoice != 'e');
+		
+		
+	}
+	
+	private void consumer() {
+		char consumerChoice;
+		do {
+			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Product \nB. Delete Product \nC. Update Product \nD. Show Producs \nE. Search Product \nF. <- Go to Main Section");
+			System.out.print("\nEnter your option: ");
+			consumerChoice = sc.next().charAt(0);
+			
+			switch(consumerChoice) {
+			case 'A':
+			case 'a':
+				addConsumer();
+				break;
+			case 'B':
+			case 'b':
+				deleteConsumer();
+				break;
+			case 'C':
+			case 'c':
+				updateConsumer();
+				break;
+			case 'D':
+			case 'd':
+				viewConsumer();
+				break;
+			case 'E':
+			case 'e':
+				System.out.println("-----Complete Industry Section-----");
+				return;
+			default:
+				System.out.println("Your choice is wrong. ");
+				
+			}
+			
+		}while(consumerChoice != 'E' || consumerChoice != 'e');
+		
+	}
+	
+	
+	private void viewConsumer() {
+		
+		System.out.printf("%-30s%-30s%-30s","Consumer ID", "Consumer Name", "Description");
+		System.out.println();
+		System.out.println("------------------------------------------------------------------------------------------------------------------------------");
+		service.viewConsumer().forEach(e -> {
+			String[] consumer = e.split(":");
+			System.out.printf(consumer[0],consumer[1], consumer[2], consumer[3]);
+			System.out.println();
+		});
+	}
+	
+	private void updateConsumer() {
+		
+		try {
+			System.out.println("--------------UPDATE CONSUMER DETAILS--------------");
+			System.out.print("Enter the number of categories: ");
+			int noOfCategories = sc.nextInt();
+			sc.nextLine();
+			while(noOfCategories<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfCategories = sc.nextInt();
+				sc.nextLine();
+			}
+			
+			System.out.println("Enter the consumer details formate is : \n[CONSUMER_ID:CONSUMER_NAME:CONSUMER_DESCRIPTION]");
+			int success = 0;
+			
+			for(int i = 0; i < noOfCategories; i++) {
+				String consumerDetails;
+				do {
+					consumerDetails = sc.nextLine();
+				}while(consumerDetails.isEmpty());
+				if(service.updateConsumer(consumerDetails)) 
+					success++;
+				}
+			
+			if(success==0) System.out.println("categories/category not deleted....");
+			else if(success==1) System.out.println("Successfully "+success+" category deleted.");
+			else if(success>1) System.out.println("Successfully "+success+" categories deleted.");
+			
+			} catch(Exception e) { 
+				System.out.println();
+				System.out.println("Something error. Please try again.....");
+				System.out.println();
+				updateProduct();
+		}
+		
+	}
+	
+	private void deleteConsumer() {
+		try {
+			System.out.println("--------------DELETE CONSUMER DETAILS--------------");
+			System.out.print("Enter the number of categories: ");
+			int noOfCategories = sc.nextInt();
+			sc.nextLine();
+			while(noOfCategories<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfCategories = sc.nextInt();
+				sc.nextLine();
+			}
+			int success = 0;
+			
+			for(int i = 0; i < noOfCategories; i++) {
+				String consumerId;
+				do {
+					consumerId = sc.nextLine();
+				}while(consumerId.isEmpty());
+				
+				if(service.deleteConsumer(consumerId)) {
+					success++;
+				}
+			}
+			
+			if(success==0) System.out.println("categories/category not deleted....");
+			else if(success==1) System.out.println("Successfully "+success+" category deleted.");
+			else if(success>1) System.out.println("Successfully "+success+" categories deleted.");
+			
+			
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			deleteProduct();
+		}
+	}
+	
+	private void addConsumer() {
+		
+		try {
+			System.out.println("--------------ADDING CONSUMER DETAILS--------------");
+			System.out.print("Enter the number of categories: ");
+			int noOfCategories = sc.nextInt();
+			sc.nextLine();
+			while(noOfCategories<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfCategories = sc.nextInt();
+				sc.nextLine();
+			}
+			
+			System.out.println("Enter the consumer details formate is : \n[CONSUMER_NAME:CONSUMER_DESCRIPTION]");
+			int success = 0;
+			
+			for(int i = 0; i < noOfCategories; i++) {
+				String consumerDetails;
+				do {
+					consumerDetails = sc.nextLine();
+				}while(consumerDetails.isEmpty());
+				String[] consumer = consumerDetails.split(":");
+				String industry = service.addConsumer(consumer[0], consumer[1]);
+				if(!industry.isEmpty()) {
+					System.out.println("Industry Id: "+industry);
+					success++;
+				}
+			}
+			
+			if(success==0) System.out.println("Industries/Industry not added....");
+			else if(success==1) System.out.println("Successfully "+success+" Industry added.");
+			else if(success>1) System.out.println("Successfully "+success+" Industries added.");
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			addProduct();
+		}
+		
+		
+	}
+	
+	private void viewIndustry() {
+		
+		System.out.printf("%-30s%-30s%-30s","Industry ID", "Industry Name", "Description");
+		System.out.println();
+		System.out.println("------------------------------------------------------------------------------------------------------------------------------");
+		service.viewIndustry().forEach(e -> {
+			String[] industry = e.split(":");
+			System.out.printf(industry[0],industry[1], industry[2], industry[3]);
+			System.out.println();
+		});
+	}
+	
+	private void updateIndustry() {
+		
+		try {
+			System.out.println("--------------UPDATE INDUSTRY DETAILS--------------");
+			System.out.print("Enter the number of industries: ");
+			int noOfIndustries = sc.nextInt();
+			sc.nextLine();
+			while(noOfIndustries<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfIndustries = sc.nextInt();
+				sc.nextLine();
+			}
+			
+			System.out.println("Enter the industry details formate is : \n[INDUSTRY_ID:INDUSTRY_NAME:INDUSTRY_DESCRIPTION]");
+			int success = 0;
+			
+			for(int i = 0; i < noOfIndustries; i++) {
+				String industryDetails;
+				do {
+					industryDetails = sc.nextLine();
+				}while(industryDetails.isEmpty());
+				if(service.updateIndustry(industryDetails)) 
+					success++;
+				}
+			
+			if(success==0) System.out.println("industries/industry not deleted....");
+			else if(success==1) System.out.println("Successfully "+success+" industry deleted.");
+			else if(success>1) System.out.println("Successfully "+success+" industries deleted.");
+			
+			} catch(Exception e) { 
+				System.out.println();
+				System.out.println("Something error. Please try again.....");
+				System.out.println();
+				updateProduct();
+		}
+		
+	}
+	
+	private void deleteIndustry() {
+		try {
+			System.out.println("--------------DELETE INDUSTRY DETAILS--------------");
+			System.out.print("Enter the number of industries: ");
+			int noOfIndustries = sc.nextInt();
+			sc.nextLine();
+			while(noOfIndustries<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfIndustries = sc.nextInt();
+				sc.nextLine();
+			}
+			int success = 0;
+			
+			for(int i = 0; i < noOfIndustries; i++) {
+				String industryId;
+				do {
+					industryId = sc.nextLine();
+				}while(industryId.isEmpty());
+				
+				if(service.deleteIndustry(industryId)) {
+					success++;
+				}
+			}
+			
+			if(success==0) System.out.println("industries/industry not deleted....");
+			else if(success==1) System.out.println("Successfully "+success+" industry deleted.");
+			else if(success>1) System.out.println("Successfully "+success+" industries deleted.");
+			
+			
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			deleteProduct();
+		}
+	}
+	
+	private void addIndustry() {
+		
+		try {
+			System.out.println("--------------ADDING INDUSTRY DETAILS--------------");
+			System.out.print("Enter the number of industries: ");
+			int noOfIndustry = sc.nextInt();
+			sc.nextLine();
+			while(noOfIndustry<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfIndustry = sc.nextInt();
+				sc.nextLine();
+			}
+			
+			System.out.println("Enter the industry details formate is : \n[INDUSTRY_NAME:INDUSTRY_DESCRIPTION]");
+			int success = 0;
+			
+			for(int i = 0; i < noOfIndustry; i++) {
+				String industryDetails;
+				do {
+					industryDetails = sc.nextLine();
+				}while(industryDetails.isEmpty());
+				String[] industrial = industryDetails.split(":");
+				String industry = service.addIndustry(industrial[0], industrial[1]);
+				if(!industry.isEmpty()) {
+					System.out.println("Industry Id: "+industry);
+					success++;
+				}
+			}
+			
+			if(success==0) System.out.println("Industries/Industry not added....");
+			else if(success==1) System.out.println("Successfully "+success+" Industry added.");
+			else if(success>1) System.out.println("Successfully "+success+" Industries added.");
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			addProduct();
+		}
+		
+		
+	}
+	
+	
+	private void viewProduct() {
+			
+		System.out.printf("%-30s%-30s%-30s%-30s","Product ID", "Product Name", "Description", "Unit Price");
+		System.out.println();
+		System.out.println("------------------------------------------------------------------------------------------------------------------------------");
+		service.viewProduct().forEach(e -> {
+			String[] product = e.split(":");
+			System.out.printf(product[0],product[1], product[2], product[3], product[4]);
+			System.out.println();
+		});	
+	}
+	
+	private void updateProduct() {
+		
+		try {
+			System.out.println("--------------UPDATE PRODUCT DETAILS--------------");
+			System.out.print("Enter the number of products: ");
+			int noOfProducts = sc.nextInt();
+			sc.nextLine();
+			while(noOfProducts<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfProducts = sc.nextInt();
+				sc.nextLine();
+			}
+			
+			System.out.println("Enter the product details formate is : \n[PRODUCT_ID:PRODUCT_NAME:PRODUCT_DESCRIPTION:UNIT_PRICE]");
+			int successProducts = 0;
+			
+			for(int i = 0; i < noOfProducts; i++) {
+				String productDetails;
+				do {
+					productDetails = sc.nextLine();
+				}while(productDetails.isEmpty());
+				if(service.updateProduct(productDetails)) 
+					successProducts++;
+				}
+			if(successProducts==0) System.out.println("products/product not updated....");
+			else if(successProducts==1) System.out.println("Successfully "+successProducts+" product updated.");
+			else if(successProducts>1) System.out.println("Successfully "+successProducts+" products updated.");
+			} catch(Exception e) { 
+				System.out.println();
+				System.out.println("Something error. Please try again.....");
+				System.out.println();
+				updateProduct();
+		}
+		
+	}
+	
+	private void deleteProduct() {
+		try {
+			System.out.println("--------------DELETE PRODUCT DETAILS--------------");
+			System.out.print("Enter the number of products: ");
+			int noOfProducts = sc.nextInt();
+			sc.nextLine();
+			while(noOfProducts<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfProducts = sc.nextInt();
+				sc.nextLine();
+			}
+			int successProducts = 0;
+			
+			for(int i = 0; i < noOfProducts; i++) {
+				String productId;
+				do {
+					productId = sc.nextLine();
+				}while(productId.isEmpty());
+				
+				if(service.deleteProduct(productId)) {
+					successProducts++;
+				}
+			}
+			
+			if(successProducts==0) System.out.println("products/product not deleted....");
+			else if(successProducts==1) System.out.println("Successfully "+successProducts+" product deleted.");
+			else if(successProducts>1) System.out.println("Successfully "+successProducts+" products deleted.");
+			
+			
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			deleteProduct();
+		}
+	}
+	
+	private void addProduct() {
+		try {
+			System.out.println("--------------ADDING PRODUCT DETAILS--------------");
+			System.out.print("Enter the number of products: ");
+			int noOfProducts = sc.nextInt();
+			sc.nextLine();
+			while(noOfProducts<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfProducts = sc.nextInt();
+				sc.nextLine();
+			}
+			
+			System.out.println("Enter the product details formate is : \n[PRODUCT_NAME:PRODUCT_DESCRIPTION:UNIT_PRICE]");
+			int successProducts = 0;
+			
+			for(int i = 0; i < noOfProducts; i++) {
+				String productDetails;
+				do {
+					productDetails = sc.nextLine();
+				}while(productDetails.isEmpty());
+				String productInfo = service.addProduct(productDetails);
+				if(!productInfo.isEmpty()) {
+					System.out.println(productInfo);
+					successProducts++;
+				}
+			}
+			
+			if(successProducts==0) System.out.println("products/product not added....");
+			else if(successProducts==1) System.out.println("Successfully "+successProducts+" product added.");
+			else if(successProducts>1) System.out.println("Successfully "+successProducts+" products added.");
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			addProduct();
+		}
 		
 		
 	}
@@ -470,4 +956,6 @@ public class ProductUserInterface {
 	}
 	
 
+
+	
 }
