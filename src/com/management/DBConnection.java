@@ -15,6 +15,7 @@ public class DBConnection {
 	    String tableName2 = "industrial_goods";
 	    String tableName3 = "consumer_goods";
 	    String tableName4 = "products";
+	    String tableName5 = "products_information";
 
 	    try (FileInputStream file = new FileInputStream("src/DB.properties")) {
 	        prop.load(file);
@@ -29,7 +30,7 @@ public class DBConnection {
 	        String dbUrl = prop.getProperty("DB_URL") + "/" + databaseName; // Correct concatenation
 	        con = DriverManager.getConnection(dbUrl, prop.getProperty("DB_USERNAME"), prop.getProperty("DB_PASSWORD"));
 	        
-	        if (!tableExists(con, tableName1) || !tableExists(con, tableName2) || !tableExists(con, tableName3) || !tableExists(con, tableName4)) {
+	        if (!tableExists(con, tableName1) || !tableExists(con, tableName2) || !tableExists(con, tableName3) || !tableExists(con, tableName4) || !tableExists(con, tableName5)) {
 	            // Create tables if they do not exist
 //	        	System.out.println("TABLES CREATING...");
 	            createTables(con);
@@ -97,7 +98,8 @@ public class DBConnection {
 	    	try {
 	    		statement.executeUpdate("CREATE TABLE industrial_goods(\r\n"
 	    				+ "industryId varchar(25) PRIMARY KEY,\r\n"
-	    				+ "industry varchar(50) UNIQUE\r\n"
+	    				+ "industry varchar(50) UNIQUE,\r\n"
+	    				+ "industry_description varchar(255) \r\n"
 	    				+ ")");	    		
 	    	} catch(SQLException e) {
 	    		
@@ -105,7 +107,8 @@ public class DBConnection {
 	    	try {
 	    		statement.executeUpdate("CREATE TABLE consumer_goods(\r\n"
 	    				+ "consumerId varchar(25) PRIMARY KEY,\r\n"
-	    				+ "consumerGoods varchar(50) UNIQUE\r\n"
+	    				+ "consumerGoods varchar(50) UNIQUE,\r\n"
+	    				+ "consumer_description varchar(255) \r\n"
 	    				+ ")");	    		
 	    	} catch(SQLException e) {
 	    		
@@ -115,14 +118,24 @@ public class DBConnection {
 	    				+ "productId varchar(25) PRIMARY KEY, \r\n"
 	    				+ "productName varchar(50) NOT NULL, \r\n"
 	    				+ "productDescription varchar(255), \r\n"
-	    				+ "unitPrice double NOT NULL DEFAULT 0,\r\n"
+	    				+ "unitPrice double DEFAULT 0\r\n"
+	    				+ ")");
+	    	} catch(SQLException e) {
+	    		
+	    	}
+	    	
+	    	try {
+	    		statement.executeUpdate("CREATE TABLE products_information(\r\n"
+	    				+ "productInfoId varchar(25),\r\n"
+	    				+ "productId varchar(25),\r\n"
 	    				+ "supplierId varchar(25),\r\n"
 	    				+ "industryId varchar(25),\r\n"
 	    				+ "consumerId varchar(25),\r\n"
-	    				+ "CONSTRAINT FK_supplier FOREIGN KEY (supplierId) REFERENCEs supplier(supplierId) ,\r\n"
-	    				+ "CONSTRAINT FK_industrialGoods FOREIGN KEY (industryId) REFERENCEs industrial_goods(industryId),\r\n"
-	    				+ "CONSTRAINT FK_consumerGoods FOREIGN KEY (consumerId) REFERENCEs consumer_goods(consumerId)\r\n"
-	    				+ ");");	    		
+	    				+ "CONSTRAINT FK_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT,\r\n"
+	    				+ "CONSTRAINT FK_supplier FOREIGN KEY (supplierId) REFERENCES supplier(supplierId) ON DELETE RESTRICT,\r\n"
+	    				+ "CONSTRAINT FK_industrialGoods FOREIGN KEY (industryId) REFERENCES industrial_goods(industryId) ON DELETE RESTRICT,\r\n"
+	    				+ "CONSTRAINT FK_consumerGoods FOREIGN KEY (consumerId) REFERENCES consumer_goods(consumerId)ON DELETE RESTRICT\r\n"
+	    				+ ")");	    		
 	    	}catch(SQLException e) {
 	    		
 	    	}

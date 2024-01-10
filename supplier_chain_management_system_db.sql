@@ -16,13 +16,15 @@ phone bigint UNIQUE
 -- Create industrial_goods table
 CREATE TABLE industrial_goods(
 industryId varchar(25) PRIMARY KEY,
-industry varchar(50) UNIQUE
+industry varchar(50) UNIQUE,
+industry_description varchar(255) 
 );
 
 -- Create consumer_goods table
 CREATE TABLE consumer_goods(
 consumerId varchar(25) PRIMARY KEY,
-consumerGoods varchar(50) UNIQUE
+consumerGoods varchar(50) UNIQUE,
+consumer_description varchar(255) 
 );
 
 -- Create products table
@@ -30,14 +32,23 @@ CREATE TABLE products(
 productId varchar(25) PRIMARY KEY, 
 productName varchar(50) NOT NULL, 
 productDescription varchar(255), 
-unitPrice double NOT NULL DEFAULT 0,
+unitPrice double DEFAULT 0
+);
+
+-- Create product information
+CREATE TABLE products_information(
+productInfoId varchar(25),
+productId varchar(25),
 supplierId varchar(25),
 industryId varchar(25),
 consumerId varchar(25),
-CONSTRAINT FK_supplier FOREIGN KEY (supplierId) REFERENCEs supplier(supplierId) ,
-CONSTRAINT FK_industrialGoods FOREIGN KEY (industryId) REFERENCEs industrial_goods(industryId),
-CONSTRAINT FK_consumerGoods FOREIGN KEY (consumerId) REFERENCEs consumer_goods(consumerId)
+CONSTRAINT FK_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT,
+CONSTRAINT FK_supplier FOREIGN KEY (supplierId) REFERENCES supplier(supplierId) ON DELETE RESTRICT,
+CONSTRAINT FK_industrialGoods FOREIGN KEY (industryId) REFERENCES industrial_goods(industryId) ON DELETE RESTRICT,
+CONSTRAINT FK_consumerGoods FOREIGN KEY (consumerId) REFERENCES consumer_goods(consumerId)ON DELETE RESTRICT
 );
+
+DROP TABLE products_information;
 
 -- Show tables in database
 SHOW TABLES;
@@ -53,5 +64,99 @@ DESC consumer_goods;
 
 -- describe products table structure
 DESC products;
+
+-- describe product information table structure
+DESC products_information;
+
+select * from products_information;
+select * from products;
+select * from supplier;
+select * from industrial_goods;
+select * from consumer_goods;
+
+
+SELECT 
+    productInfoId,
+    productId,
+    productName,
+    productDescription,
+    unitPrice,
+    supplierName,
+    industry,
+    consumerGoods
+FROM 
+    products_information
+NATURAL JOIN 
+    products
+NATURAL JOIN 
+    supplier
+NATURAL JOIN 
+    industrial_goods
+NATURAL JOIN 
+    consumer_goods;
+
+
+
+SELECT 
+    pi.productInfoId,
+    p.productId,
+    p.productName,
+    p.productDescription,
+    p.unitPrice,
+    s.supplierName,
+    ig.industry,
+    cg.consumerGoods
+FROM 
+    products_information pi
+JOIN 
+    products p ON pi.productId = p.productId
+JOIN 
+    supplier s ON pi.supplierId = s.supplierId
+JOIN 
+    industrial_goods ig ON pi.industryId = ig.industryId
+JOIN 
+    consumer_goods cg ON pi.consumerId = cg.consumerId;
+
+
+SELECT 
+    pi.productInfoId,
+    p.productId,
+    p.productName,
+    p.productDescription,
+    p.unitPrice,
+    s.supplierName,
+    ig.industry,
+    cg.consumerGoods
+FROM 
+    products_information pi
+JOIN 
+    products p ON pi.productId = p.productId
+JOIN 
+    supplier s ON pi.supplierId = s.supplierId
+JOIN 
+    industrial_goods ig ON pi.industryId = ig.industryId
+JOIN 
+    consumer_goods cg ON pi.consumerId = cg.consumerId
+WHERE 
+    pi.productInfoId = 'your_specific_productInfoId';
+
+SELECT 
+    pi.productInfoId,
+    p.productId,
+    p.productName,
+    p.productDescription,
+    p.unitPrice,
+    s.supplierName,
+    ig.industry
+FROM 
+    products_information pi
+JOIN 
+    products p ON pi.productId = p.productId
+JOIN 
+    supplier s ON pi.supplierId = s.supplierId
+JOIN 
+    industrial_goods ig ON pi.industryId = ig.industryId
+WHERE 
+    p.productName = 'your_specific_productName';
 
 

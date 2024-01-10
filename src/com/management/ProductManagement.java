@@ -230,14 +230,13 @@ public class ProductManagement {
 		
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement proInfo = con.prepareStatement("INSTER INTO products_information VALUES(?, ?, ?, ?, ?)");
+				PreparedStatement proInfo = con.prepareStatement("INSERT INTO products_information (productInfoId, productId, supplierId, industryId, consumerId) VALUES (?, ?, ?, ?, ?)");
 			){
-			
-			proInfo.setString(5, productInfoId);
-			proInfo.setString(1, productId);
-			proInfo.setString(2, supplierId);
-			proInfo.setString(3, industryId);
-			proInfo.setString(4, consumerId);
+			proInfo.setString(1, productInfoId);
+			proInfo.setString(2, productId);
+			proInfo.setString(3, supplierId);
+			proInfo.setString(4, industryId);
+			proInfo.setString(5, consumerId);
 			
 			return proInfo.executeUpdate()>0;	
 		}
@@ -274,33 +273,17 @@ public class ProductManagement {
 	
 	public ArrayList<Product> viewProductInfo(String goodsType) throws ClassNotFoundException, SQLException, InvalidProduct{
 		
+		
 		ArrayList<Product> list = new ArrayList<Product>();
 		
 		if("All".equals(goodsType)) {
 			try(
 					Connection con = DBConnection.getConnection();
-					PreparedStatement st = con.prepareStatement("SELECT \r\n"
-							+ "    productInfoId,\r\n"
-							+ "    productName,\r\n"
-							+ "    productDescription,\r\n"
-							+ "    unitPrice,\r\n"
-							+ "    supplierName,\r\n"
-							+ "    email ,\r\n"
-							+ "    phone,\r\n"
-							+ "    industryId,\r\n"
-							+ "    industry,\r\n"
-							+ "    industry_description\r\n"
-							+ "FROM \r\n"
-							+ "    products_information\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    products\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    supplier\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    industrial_goods\r\n"
-							+ "");
+					PreparedStatement st = con.prepareStatement("SELECT productInfoId, productName, productDescription, unitPrice, supplierName, email, phone, industryId, industry, industry_description FROM products_information NATURAL JOIN products NATURAL JOIN supplier NATURAL JOIN industrial_goods");
 				){
+				
 				ResultSet rs = st.executeQuery();
+				
 				while(rs.next()) {
 					String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
 					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
@@ -311,26 +294,7 @@ public class ProductManagement {
 			}
 			try(
 					Connection con = DBConnection.getConnection();
-					PreparedStatement st = con.prepareStatement("SELECT \r\n"
-							+ "    productInfoId,\r\n"
-							+ "    productName,\r\n"
-							+ "    productDescription,\r\n"
-							+ "    unitPrice,\r\n"
-							+ "    supplierName,\r\n"
-							+ "    email ,\r\n"
-							+ "    phone,\r\n"
-							+ "    consumerId,\r\n"
-							+ "    consumerGoods,\r\n"
-							+ "    consumer_description\r\n"
-							+ "FROM \r\n"
-							+ "    products_information\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    products\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    supplier\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    consumer_goods;\r\n"
-							+ "");
+					PreparedStatement st = con.prepareStatement("SELECT productInfoId, productName, productDescription, unitPrice, supplierName, email, phone, consumerId, consumerGoods, consumer_description FROM products_information NATURAL JOIN products NATURAL JOIN supplier NATURAL JOIN consumer_goods");
 				){
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
@@ -341,29 +305,11 @@ public class ProductManagement {
 			}
 		}
 		
-		else if("industrial".equals(goodsType)) {
+		else if("IndustrialGoods".equals(goodsType)) {
 			try(
 					Connection con = DBConnection.getConnection();
-					PreparedStatement st = con.prepareStatement("SELECT \r\n"
-							+ "    productInfoId,\r\n"
-							+ "    productName,\r\n"
-							+ "    productDescription,\r\n"
-							+ "    unitPrice,\r\n"
-							+ "    supplierName,\r\n"
-							+ "    email ,\r\n"
-							+ "    phone,\r\n"
-							+ "    industryId,\r\n"
-							+ "    industry,\r\n"
-							+ "    industry_description\r\n"
-							+ "FROM \r\n"
-							+ "    products_information\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    products\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    supplier\r\n"
-							+ "NATURAL JOIN \r\n"
-							+ "    industrial_goods\r\n"
-							+ "");
+					PreparedStatement st = con.prepareStatement("SELECT productInfoId, productName, productDescription, unitPrice, supplierName, email, phone, industryId, industry, industry_description FROM products_information NATURAL JOIN products NATURAL JOIN supplier NATURAL JOIN industrial_goods");
+
 				){
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
@@ -376,7 +322,7 @@ public class ProductManagement {
 			}
 		}
 		
-		else if("consumer".equals(goodsType)) {
+		else if("ConsumerGoods".equals(goodsType)) {
 			try(
 					Connection con = DBConnection.getConnection();
 					PreparedStatement st = con.prepareStatement("SELECT \r\n"
@@ -750,7 +696,7 @@ public class ProductManagement {
 		}
 	}
 		
-	public boolean searchProductInfoByConsumerId(String industryId) throws ClassNotFoundException, SQLException {
+	public boolean searchProductInfoByConsumerId(String consumerId) throws ClassNotFoundException, SQLException {
 
 		try(Connection con = DBConnection.getConnection();){
 		
@@ -762,12 +708,42 @@ public class ProductManagement {
 					+ "    consumerId= '?'\r\n"
 					+ "");)
 			{
-				st.setString(1, industryId);
+				st.setString(1, consumerId);
 				ResultSet rs = st.executeQuery();
 				return rs.next();
 			}
 		}
 	}
+	
+	public boolean checkProductInfoData(String productId, String supplierId, String industryId, String consumerId ) throws ClassNotFoundException, SQLException {
+		try (Connection con = DBConnection.getConnection();) {
+		if("NO".equals(consumerId)) {
+			    try (PreparedStatement st = con.prepareStatement("SELECT * FROM products_information WHERE productId = ? AND supplierId = ? AND industryId = ?");) {
+			        System.out.println("yes");
+			        st.setString(1, productId);
+			        st.setString(2, supplierId);
+			        st.setString(3, industryId);
+			        ResultSet rs = st.executeQuery();
+			        boolean one = rs.next();
+			        System.out.println(one);
+			        return one;
+			    }
+			}
+		else if("NO".equals(industryId)) {
+				
+				try(PreparedStatement st = con.prepareStatement("SELECT * FROM products_information WHERE productId = ? AND supplierId = ? AND consumerId = ?");)
+				{
+					st.setString(1, productId);
+					st.setString(2, supplierId);
+					st.setString(3, consumerId);
+					ResultSet rs = st.executeQuery();
+					return rs.next();
+				}
+			}
+		return false;
+		}
+	}
+	
  
 }
 

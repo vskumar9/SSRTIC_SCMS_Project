@@ -37,6 +37,8 @@ public class UserInterface {
     		} catch(Exception e) {
     			System.out.println();
     			System.out.println("Something error. Please try again.....");
+    			System.out.println(e);
+    			e.printStackTrace();
     			System.out.println();
     			userInterface();
     		} 		}

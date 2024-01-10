@@ -256,7 +256,7 @@ public class ProductUserInterface {
 				System.out.println();
 				System.out.println("Something error. Please try again.....");
 				System.out.println();
-				updateProduct();
+				updateConsumer();
 		}
 		
 	}
@@ -294,7 +294,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
-			deleteProduct();
+			deleteConsumer();
 		}
 	}
 	
@@ -334,7 +334,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
-			addProduct();
+			addConsumer();
 		}
 		
 		
@@ -385,7 +385,7 @@ public class ProductUserInterface {
 				System.out.println();
 				System.out.println("Something error. Please try again.....");
 				System.out.println();
-				updateProduct();
+				updateIndustry();
 		}
 		
 	}
@@ -423,7 +423,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
-			deleteProduct();
+			deleteIndustry();
 		}
 	}
 	
@@ -463,7 +463,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
-			addProduct();
+			addIndustry();
 		}
 		
 		
@@ -731,13 +731,12 @@ public class ProductUserInterface {
 			default:
 				System.out.println("Please select correct option....");
 			}
-		}while(goods >= 4);
-		try {
-			
+		}while(goods > 4);
+		try {			
+			System.out.printf("%-30s%-30s%-30s%-30s%-50s%-50s%-50s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information","Industry/Category Id", "Industry/Consumer");
+			System.out.println();
+			System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			service.viewProductInfo(typeOfGoods).forEach(e -> {
-				System.out.printf("%-30s%-30s%-30s%-30s%-30s%-30s%-30s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information","Industry/Category Id", "Industry/Consumer");
-				System.out.println();
-				System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 				System.out.println(e);
 			});	
 			
@@ -817,7 +816,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
-			addProductInfo();
+			updateProductInfo();
 		}
 		
 	}
@@ -839,6 +838,7 @@ public class ProductUserInterface {
 					productId = sc.nextLine();
 				}while(productId.isEmpty());
 				String deleteProductInfo = service.deleteProductInfo(productId);
+				System.out.println(!deleteProductInfo.isEmpty());
 				if(!deleteProductInfo.isEmpty()) {
 					System.out.println(deleteProductInfo);
 					successfull++;
@@ -875,7 +875,7 @@ public class ProductUserInterface {
 				noOfProducts = sc.nextInt();
 				sc.nextLine();
 			}
-			System.out.print("Enter "+typeOfGoods+" name or category: ");
+			System.out.print("Enter "+typeOfGoods+" name : ");
 			String goods;
 			do {
 				goods = sc.nextLine();
@@ -885,7 +885,7 @@ public class ProductUserInterface {
 				goodsId = service.checkingIndustry(goods);
 			else if("ConsumerGoods".equals(typeOfGoods))
 				goodsId = service.checkingConsumer(goods);
-			if(goodsId.isEmpty()) {
+			if(goodsId == null) {
 				if("IndustrialGoods".equals(typeOfGoods)) {
 					System.out.print("Enter "+typeOfGoods+" description:");
 					String description = sc.nextLine();
@@ -911,9 +911,9 @@ public class ProductUserInterface {
 				}while(productDetails.isEmpty());
 				String productInfo = null;
 				if("IndustrialGoods".equals(typeOfGoods))
-					productInfo = service.addProductInfo(productDetails+":"+goodsId+"IndustrialGoods");
+					productInfo = service.addProductInfo(productDetails+":"+goodsId+":"+"IndustrialGoods");
 				else if("ConsumerGoods".equals(typeOfGoods))
-					productInfo = service.addProductInfo(productDetails+":"+goodsId+"ConsumerGoods");
+					productInfo = service.addProductInfo(productDetails+":"+goodsId+":"+"ConsumerGoods");
 				if(!productInfo.isEmpty()) {
 					System.out.println(productInfo);
 					successProducts++;

@@ -36,7 +36,7 @@ public class IndustrialGoods extends Product{
 	@Override
 	public String toString() {
 		super.toString();
-		System.out.printf("%30s%30s%30s",industryId, industry, industrialDescription);
+		System.out.printf("%30s%30s",industryId, industry);
 		return "";
 	}
 	

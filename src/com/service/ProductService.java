@@ -27,21 +27,31 @@ public class ProductService {
 			String[] productInfo = productDetails.split(":");
 			if(productInfo.length == 6) {
 				String productId = pm.searchProduct(productInfo[0], Double.valueOf(productInfo[2]));
-				if(productId.isEmpty()) {
+				if(productId == null) {
 					productId = "PROD"+generateUniqueId();
 					pm.addProduct(productId, productInfo[0], productInfo[1], Double.valueOf(productInfo[2]));
 				}
-				if(util.validateSupplierId(productInfo[3]) && sm.searchSupplierByName(productInfo[3]).isEmpty()) {
+				if(util.validateSupplierId(productInfo[3]) && !sm.searchSupplierByName(productInfo[3]).isEmpty()) {
 					return "Supplier id: "+productInfo[3]+" not exists.";
 				}
 				String productInfoId = "PROI"+generateUniqueId();
-				if("IndustrialGoods".equals(productInfo[5]))
-					if(pm.addProductInfo(productInfoId, productId, productInfo[3], productInfo[4], null))
-						return "The Product Id: "+productId+", Industry id:"+productInfo[4]+" and product inforamtion id(product with supplier and goods): "+productInfoId;				
+				if("IndustrialGoods".equals(productInfo[5])) {
+					if(!pm.checkProductInfoData(productId, productInfo[3], productInfo[4], "NO")) {
+						if(pm.addProductInfo(productInfoId, productId, productInfo[3], productInfo[4], null))
+							return "The Product Id: "+productId+", Industry id:"+productInfo[4]+" and product inforamtion id(product with supplier and goods): "+productInfoId;															
+					}
+					System.out.println("This data already exists");
+				}
 						
-				else if("ConsumerGoods".equals(productInfo[5]))
-					if(pm.addProductInfo(productInfoId, productId, productInfo[3], null, productInfo[4]))
-						return "The Product Id: "+productId+", Consumer id:"+productInfo[4]+" and product inforamtion id(product with supplier and goods): "+productInfoId;				
+				else if("ConsumerGoods".equals(productInfo[5])) {
+					if(!pm.checkProductInfoData(productId, productInfo[3], "NO", productInfo[4])) {
+						if(pm.addProductInfo(productInfoId, productId, productInfo[3], null, productInfo[4]))
+							return "The Product Id: "+productId+", Consumer id:"+productInfo[4]+" and product inforamtion id(product with supplier and goods): "+productInfoId;										
+					}
+					System.out.println("This data already exists");
+					
+				}
+				
 				return null;
 			}
 			else {
@@ -59,13 +69,14 @@ public class ProductService {
 	
 	public String deleteProductInfo(String productInfoId) {
 		try {
+//			System.out.println(util.validProductInfoId(productInfoId));
 			if(pm.deleteProductInfo(productInfoId) && util.validProductInfoId(productInfoId))
 				return productInfoId+" is successfully deleted.";			
-		} catch(ClassNotFoundException | SQLException e) {
-			System.out.println(e.getMessage());
 		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
-		}
+		}catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		} 
 		return null;
 	}
 	
@@ -328,7 +339,6 @@ public class ProductService {
 		String[] productArray = productDetails.split(":");
 			if(productArray.length == 9) {
 					if("IndustrialGoods".equals(productArray[8])) {
-						
 						IndustrialGoods product = new IndustrialGoods(productArray[0], productArray[1], productArray[2], Double.parseDouble(productArray[3]), productArray[4],productArray[5], productArray[6], productArray[6]);
 						return product;
 					} 
