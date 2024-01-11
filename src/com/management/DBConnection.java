@@ -126,7 +126,7 @@ public class DBConnection {
 	    	
 	    	try {
 	    		statement.executeUpdate("CREATE TABLE products_information(\r\n"
-	    				+ "productInfoId varchar(25),\r\n"
+	    				+ "productInfoId varchar(25) PRIMARY KEY,\r\n"
 	    				+ "productId varchar(25),\r\n"
 	    				+ "supplierId varchar(25),\r\n"
 	    				+ "industryId varchar(25),\r\n"

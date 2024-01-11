@@ -1,9 +1,7 @@
 package com.client;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 
-import com.exception.InvalidProduct;
 import com.service.ProductService;
 import com.util.ApplicationUtil;
 
@@ -99,7 +97,7 @@ public class ProductUserInterface {
 		
 		char productChoice;
 		do {
-			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Product \nB. Delete Product \nC. Update Product \nD. Show Producs \nE. Search Product \nF. <- Go to Main Section");
+			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Product \nB. Delete Product \nC. Update Product \nD. Show Producs \nE. <- Go to Main Section");
 			System.out.print("\nEnter your option: ");
 			productChoice = sc.next().charAt(0);
 			
@@ -138,7 +136,7 @@ public class ProductUserInterface {
 	private void industry() {
 		char industryChoice;
 		do {
-			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Product \nB. Delete Product \nC. Update Product \nD. Show Producs \nE. Search Product \nF. <- Go to Main Section");
+			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Industry \nB. Delete Industry \nC. Update Industry \nD. Show Industry \nE. <- Go to Main Section");
 			System.out.print("\nEnter your option: ");
 			industryChoice = sc.next().charAt(0);
 			
@@ -176,7 +174,7 @@ public class ProductUserInterface {
 	private void consumer() {
 		char consumerChoice;
 		do {
-			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Product \nB. Delete Product \nC. Update Product \nD. Show Producs \nE. Search Product \nF. <- Go to Main Section");
+			System.out.print("--------------PRODUCT SECTION--------------\nA. Add Consumer \nB. Delete Consumer \nC. Update Consumer \nD. Show Consumer \nE. <- Go to Main Section");
 			System.out.print("\nEnter your option: ");
 			consumerChoice = sc.next().charAt(0);
 			
@@ -256,6 +254,7 @@ public class ProductUserInterface {
 				System.out.println();
 				System.out.println("Something error. Please try again.....");
 				System.out.println();
+				sc.nextLine();
 				updateConsumer();
 		}
 		
@@ -273,7 +272,7 @@ public class ProductUserInterface {
 				sc.nextLine();
 			}
 			int success = 0;
-			
+			System.out.print("Enter consumer/category Id:");
 			for(int i = 0; i < noOfCategories; i++) {
 				String consumerId;
 				do {
@@ -294,6 +293,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
+			sc.nextLine();
 			deleteConsumer();
 		}
 	}
@@ -321,7 +321,7 @@ public class ProductUserInterface {
 				}while(consumerDetails.isEmpty());
 				String[] consumer = consumerDetails.split(":");
 				String industry = service.addConsumer(consumer[0], consumer[1]);
-				if(!industry.isEmpty()) {
+				if(industry != null) {
 					System.out.println("Industry Id: "+industry);
 					success++;
 				}
@@ -333,7 +333,8 @@ public class ProductUserInterface {
 		} catch(Exception e) {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
-			System.out.println();
+			System.out.println(e);
+			sc.nextLine();
 			addConsumer();
 		}
 		
@@ -350,6 +351,7 @@ public class ProductUserInterface {
 			System.out.printf(industry[0],industry[1], industry[2], industry[3]);
 			System.out.println();
 		});
+		System.out.println();
 	}
 	
 	private void updateIndustry() {
@@ -385,6 +387,7 @@ public class ProductUserInterface {
 				System.out.println();
 				System.out.println("Something error. Please try again.....");
 				System.out.println();
+				sc.nextLine();
 				updateIndustry();
 		}
 		
@@ -402,7 +405,7 @@ public class ProductUserInterface {
 				sc.nextLine();
 			}
 			int success = 0;
-			
+			System.out.print("Enter industry Id: ");
 			for(int i = 0; i < noOfIndustries; i++) {
 				String industryId;
 				do {
@@ -423,6 +426,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
+			sc.nextLine();
 			deleteIndustry();
 		}
 	}
@@ -450,7 +454,7 @@ public class ProductUserInterface {
 				}while(industryDetails.isEmpty());
 				String[] industrial = industryDetails.split(":");
 				String industry = service.addIndustry(industrial[0], industrial[1]);
-				if(!industry.isEmpty()) {
+				if(industry != null) {
 					System.out.println("Industry Id: "+industry);
 					success++;
 				}
@@ -463,6 +467,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
+			sc.nextLine();
 			addIndustry();
 		}
 		
@@ -476,10 +481,9 @@ public class ProductUserInterface {
 		System.out.println();
 		System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 		service.viewProduct().forEach(e -> {
-			String[] product = e.split(":");
-			System.out.printf(product[0],product[1], product[2], product[3], product[4]);
-			System.out.println();
+			System.out.printf("%s%n", e);
 		});	
+		System.out.println();
 	}
 	
 	private void updateProduct() {
@@ -513,6 +517,7 @@ public class ProductUserInterface {
 				System.out.println();
 				System.out.println("Something error. Please try again.....");
 				System.out.println();
+				sc.nextLine();
 				updateProduct();
 		}
 		
@@ -531,6 +536,7 @@ public class ProductUserInterface {
 			}
 			int successProducts = 0;
 			
+			System.out.print("Enter product id: ");
 			for(int i = 0; i < noOfProducts; i++) {
 				String productId;
 				do {
@@ -551,6 +557,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
+			sc.nextLine();
 			deleteProduct();
 		}
 	}
@@ -589,6 +596,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
+			sc.nextLine();
 			addProduct();
 		}
 		
@@ -598,7 +606,7 @@ public class ProductUserInterface {
 	private void searchProductInfo() {
 		int search;
 		do {
-			System.out.print("--------------SEARCH PRODUCT INFORMATION DETAILS--------------\n1. Product Information ID\n2. Product Name\n3. Supplier Name\n4. Industry\5. Consumer Category\6. <- Go Back\nEnter your option: ");
+			System.out.print("--------------SEARCH PRODUCT INFORMATION DETAILS--------------\n1. Product Information ID\n2. Product Name\n3. Supplier Name\n4. Industry\n5. Consumer Category\n6. <- Go Back\nEnter your option: ");
 			search = sc.nextInt();
 			switch(search) {
 			case 1: 
@@ -607,20 +615,17 @@ public class ProductUserInterface {
 				do {
 					productId = sc.nextLine();
 				}while(productId.isEmpty());
-				try {
-					if(util.validateProductinfoId(productId)) {
-						service.searchProductInfoByProductInfoId(productId).forEach(e -> {
-							System.out.printf("%-30s%-30s%-30s%-30s%-30s%-30s%-30s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information", "Industry/Consumer Id", "Industry/Category");
-							System.out.println();
-							System.out.println("------------------------------------------------------------------------------------------------------------------------------");
-							System.out.println(e);
-						});						
+				if(service.searchProductInfoByProductName(productId) == null) {
+						System.out.println("Not Available product information this ID: "+productId);
 					}
-				}catch(InvalidProduct e) {
-					System.out.println(e.getMessage());
-				} catch(ClassNotFoundException | SQLException e) {
-					System.out.println(e.getMessage());
-				}
+				else
+					System.out.printf("%-30s%-30s%-30s%-30s%-50s%-50s%-50s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information","Industry/Category Id", "Industry/Consumer");
+					System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+					System.out.println();
+					service.searchProductInfoByProductInfoId(productId).forEach(e -> {
+						System.out.println(e);
+					});										
+					System.out.println();
 				break;
 			case 2:
 				System.out.print("Enter the product Name: ");
@@ -630,15 +635,16 @@ public class ProductUserInterface {
 				}while(productName.isEmpty());
 				
 				if(service.searchProductInfoByProductName(productName) == null) {
-					System.out.println("Not Available "+productName);
+					System.out.println("Not Available product information on this name: "+productName);
 				}
 				else {
+					System.out.printf("%-30s%-30s%-30s%-30s%-50s%-50s%-50s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information","Industry/Category Id", "Industry/Consumer");
+					System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+					System.out.println();
 					service.searchProductInfoByProductName(productName).forEach(e->{
-						System.out.printf("%-30s%-30s%-30s%-30s%-30s%-30s%-30s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information", "Industry/Consumer Id", "Industry/Category");
-						System.out.println();
-						System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 						System.out.println(e);
 					});					
+					System.out.println();
 				}
 				
 				break;
@@ -653,12 +659,13 @@ public class ProductUserInterface {
 					System.out.println("There is no supplier on this name: "+supplierName);
 				}
 				else {
+					System.out.printf("%-30s%-30s%-30s%-30s%-50s%-50s%-50s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information","Industry/Category Id", "Industry/Consumer");
+					System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+					System.out.println();
 					service.searchProductInfoBysupplierName(supplierName).forEach(e->{
-						System.out.printf("%-30s%-30s%-30s%-30s%-30s%-30s%-30s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information", "Industry/Consumer Id", "Industry/Category");
-						System.out.println();
-						System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 						System.out.println(e);
-					});					
+					});	
+					System.out.println();
 				}
 				break;
 			case 4:
@@ -672,12 +679,13 @@ public class ProductUserInterface {
 					System.out.println("There is no industry on this name: "+industry);
 				}
 				else {
+					System.out.printf("%-30s%-30s%-30s%-30s%-50s%-50s%-50s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information","Industry/Category Id", "Industry/Consumer");
+					System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+					System.out.println();
 					service.searchProductInfoByIndustry(industry).forEach(e->{
-						System.out.printf("%-30s%-30s%-30s%-30s%-30s%-30s%-30s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information", "Industry/Consumer Id", "Industry/Category");
-						System.out.println();
-						System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 						System.out.println(e);
-					});					
+					});	
+					System.out.println();
 				}
 				break;
 			case 5:
@@ -688,15 +696,16 @@ public class ProductUserInterface {
 				}while(consumer.isEmpty());
 				
 				if(service.searchProductInfoByConsumer(consumer) == null) {
-					System.out.println("There is no supplier on this name: "+consumer);
+					System.out.println("There is no consumer on this name: "+consumer);
 				}
 				else {
+					System.out.printf("%-30s%-30s%-30s%-30s%-50s%-50s%-50s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information","Industry/Category Id", "Industry/Consumer");
+					System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+					System.out.println();
 					service.searchProductInfoByConsumer(consumer).forEach(e->{
-						System.out.printf("%-30s%-30s%-30s%-30s%-30s%-30s%-30s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information", "Industry/Consumer Id", "Industry/Category");
-						System.out.println();
-						System.out.println("------------------------------------------------------------------------------------------------------------------------------");
 						System.out.println(e);
 					});					
+					System.out.println();
 				}
 				break;
 			case 6:
@@ -705,7 +714,7 @@ public class ProductUserInterface {
 			default:
 				System.out.println("Please select correct option....");
 			}
-		}while(search != 4);
+		}while(search != 6);
 		
 		
 	}	
@@ -732,16 +741,18 @@ public class ProductUserInterface {
 				System.out.println("Please select correct option....");
 			}
 		}while(goods > 4);
-		try {			
+				
+		if(service.viewProductInfo(typeOfGoods).isEmpty()) {
+			System.out.println("Not available product information");
+		}
+		else {
 			System.out.printf("%-30s%-30s%-30s%-30s%-50s%-50s%-50s","Product ID", "Product Name", "Description", "Unit Price", "Supplier Information","Industry/Category Id", "Industry/Consumer");
+			System.out.println("\n-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			System.out.println();
-			System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			service.viewProductInfo(typeOfGoods).forEach(e -> {
 				System.out.println(e);
 			});	
-			
-		}catch(ClassNotFoundException | SQLException | InvalidProduct e) {
-			System.out.println(e.getMessage());
+			System.out.println();			
 		}
 	}
 		
@@ -773,7 +784,7 @@ public class ProductUserInterface {
 				goodsId = service.checkingIndustry(goods);
 			else if("ConsumerGoods".equals(typeOfGoods))
 				goodsId = service.checkingConsumer(goods);
-			if(goodsId.isEmpty()) {
+			if(goodsId == null) {
 				if("IndustrialGoods".equals(typeOfGoods)) {
 					System.out.print("Enter "+typeOfGoods+" description:");
 					String description = sc.nextLine();
@@ -782,9 +793,9 @@ public class ProductUserInterface {
 				else if("ConsumerGoods".equals(typeOfGoods)) {
 					System.out.print("Enter "+typeOfGoods+" description:");
 					String description = sc.nextLine();
-					goodsId = service.addIndustry(goods, description);			
+					goodsId = service.addConsumer(goods, description);			
 				}
-				if(goodsId.isEmpty()) {
+				if(goodsId == null) {
 					System.out.println("sorry..!, This service corrently not working. please try again later.");
 					updateProductInfo();
 				}
@@ -797,13 +808,12 @@ public class ProductUserInterface {
 				do {
 					productDetails = sc.nextLine();
 				}while(productDetails.isEmpty());
-				String productInfo = null;
+				boolean productInfo = false;
 				if("IndustrialGoods".equals(typeOfGoods))
-					productInfo = service.addProductInfo(productDetails+":"+goodsId+"IndustrialGoods");
+					productInfo = service.updateProductInfo(productDetails+":"+goodsId+":"+"IndustrialGoods");
 				else if("ConsumerGoods".equals(typeOfGoods))
-					productInfo = service.addProductInfo(productDetails+":"+goodsId+"ConsumerGoods");
-				if(!productInfo.isEmpty()) {
-					System.out.println(productInfo);
+					productInfo = service.updateProductInfo(productDetails+":"+goodsId+":"+"ConsumerGoods");
+				if(productInfo) {
 					successProducts++;
 				}
 			}
@@ -816,11 +826,13 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
+			sc.nextLine();
 			updateProductInfo();
 		}
 		
 	}
 	
+
 	private void deleteProductInfo() {
 		try {
 			System.out.print("--------------DELETE PRODUCT INFORMATION DETAILS--------------\nEnter number of product informations: ");
@@ -838,21 +850,21 @@ public class ProductUserInterface {
 					productId = sc.nextLine();
 				}while(productId.isEmpty());
 				String deleteProductInfo = service.deleteProductInfo(productId);
-				System.out.println(!deleteProductInfo.isEmpty());
-				if(!deleteProductInfo.isEmpty()) {
+				if(deleteProductInfo != null) {
 					System.out.println(deleteProductInfo);
 					successfull++;
 				}	
 			}
-			if(successfull==0) System.out.println("products/product information not added....");
-			else if(successfull==1) System.out.println("Successfully "+successfull+" product information added.");
-			else if(successfull>1) System.out.println("Successfully "+successfull+" products information added.");
+			if(successfull==0) System.out.println("products/product information not deleted....");
+			else if(successfull==1) System.out.println("Successfully "+successfull+" product information deleted.");
+			else if(successfull>1) System.out.println("Successfully "+successfull+" products information deleted.");
 			
 			
 		} catch(Exception e) {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
+			sc.nextLine();
 			deleteProductInfo();
 		}
 	}
@@ -894,7 +906,7 @@ public class ProductUserInterface {
 				else if("ConsumerGoods".equals(typeOfGoods)) {
 					System.out.print("Enter "+typeOfGoods+" description:");
 					String description = sc.nextLine();
-					goodsId = service.addIndustry(goods, description);			
+					goodsId = service.addConsumer(goods, description);			
 				}
 				if(goodsId.isEmpty()) {
 					System.out.println("sorry..!, This service corrently not working. please try again later.");
@@ -928,6 +940,7 @@ public class ProductUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
+			sc.nextLine();
 			addProductInfo();
 		}
 	}

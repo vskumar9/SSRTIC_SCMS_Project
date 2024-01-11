@@ -37,7 +37,7 @@ unitPrice double DEFAULT 0
 
 -- Create product information
 CREATE TABLE products_information(
-productInfoId varchar(25),
+productInfoId varchar(25) PRIMARY KEY,
 productId varchar(25),
 supplierId varchar(25),
 industryId varchar(25),

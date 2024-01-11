@@ -2,25 +2,19 @@ package com.util;
 import java.sql.SQLException;
 
 import com.exception.InvalidException;
-import com.exception.InvalidEmailId;
-import com.exception.InvalidPhoneNumber;
-import com.exception.InvalidProduct;
-import com.exception.InvalidSupplierId;
-//import com.exception.InvaliedSupplierName;
-//import com.management.ProductManagement;
 import com.management.SupplierManagement;
 
 public class ApplicationUtil {
 	
-	public boolean isValidEmail(String email) throws InvalidEmailId {
+	public boolean isValidEmail(String email) throws InvalidException {
 		if(email.matches("^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$")) return true;
-		throw new InvalidEmailId("Invalid Mail ID: "+email);
+		throw new InvalidException("Invalid Mail ID: "+email);
 		
 	}
 	
-	public boolean isValidPhoneNumber(String phoneNumber) throws InvalidPhoneNumber {
+	public boolean isValidPhoneNumber(String phoneNumber) throws InvalidException {
 		if(phoneNumber.matches("[6-9]{1}[0-9]{9}")) return true;
-		throw new InvalidPhoneNumber("Invalid Phone number: "+phoneNumber);
+		throw new InvalidException("Invalid Phone number: "+phoneNumber);
 	}
 	
 	public boolean validProductInfoId(String productInfoId) throws InvalidException {
@@ -44,32 +38,32 @@ public class ApplicationUtil {
 //		throw new InvaliedSupplierName(supplierName+"Supplier is not exists");
 //	}
 	
-	public boolean emailValidate(String email) throws ClassNotFoundException, SQLException, InvalidEmailId {
+	public boolean emailValidate(String email) throws ClassNotFoundException, SQLException, InvalidException {
 		if(new SupplierManagement().searchEmail(email))return true;
-		throw new InvalidEmailId("Already exists email id: "+email);
+		throw new InvalidException("Already exists email id: "+email);
 	}
 	
-	public boolean phoneNumberValidate(long phone) throws ClassNotFoundException, SQLException, InvalidEmailId {
+	public boolean phoneNumberValidate(long phone) throws ClassNotFoundException, SQLException, InvalidException {
 		if(new SupplierManagement().searchPhoneNumber(phone)) return true;
-		throw new InvalidEmailId("Already exists phone number: "+phone);
+		throw new InvalidException("Already exists phone number: "+phone);
 	}
 		
-	public boolean validateProductId(String productDetails) throws ClassNotFoundException, SQLException, InvalidProduct {
+	public boolean validateProductId(String productDetails) throws ClassNotFoundException, SQLException, InvalidException {
 		String[] product = productDetails.split(":");
 		if(product[0].matches("^PROD\\d{13,15}$")) {return true;};
-		throw new InvalidProduct("Product id: "+product[0]+" is not exists");
+		throw new InvalidException("Product id: "+product[0]+" is not exists");
 	}
 	
-	public boolean validateSupplierId(String supplierDetails) throws ClassNotFoundException, SQLException, InvalidSupplierId {
+	public boolean validateSupplierId(String supplierDetails) throws ClassNotFoundException, SQLException, InvalidException {
 		String[] supplier = supplierDetails.split(":");
 		if(supplier[0].matches("^SUPP\\d{13,15}$")) {return true;};
-		throw new InvalidSupplierId("Supplier id: "+supplier[0]+" is not exists");
+		throw new InvalidException("Supplier id: "+supplier[0]+" is not exists");
 	}
 	
-	public boolean validateProductinfoId(String productDetails) throws ClassNotFoundException, SQLException, InvalidProduct {
+	public boolean validateProductinfoId(String productDetails) throws ClassNotFoundException, SQLException, InvalidException {
 		String[] product = productDetails.split(":");
 		if(product[0].matches("^PROI\\d{13,15}$")) {return true;};
-		throw new InvalidProduct("Product id: "+product[0]+" is not exists");
+		throw new InvalidException("Product id: "+product[0]+" is not exists");
 	}
 	
 	

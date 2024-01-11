@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.exception.InvalidException;
-import com.exception.InvalidProduct;
-import com.exception.InvalidSupplierId;
 import com.management.ProductManagement;
 import com.management.SupplierManagement;
 import com.model.ConsumerGoods;
@@ -31,7 +29,7 @@ public class ProductService {
 					productId = "PROD"+generateUniqueId();
 					pm.addProduct(productId, productInfo[0], productInfo[1], Double.valueOf(productInfo[2]));
 				}
-				if(util.validateSupplierId(productInfo[3]) && !sm.searchSupplierByName(productInfo[3]).isEmpty()) {
+				if(util.validateSupplierId(productInfo[3]) && sm.searchSupplierById(productInfo[3]).isEmpty()) {
 					return "Supplier id: "+productInfo[3]+" not exists.";
 				}
 				String productInfoId = "PROI"+generateUniqueId();
@@ -59,7 +57,7 @@ public class ProductService {
 				return null;
 			}
 			
-		} catch(InvalidSupplierId e) {
+		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
@@ -69,37 +67,41 @@ public class ProductService {
 	
 	public String deleteProductInfo(String productInfoId) {
 		try {
-//			System.out.println(util.validProductInfoId(productInfoId));
 			if(pm.deleteProductInfo(productInfoId) && util.validProductInfoId(productInfoId))
 				return productInfoId+" is successfully deleted.";			
 		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		}catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
-		} 
+		}
 		return null;
 	}
 	
 	public boolean updateProductInfo(String productInfoDetails) {
 		try {
 			String[] productInfo = productInfoDetails.split(":");
+			
+			
 			if(productInfo.length == 7) {
-				String productId = pm.searchProduct(productInfo[0], Double.valueOf(productInfo[2]));
-				if(productId.isEmpty()) {
+				String productId = pm.searchProduct(productInfo[1], Double.valueOf(productInfo[3]));
+				if(productId == null) {
 					productId = "PROD"+generateUniqueId();
-					pm.addProduct(productId, productInfo[0], productInfo[1], Double.valueOf(productInfo[2]));
+					pm.addProduct(productId, productInfo[1], productInfo[2], Double.valueOf(productInfo[3]));
 				}
-				if(util.validProductInfoId(productInfo[0]) && sm.searchSupplierByName(productInfo[4]).isEmpty()) {
+				if(util.validProductInfoId(productInfo[0]) && sm.searchSupplierById(productInfo[4]).isEmpty()) {
 					System.out.println("Supplier id: "+productInfo[4]+" not exists.");
 					return false;
 				}
-				if("IndustrialGoods".equals(productInfo[6]))
-					if(pm.addProductInfo(productInfo[0], productId, productInfo[4], productInfo[5], null)) {
+				if("IndustrialGoods".equals(productInfo[6])) {
+					if(pm.updateProductInfo(productInfo[0], productId, productInfo[4], productInfo[5], null)) {
 						System.out.println("The Product Id: "+productId+", Industry id:"+productInfo[4]+" and product inforamtion id(product with supplier and goods): "+productInfo[0]);
 						return true;
-					}
+					}					
+				}
 				else if("ConsumerGoods".equals(productInfo[6]))
-					if(pm.addProductInfo(productInfo[0], productId, productInfo[4], null, productInfo[5])) {
+					System.out.println(productInfo[6]);
+				
+					if(pm.updateProductInfo(productInfo[0], productId, productInfo[4], null, productInfo[5])) {
 						System.out.println("The Product Id: "+productId+", Consumer id:"+productInfo[4]+" and product inforamtion id(product with supplier and goods): "+productInfo[0]);
 						return true;
 					}
@@ -113,14 +115,23 @@ public class ProductService {
 		return false;
 	}
 	
-	public ArrayList<Product> viewProductInfo(String goodsType) throws ClassNotFoundException, SQLException, InvalidProduct{
-		return pm.viewProductInfo(goodsType);
+	public ArrayList<Product> viewProductInfo(String goodsType) {
+		try {
+			return pm.viewProductInfo(goodsType);			
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
 	}
 	
-	public ArrayList<Product> searchProductInfoByProductInfoId(String productInfoId) throws ClassNotFoundException, SQLException{
+	public ArrayList<Product> searchProductInfoByProductInfoId(String productInfoId) {
 		try {
-			return pm.searchProductInfoByProductInfoId(productInfoId);			
+			if(util.validateProductinfoId(productInfoId)) {
+				return pm.searchProductInfoByProductInfoId(productInfoId);							
+			}
 		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		}
 		return null;
@@ -192,7 +203,7 @@ public class ProductService {
 			else {
 				System.out.println("The product couldn't be deleted. You first delete the product from the product information as it is in the product information list.");
 			}
-		} catch(ClassNotFoundException | SQLException | InvalidProduct e) {
+		} catch(ClassNotFoundException | SQLException | InvalidException e) {
 			System.out.println(e.getMessage());
 		}
 		return false;
@@ -208,7 +219,7 @@ public class ProductService {
 			System.out.println("Invalid Product Details.");
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
-		} catch(NumberFormatException | InvalidProduct e) {
+		} catch(NumberFormatException | InvalidException e) {
 			System.out.println(e.getMessage());
 		}
 		return false;
@@ -258,7 +269,7 @@ public class ProductService {
 		try {
 			String[] industry = industryDetails.split(":");
 			if(util.validIndustryId(industry[0]) && industry.length == 3) {
-				pm.updateIndustry(industry[0], industry[1], industry[3]);
+				pm.updateIndustry(industry[0], industry[1], industry[2]);
 				return true;
 			}
 			System.out.println("Invalid industry details.");
@@ -280,6 +291,7 @@ public class ProductService {
 	
 	public String addConsumer(String consumer, String desc) {
 		try {
+			
 			if(pm.searchConsumer(consumer) == null) {
 				String consumerId = "CONS"+generateUniqueId();
 				if(new ProductManagement().addConsumer(consumerId, consumer, desc)) {
@@ -301,8 +313,11 @@ public class ProductService {
 			}
 			else {
 				System.out.println("The consumer couldn't be deleted. You first delete the consumer from the product information as it is in the product information list.");
+				return false;
 			}
-		} catch(ClassNotFoundException | SQLException | InvalidException e) {
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		}
 		return false;
@@ -312,9 +327,8 @@ public class ProductService {
 	public boolean updateConsumer(String consumerDetails) {
 		try {
 			String[] consumer = consumerDetails.split(":");
-			if(util.validIndustryId(consumer[0]) && consumer.length == 3) {
-				pm.updateIndustry(consumer[0], consumer[1], consumer[3]);
-				return true;
+			if(util.validConsumerId(consumer[0]) && consumer.length == 3) {
+				return pm.updateConsumer(consumer[0], consumer[1], consumer[2]);
 			}
 			System.out.println("Invalid consumer details.");
 		} catch(ClassNotFoundException | SQLException | InvalidException e) {

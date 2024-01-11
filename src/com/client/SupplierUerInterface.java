@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 
 
-import com.exception.InvalidSupplierId;
+import com.exception.InvalidException;
 import com.service.SupplierService;
 import com.util.ApplicationUtil;
 
@@ -97,7 +97,7 @@ public class SupplierUerInterface {
 						});						
 					}
 					System.out.println();
-				}catch(InvalidSupplierId e) {
+				}catch(InvalidException e) {
 					System.out.println(e.getMessage());
 				} catch(ClassNotFoundException | SQLException e) {
 					System.out.println(e.getMessage());

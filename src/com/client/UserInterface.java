@@ -16,7 +16,7 @@ public class UserInterface {
     		try {
     			int choice;
     			do {
-    				System.out.print("1. Products\n2. Suppliers\n3. Exit\nEnter your choice: ");
+    				System.out.print("1. Products\n2. Suppliers\n3. Inventory\n4. Exit\nEnter your choice: ");
     				choice = sc.nextInt();
     				
     				switch(choice) {
@@ -29,17 +29,22 @@ public class UserInterface {
     					new SupplierUerInterface().supplierSection();
     					break;	
     				case 3:
+    					// Call the inventoryUserInterface class method inventory
+    					new InventoryUserInterface().inventory();
+    					break;
+    				case 4:
     					System.out.println("Closing Application.......\nThank you.");
     					return;
-    					
+    				default:
+    					System.out.println("Your choice is wrong. Please select correct option.");
+    					break;
     				}
     			}while(choice!=6);    			
     		} catch(Exception e) {
     			System.out.println();
     			System.out.println("Something error. Please try again.....");
-    			System.out.println(e);
-    			e.printStackTrace();
     			System.out.println();
+    			sc.nextLine();
     			userInterface();
     		} 		}
     }

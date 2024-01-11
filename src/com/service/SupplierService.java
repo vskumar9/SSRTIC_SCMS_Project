@@ -5,9 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.exception.InvalidEmailId;
-import com.exception.InvalidPhoneNumber;
-import com.exception.InvalidSupplierId;
+import com.exception.InvalidException;
 import com.management.SupplierManagement;
 import com.model.Supplier;
 import com.util.ApplicationUtil;
@@ -25,7 +23,7 @@ public class SupplierService {
 			if( supplier == null) return null;
 			new SupplierManagement().addSupplier(supplier);
 			return supplier.getSupplierName()+" Id is: "+supplier.getSupplierId();			
-		} catch(InvalidEmailId | InvalidPhoneNumber e) {
+		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
@@ -39,7 +37,7 @@ public class SupplierService {
 			if(util.validateSupplierId(id)) {
 				return new SupplierManagement().deleteSupplier(id);			
 			}			
-		} catch(InvalidSupplierId e) {
+		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
@@ -52,7 +50,7 @@ public class SupplierService {
 	public boolean updateSupplier(String supplierDetails) {
 		try {
 			if(util.validateSupplierId(supplierDetails)) return new SupplierManagement().updateSupplier(parseSupplierDetails(supplierDetails, "UPDATE"));
-		} catch(InvalidEmailId | InvalidPhoneNumber | InvalidSupplierId e) {
+		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
@@ -75,7 +73,7 @@ public class SupplierService {
 	public ArrayList<Supplier> searchBySupplierId(String supplierId) {
 		try{
 			if(util.validateSupplierId(supplierId))return new SupplierManagement().searchSupplierById(supplierId);
-		} catch(InvalidSupplierId e) {
+		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
@@ -94,7 +92,7 @@ public class SupplierService {
 	}
 	
 	// Helper method to create supplier object
-	public Supplier parseSupplierDetails(String supplierDetails, String method) throws ClassNotFoundException, SQLException, InvalidEmailId, InvalidPhoneNumber {
+	public Supplier parseSupplierDetails(String supplierDetails, String method) throws ClassNotFoundException, SQLException, InvalidException {
 		
 		String[] supplier = supplierDetails.split(":");
 		if(supplier.length == 5) {

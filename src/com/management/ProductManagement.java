@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-import com.exception.InvalidProduct;
 import com.model.Product;
 import com.service.ProductService;
 
@@ -50,7 +49,7 @@ public class ProductManagement {
 	public boolean addConsumer(String id, String consumer, String description) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement pro = con.prepareStatement("INSERT INTO consumer_goods VALUES(?, ?, ?");
+				PreparedStatement pro = con.prepareStatement("INSERT INTO consumer_goods VALUES(?, ?, ?)");
 			){
 			
 			pro.setString(1, id);
@@ -96,13 +95,13 @@ public class ProductManagement {
 	public boolean updateProduct(String id, String name, String description, double unitPrice) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement pro = con.prepareStatement("UPDATE products SET productName = ?, description = ?, unitPrice = ? WHERE LOWER(productId) = LOWER(?)")
+				PreparedStatement pro = con.prepareStatement("UPDATE products SET productName = ?, productDescription = ?, unitPrice = ? WHERE LOWER(productId) = LOWER(?)")
 			){
 			
 			pro.setString(1, name);
 			pro.setString(2, description);
 			pro.setDouble(3, unitPrice);
-			pro.setString(6, id);
+			pro.setString(4, id);
 			
 			return pro.executeUpdate()>0;
 		}
@@ -131,7 +130,6 @@ public class ProductManagement {
 			pro.setString(1, cosumer);
 			pro.setString(2, description);
 			pro.setString(3, id);
-			
 			return pro.executeUpdate()>0;
 		}
 	}
@@ -187,8 +185,8 @@ public class ProductManagement {
 			){
 			ResultSet rs = pro.executeQuery();
 			while(rs.next()) {
-				String product = "%-30s%-30s%-30s%-30.2f%"+":"+rs.getString(1)+":"+rs.getString(2)+":"+rs.getString(3)+":"+rs.getString(4);
-				list.add(product);
+				 String product = String.format("%-30s%-30s%-30s%-30.2f", rs.getString(1), rs.getString(2), rs.getString(3), rs.getDouble(4));
+		         list.add(product);
 			}
 		}
 		return list;
@@ -261,6 +259,7 @@ public class ProductManagement {
 				PreparedStatement proInfo = con.prepareStatement("UPDATE products_information SET productId = ?, supplierId = ?, industryId = ?, consumerId = ? WHERE LOWER(productInfoId) = LOWER(?)");
 			){
 			
+
 			proInfo.setString(1, productId);
 			proInfo.setString(2, supplierId);
 			proInfo.setString(3, industryId);
@@ -271,7 +270,7 @@ public class ProductManagement {
 		
 	}
 	
-	public ArrayList<Product> viewProductInfo(String goodsType) throws ClassNotFoundException, SQLException, InvalidProduct{
+	public ArrayList<Product> viewProductInfo(String goodsType) throws ClassNotFoundException, SQLException {
 		
 		
 		ArrayList<Product> list = new ArrayList<Product>();
@@ -281,7 +280,6 @@ public class ProductManagement {
 					Connection con = DBConnection.getConnection();
 					PreparedStatement st = con.prepareStatement("SELECT productInfoId, productName, productDescription, unitPrice, supplierName, email, phone, industryId, industry, industry_description FROM products_information NATURAL JOIN products NATURAL JOIN supplier NATURAL JOIN industrial_goods");
 				){
-				
 				ResultSet rs = st.executeQuery();
 				
 				while(rs.next()) {
@@ -360,150 +358,70 @@ public class ProductManagement {
 
 	}
 	
-	public ArrayList<Product> searchProductInfoByProductInfoId(String productInfoId) throws ClassNotFoundException, SQLException{
+	public ArrayList<Product> searchProductInfoByProductInfoId(String productInfoId) throws ClassNotFoundException, SQLException {
 
-		ArrayList<Product> list = new ArrayList<Product>();
-		
-		try(Connection con = DBConnection.getConnection();){
-		
-			try(PreparedStatement st = con.prepareStatement("SELECT \r\n"
-					+ "    pi.productInfoId,\r\n"
-					+ "    p.productName,\r\n"
-					+ "    p.productDescription,\r\n"
-					+ "    p.unitPrice,\r\n"
-					+ "    s.supplierName,\r\n"
-					+ "    s.email ,\r\n"
-					+ "    s.phone,\r\n"
-					+ "    industryId,\r\n"
-					+ "    ig.industry,\r\n"
-					+ "    ig.industry_description\r\n"
-					+ "FROM \r\n"
-					+ "    products_information pi\r\n"
-					+ "JOIN \r\n"
-					+ "    products p ON pi.productId = p.productId\r\n"
-					+ "JOIN \r\n"
-					+ "    supplier s ON pi.supplierId = s.supplierId\r\n"
-					+ "JOIN \r\n"
-					+ "    industrial_goods ig ON pi.industryId = ig.industryId\r\n"
-					+ "WHERE \r\n"
-					+ "    pi.productInfoId = '?'\r\n"
-					+ "");)
-			{
-				st.setString(1, productInfoId);
-				ResultSet rs = st.executeQuery();
-				while(rs.next()) {
-					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
-					list.add(new ProductService().parseProductDetails(productInfo));
-				}
-			}
-			try(PreparedStatement st = con.prepareStatement("SELECT \r\n"
-					+ "    pi.productInfoId,\r\n"
-					+ "    p.productName,\r\n"
-					+ "    p.productDescription,\r\n"
-					+ "    p.unitPrice,\r\n"
-					+ "    s.supplierName,\r\n"
-					+ "    s.email ,\r\n"
-					+ "    s.phone,\r\n"
-					+ "    cg.consumerId,\r\n"
-					+ "    cg.consumerGoods,\r\n"
-					+ "    cg.consumer_description\r\n"
-					+ "FROM \r\n"
-					+ "    products_information pi\r\n"
-					+ "JOIN \r\n"
-					+ "    products p ON pi.productId = p.productId\r\n"
-					+ "JOIN \r\n"
-					+ "    supplier s ON pi.supplierId = s.supplierId\r\n"
-					+ "JOIN \r\n"
-					+ "    consumer_goods cg ON pi.consumerId = cg.consumerId\r\n"
-					+ "WHERE \r\n"
-					+ "    pi.productInfoId = '?'\r\n"
-					+ "");)
-			{
-				st.setString(1, productInfoId);
-				ResultSet rs = st.executeQuery();
-				while(rs.next()) {
-					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
-					list.add(new ProductService().parseProductDetails(productInfo));
-					}
-				}
-			}
-		return list;
-		}
+	    ArrayList<Product> list = new ArrayList<Product>();
+
+	    try (Connection con = DBConnection.getConnection();) {
+
+	        try (PreparedStatement st = con.prepareStatement("SELECT pi.productInfoId, p.productName, p.productDescription, p.unitPrice, s.supplierName, s.email, s.phone, ig.industryId, ig.industry, ig.industry_description FROM products_information pi JOIN products p ON pi.productId = p.productId JOIN supplier s ON pi.supplierId = s.supplierId JOIN industrial_goods ig ON pi.industryId = ig.industryId WHERE pi.productInfoId = ?");) {
+
+	            st.setString(1, productInfoId);
+	            ResultSet rs = st.executeQuery();
+	            while (rs.next()) {
+	                String supplier = rs.getString("supplierName") + " | " + rs.getString("email") + " | " + rs.getString("phone");
+	                String productInfo = rs.getString("productInfoId") + ":" + rs.getString("productName") + ":" + rs.getString("productDescription") + ":" + rs.getDouble("unitPrice") + ":" + supplier + ":" + rs.getString("industryId") + ":" + rs.getString("industry") + ":" + rs.getString("industry_description") + ":" + "IndustrialGoods";
+	                list.add(new ProductService().parseProductDetails(productInfo));
+	            }
+	        }
+
+	        try (PreparedStatement st = con.prepareStatement("SELECT pi.productInfoId, p.productName, p.productDescription, p.unitPrice, s.supplierName, s.email, s.phone, cg.consumerId, cg.consumerGoods, cg.consumer_description FROM products_information pi JOIN products p ON pi.productId = p.productId JOIN supplier s ON pi.supplierId = s.supplierId JOIN consumer_goods cg ON pi.consumerId = cg.consumerId WHERE pi.productInfoId = ?");) {
+
+	            st.setString(1, productInfoId);
+	            ResultSet rs = st.executeQuery();
+	            while (rs.next()) {
+	                String supplier = rs.getString("supplierName") + "|" + rs.getString("email") + "|" + rs.getString("phone");
+	                String productInfo = rs.getString("productInfoId") + ":" + rs.getString("productName") + ":" + rs.getString("productDescription") + ":" + rs.getDouble("unitPrice") + ":" + supplier + ":" + rs.getString("consumerId") + ":" + rs.getString("consumerGoods") + ":" + rs.getString("consumer_description") + ":" + "ConsumerGoods";
+	                list.add(new ProductService().parseProductDetails(productInfo));
+	            }
+	        }
+	    }
+
+	    return list;
+	}
+
 			
 	public ArrayList<Product> searchProductInfoByProductName(String productName) throws ClassNotFoundException, SQLException {
 
-		ArrayList<Product> list = new ArrayList<Product>();
-		
-		try(Connection con = DBConnection.getConnection();){
-		
-			try(PreparedStatement st = con.prepareStatement("SELECT \r\n"
-					+ "    pi.productInfoId,\r\n"
-					+ "    p.productName,\r\n"
-					+ "    p.productDescription,\r\n"
-					+ "    p.unitPrice,\r\n"
-					+ "    s.supplierName,\r\n"
-					+ "    s.email,\r\n"
-					+ "    s.phone,\r\n"
-					+ "    industryId,\r\n"
-					+ "    ig.industry,\r\n"
-					+ "    ig.industry_description\r\n"
-					+ "FROM \r\n"
-					+ "    products_information pi\r\n"
-					+ "JOIN \r\n"
-					+ "    products p ON pi.productId = p.productId\r\n"
-					+ "JOIN \r\n"
-					+ "    supplier s ON pi.supplierId = s.supplierId\r\n"
-					+ "JOIN \r\n"
-					+ "    industrial_goods ig ON pi.industryId = ig.industryId\r\n"
-					+ "WHERE \r\n"
-					+ "    p.productName = '?'\r\n"
-					+ "");)
-			{
-				st.setString(1, productName);
-				ResultSet rs = st.executeQuery();
-				while(rs.next()) {
-					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
-					list.add(new ProductService().parseProductDetails(productInfo));
-				}
-			}
-			try(PreparedStatement st = con.prepareStatement("SELECT \r\n"
-					+ "    pi.productInfoId,\r\n"
-					+ "    p.productName,\r\n"
-					+ "    p.productDescription,\r\n"
-					+ "    p.unitPrice,\r\n"
-					+ "    s.supplierName,\r\n"
-					+ "    s.email ,\r\n"
-					+ "    s.phone,\r\n"
-					+ "    cg.consumerId,\r\n"
-					+ "    cg.consumerGoods,\r\n"
-					+ "    cg.consumer_description\r\n"
-					+ "FROM \r\n"
-					+ "    products_information pi\r\n"
-					+ "JOIN \r\n"
-					+ "    products p ON pi.productId = p.productId\r\n"
-					+ "JOIN \r\n"
-					+ "    supplier s ON pi.supplierId = s.supplierId\r\n"
-					+ "JOIN \r\n"
-					+ "    consumer_goods cg ON pi.consumerId = cg.consumerId\r\n"
-					+ "WHERE \r\n"
-					+ "   p.productName = '?'\r\n"
-					+ "");)
-			{
-				st.setString(1, productName);
-				ResultSet rs = st.executeQuery();
-				while(rs.next()) {
-					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
-					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
-					list.add(new ProductService().parseProductDetails(productInfo));
-					}
-				}
-			}
-		return list;
-		}
-		
+	    ArrayList<Product> list = new ArrayList<Product>();
+	
+	    try (Connection con = DBConnection.getConnection();) {
+	
+	        try (PreparedStatement st = con.prepareStatement("SELECT pi.productInfoId, p.productName, p.productDescription, p.unitPrice, s.supplierName, s.email, s.phone, ig.industryId, ig.industry, ig.industry_description FROM products_information pi JOIN products p ON pi.productId = p.productId JOIN supplier s ON pi.supplierId = s.supplierId JOIN industrial_goods ig ON pi.industryId = ig.industryId WHERE p.productName = ?");) {
+	
+	            st.setString(1, productName);
+	            ResultSet rs = st.executeQuery();
+	            while (rs.next()) {
+	                String supplier = rs.getString("supplierName") + "|" + rs.getString("email") + "|" + rs.getString("phone");
+	                String productInfo = rs.getString("productInfoId") + ":" + rs.getString("productName") + ":" + rs.getString("productDescription") + ":" + rs.getDouble("unitPrice") + ":" + supplier + ":" + rs.getString("industryId") + ":" + rs.getString("industry") + ":" + rs.getString("industry_description") + ":" + "IndustrialGoods";
+	                list.add(new ProductService().parseProductDetails(productInfo));
+	            }
+	        }
+	
+	        try (PreparedStatement st = con.prepareStatement("SELECT pi.productInfoId, p.productName, p.productDescription, p.unitPrice, s.supplierName, s.email, s.phone, cg.consumerId, cg.consumerGoods, cg.consumer_description FROM products_information pi JOIN products p ON pi.productId = p.productId JOIN supplier s ON pi.supplierId = s.supplierId JOIN consumer_goods cg ON pi.consumerId = cg.consumerId WHERE p.productName = ?");) {
+	
+	            st.setString(1, productName);
+	            ResultSet rs = st.executeQuery();
+	            while (rs.next()) {
+	                String supplier = rs.getString("supplierName") + "|" + rs.getString("email") + "|" + rs.getString("phone");
+	                String productInfo = rs.getString("productInfoId") + ":" + rs.getString("productName") + ":" + rs.getString("productDescription") + ":" + rs.getDouble("unitPrice") + ":" + supplier + ":" + rs.getString("consumerId") + ":" + rs.getString("consumerGoods") + ":" + rs.getString("consumer_description") + ":" + "ConsumerGoods";
+	                list.add(new ProductService().parseProductDetails(productInfo));
+	            }
+	        }
+	    } 	
+	    return list;
+	}
+	
 	public ArrayList<Product> searchProductInfoBysupplierName(String supplierName) throws ClassNotFoundException, SQLException {
 
 		ArrayList<Product> list = new ArrayList<Product>();
@@ -518,7 +436,7 @@ public class ProductManagement {
 					+ "    s.supplierName,\r\n"
 					+ "    s.email,\r\n"
 					+ "    s.phone,\r\n"
-					+ "    industryId,\r\n"
+					+ "    ig.industryId,\r\n"
 					+ "    ig.industry,\r\n"
 					+ "    ig.industry_description\r\n"
 					+ "FROM \r\n"
@@ -530,7 +448,7 @@ public class ProductManagement {
 					+ "JOIN \r\n"
 					+ "    industrial_goods ig ON pi.industryId = ig.industryId\r\n"
 					+ "WHERE \r\n"
-					+ "    s.supplierName = '?'\r\n"
+					+ "    s.supplierName = ?\r\n"
 					+ "");)
 			{
 				st.setString(1, supplierName);
@@ -561,7 +479,7 @@ public class ProductManagement {
 					+ "JOIN \r\n"
 					+ "    consumer_goods cg ON pi.consumerId = cg.consumerId\r\n"
 					+ "WHERE \r\n"
-					+ "    s.supplierName = '?'\r\n"
+					+ "    s.supplierName = ?\r\n"
 					+ "");)
 			{
 				st.setString(1, supplierName);
@@ -602,7 +520,7 @@ public class ProductManagement {
 						+ "JOIN \r\n"
 						+ "    industrial_goods ig ON pi.industryId = ig.industryId\r\n"
 						+ "WHERE \r\n"
-						+ "     ig.industry = '?'\r\n"
+						+ "     ig.industry = ?\r\n"
 						+ "");
 				){
 
@@ -643,7 +561,7 @@ public class ProductManagement {
 						+ "JOIN \r\n"
 						+ "    consumer_goods cg ON pi.consumerId = cg.consumerId\r\n"
 						+ "WHERE \r\n"
-						+ "     ig.industry = '?'\r\n"
+						+ "     cg.consumerGoods = ?\r\n"
 						+ "");
 				){
 
@@ -660,20 +578,15 @@ public class ProductManagement {
 	
 	public boolean searchProductInfoByProductId(String productId) throws ClassNotFoundException, SQLException {
 
-		try(Connection con = DBConnection.getConnection();){
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM products_information WHERE productId= ? ");
+			){
 		
-			try(PreparedStatement st = con.prepareStatement("SELECT \r\n"
-					+ "    *\r\n"
-					+ "FROM \r\n"
-					+ "    products_information \r\n"
-					+ "WHERE \r\n"
-					+ "    productId= '?'\r\n"
-					+ "");)
-			{
+
 				st.setString(1, productId);
 				ResultSet rs = st.executeQuery();
 				return rs.next();
-			}
 		}
 	}
 	
@@ -686,7 +599,7 @@ public class ProductManagement {
 					+ "FROM \r\n"
 					+ "    products_information \r\n"
 					+ "WHERE \r\n"
-					+ "    industryId= '?'\r\n"
+					+ "    industryId= ?\r\n"
 					+ "");)
 			{
 				st.setString(1, industryId);
@@ -705,7 +618,7 @@ public class ProductManagement {
 					+ "FROM \r\n"
 					+ "    products_information \r\n"
 					+ "WHERE \r\n"
-					+ "    consumerId= '?'\r\n"
+					+ "    consumerId= ?\r\n"
 					+ "");)
 			{
 				st.setString(1, consumerId);

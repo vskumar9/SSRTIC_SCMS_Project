@@ -34,7 +34,7 @@ public class ConsumerGoods extends Product{
 	@Override
 	public String toString() {
 		super.toString();
-		System.out.printf("%30s%30s%30s",consumerId, category, categoryDescription);
+		System.out.printf("%30s%30s",consumerId, category);
 		return "";
 	}
 
