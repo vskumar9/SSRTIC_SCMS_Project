@@ -139,6 +139,18 @@ public class DBConnection {
 	    	}catch(SQLException e) {
 	    		
 	    	}
+	    	
+	    	try {
+	    		statement.executeUpdate("CREATE TABLE inventory(\r\n"
+	    				+ "inventoryId varchar(25) PRIMARY KEY,\r\n"
+	    				+ "productId varchar(25),\r\n"
+	    				+ "quntityInStock bigint DEFAULT 0,\r\n"
+	    				+ "lastStockUpdate datetime DEFAULT NOW(),\r\n"
+	    				+ "CONSTRAINT Fk_inventory_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT\r\n"
+	    				+ ")");	    		
+	    	}catch(SQLException e) {
+	    		
+	    	}
 	        }
 	    }
 	

@@ -167,7 +167,7 @@ public class SupplierUerInterface {
 			int noOfSuppliers= sc.nextInt();
 			sc.nextLine();
 			while(noOfSuppliers<=0) {
-				System.out.println("Your ennter number is wrong... ");
+				System.out.println("Your enter number is wrong... ");
 				noOfSuppliers = sc.nextInt();
 				sc.nextLine();
 			}

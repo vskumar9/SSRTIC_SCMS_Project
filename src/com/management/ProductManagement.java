@@ -657,6 +657,20 @@ public class ProductManagement {
 		}
 	}
 	
+	public boolean checkingProductId(String productId) throws ClassNotFoundException, SQLException {
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM products WHERE LOWER(productId) = LOWER(?)");
+			){
+			
+			st.setString(1, productId);
+			
+			ResultSet rs = st.executeQuery();
+			return rs.next();
+			
+		}
+	}
+	
  
 }
 

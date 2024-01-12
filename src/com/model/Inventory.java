@@ -3,33 +3,46 @@ import java.util.Date;
 
 public class Inventory {
 
+	private String inventoryId;
 	private String productId;
-	private int quantityInStock;
+	private long quantityInStock;
 	private Date lastStockUpdate;
-	public Inventory(String productId, int quantityInStock, Date lastStockUpdate) {
+	public Inventory(String inventoryId, String productId, long quantityInStock, Date lastStockUpdate) {
 		super();
+		this.inventoryId = inventoryId;
 		this.productId = productId;
 		this.quantityInStock = quantityInStock;
 		this.lastStockUpdate = lastStockUpdate;
 	}
+	public String getInventoryId() {
+		return inventoryId;
+	}
+	public void setInventoryId(String inventoryId) {
+		this.inventoryId = inventoryId;
+	}
 	public String getProductId() {
 		return productId;
 	}
-	public int getQuantityInStock() {
+	public void setProductId(String productId) {
+		this.productId = productId;
+	}
+	public long getQuantityInStock() {
 		return quantityInStock;
+	}
+	public void setQuantityInStock(long quantityInStock) {
+		this.quantityInStock = quantityInStock;
 	}
 	public Date getLastStockUpdate() {
 		return lastStockUpdate;
+	}	
+	public void setLastStockUpdate(Date lastStockUpdate) {
+		this.lastStockUpdate = lastStockUpdate;
 	}
 	
-	public void updateStock(int quantity) {
-		this.quantityInStock += quantity;
-		this.lastStockUpdate = new Date();
-	}
 	@Override
 	public String toString() {
-		return "InventoryManagement [productId=" + productId + ", quantityInStock=" + quantityInStock
-				+ ", lastStockUpdate=" + lastStockUpdate + "]";
+		System.out.printf("%-25s%-50s%-15s%-15s", inventoryId, productId, quantityInStock, lastStockUpdate);
+		return "";
 	}
 
 

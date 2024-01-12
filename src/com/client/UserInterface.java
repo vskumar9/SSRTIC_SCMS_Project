@@ -30,7 +30,7 @@ public class UserInterface {
     					break;	
     				case 3:
     					// Call the inventoryUserInterface class method inventory
-    					new InventoryUserInterface().inventory();
+    					new InventoryUserInterface().inventorySection();
     					break;
     				case 4:
     					System.out.println("Closing Application.......\nThank you.");

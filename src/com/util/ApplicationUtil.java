@@ -66,6 +66,11 @@ public class ApplicationUtil {
 		throw new InvalidException("Product id: "+product[0]+" is not exists");
 	}
 	
+	public boolean validateInventoryId(String inventoryId) throws InvalidException {
+		if(inventoryId.matches("^INVT\\d{13,15}$")) return true;
+		throw new InvalidException("Inventory id: "+inventoryId+" is not exists");
+	}
+	
 	
 
 

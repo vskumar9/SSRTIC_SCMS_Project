@@ -48,7 +48,16 @@ CONSTRAINT FK_industrialGoods FOREIGN KEY (industryId) REFERENCES industrial_goo
 CONSTRAINT FK_consumerGoods FOREIGN KEY (consumerId) REFERENCES consumer_goods(consumerId)ON DELETE RESTRICT
 );
 
-DROP TABLE products_information;
+-- Create Inventory table
+CREATE TABLE inventory(
+inventoryId varchar(25) PRIMARY KEY,
+productId varchar(25),
+quntityStock bigint DEFAULT 0,
+lastUpdate datetime DEFAULT NOW(),
+CONSTRAINT Fk_inventory_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT
+);
+
+DROP TABLE inventory;
 
 -- Show tables in database
 SHOW TABLES;
@@ -67,6 +76,10 @@ DESC products;
 
 -- describe product information table structure
 DESC products_information;
+
+-- describe inventory table structure
+DESC inventory;
+
 
 select * from products_information;
 select * from products;

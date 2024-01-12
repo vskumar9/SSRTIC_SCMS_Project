@@ -373,7 +373,6 @@ public class ProductService {
 		return new ProductManagement().searchConsumer(consumer);
 	}
 	
-	
 	public String generateUniqueId() {
 	       return generateSCMId();
 	    }
