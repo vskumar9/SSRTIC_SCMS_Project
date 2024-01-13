@@ -1,13 +1,13 @@
 package com.model;
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Inventory {
 
 	private String inventoryId;
 	private String productId;
 	private long quantityInStock;
-	private Date lastStockUpdate;
-	public Inventory(String inventoryId, String productId, long quantityInStock, Date lastStockUpdate) {
+	private Timestamp lastStockUpdate;
+	public Inventory(String inventoryId, String productId, long quantityInStock, Timestamp lastStockUpdate) {
 		super();
 		this.inventoryId = inventoryId;
 		this.productId = productId;
@@ -32,10 +32,10 @@ public class Inventory {
 	public void setQuantityInStock(long quantityInStock) {
 		this.quantityInStock = quantityInStock;
 	}
-	public Date getLastStockUpdate() {
+	public Timestamp getLastStockUpdate() {
 		return lastStockUpdate;
 	}	
-	public void setLastStockUpdate(Date lastStockUpdate) {
+	public void setLastStockUpdate(Timestamp lastStockUpdate) {
 		this.lastStockUpdate = lastStockUpdate;
 	}
 	

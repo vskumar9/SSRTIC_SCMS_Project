@@ -1,19 +1,19 @@
 package com.model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class OrderProcessing {
 
 	private String orderId;
 	private String customerId;
-	private Date orderDate;
+	private Timestamp orderDate;
 	private double totalAmount;
 	private String status;
-	public OrderProcessing(String customerId, double totalAmount) {
+	public OrderProcessing(String orderId, String customerId, double totalAmount) {
 		super();
-//		this.orderId = "ORD"+new ApplicationUtil().generateUniqueId();
+		this.orderId = orderId;
 		this.customerId = customerId;
-		this.orderDate = new Date();
+		this.orderDate = new Timestamp(0);
 		this.totalAmount = totalAmount;
 		this.status = "Processing";
 	}
@@ -26,10 +26,10 @@ public class OrderProcessing {
 	public void setCustomerId(String customerId) {
 		this.customerId = customerId;
 	}
-	public Date getOrderDate() {
+	public Timestamp getOrderDate() {
 		return orderDate;
 	}
-	public void setOrderDate(Date orderDate) {
+	public void setOrderDate(Timestamp orderDate) {
 		this.orderDate = orderDate;
 	}
 	public double getTotalAmount() {

@@ -1,6 +1,7 @@
 package com.service;
 
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -22,16 +23,16 @@ public class InventoryService {
 		try {
 			if(pm.checkingProductId(inventory[0])) {
 				if(inventory.length == 2) {
-					if(!im.checkingInventory(inventory[0])) {
+//					if(!im.checkingInventory(inventory[0])) {
 						String inventoryId = generateUniqueId();
-						Inventory in = new Inventory(inventoryId, inventory[0], Long.valueOf(inventory[1]), new Date());
+						Inventory in = new Inventory(inventoryId, inventory[0], Long.valueOf(inventory[1]), new Timestamp(0));
 						if(im.addInventory(in))
 							return "Inventory Id: "+inventoryId;						
-					}
-					else {
-						System.out.println("Already exists product id: "+inventory[0]);
-						return null;
-					}				
+//					}
+//					else {
+//						System.out.println("Already exists product id: "+inventory[0]);
+//						return null;
+//					}				
 				}
 				else {
 					System.out.println("Invalid Inventory Data.");
@@ -67,7 +68,7 @@ public class InventoryService {
 			
 			if(inventory.length == 3 && util.validateInventoryId(inventory[0])) {
 				if(pm.checkingProductId(inventory[1])) {
-					return im.updateInventory(new Inventory(inventory[0], inventory[1], Long.valueOf(inventory[2]), new Date()));
+					return im.updateInventory(new Inventory(inventory[0], inventory[1], Long.valueOf(inventory[2]), new Timestamp(0)));
 					
 				} else {
 					System.out.println("Product not exists.");

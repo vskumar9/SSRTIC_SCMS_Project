@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 
 import com.model.Inventory;
@@ -21,8 +22,8 @@ public class InventoryManagement {
 	        st.setString(2, inventory.getProductId());
 	        st.setLong(3, inventory.getQuantityInStock());
 	        
-	        Date sqlDate = new Date(inventory.getLastStockUpdate().getTime());
-	        st.setDate(4, sqlDate);
+	        Timestamp timestamp = new Timestamp(inventory.getLastStockUpdate().getTime());
+	        st.setTimestamp(4, timestamp);
 
 	        return st.executeUpdate() > 0;
 	    }
@@ -79,7 +80,7 @@ public class InventoryManagement {
 				ResultSet rs = st.executeQuery();
 				
 				while(rs.next()) {
-					list.add(new Inventory(rs.getString("inventoryId"), rs.getString("productId")+" | "+rs.getString("productName"), rs.getLong("quntityInStock"), rs.getDate("lastStockUpdate")));
+					list.add(new Inventory(rs.getString("inventoryId"), rs.getString("productId")+" | "+rs.getString("productName"), rs.getLong("quntityInStock"), rs.getTimestamp("lastStockUpdate")));
 				}
 				return list;
 			}
@@ -110,7 +111,7 @@ public class InventoryManagement {
 				ResultSet rs = st.executeQuery();
 				
 				while(rs.next()) {
-					list.add(new Inventory(rs.getString("inventoryId"), rs.getString("productId")+" | "+rs.getString("productName"), rs.getLong("quntityInStock"), rs.getDate("lastStockUpdate")));
+					list.add(new Inventory(rs.getString("inventoryId"), rs.getString("productId")+" | "+rs.getString("productName"), rs.getLong("quntityInStock"), rs.getTimestamp("lastStockUpdate")));
 				}
 				return list;
 			}
@@ -142,7 +143,7 @@ public class InventoryManagement {
 				ResultSet rs = st.executeQuery();
 				
 				while(rs.next()) {
-					list.add(new Inventory(rs.getString("inventoryId"), rs.getString("productId")+" | "+rs.getString("productName"), rs.getLong("quntityInStock"), rs.getDate("lastStockUpdate")));
+					list.add(new Inventory(rs.getString("inventoryId"), rs.getString("productId")+" | "+rs.getString("productName"), rs.getLong("quntityInStock"), rs.getTimestamp("lastStockUpdate")));
 				}
 				return list;
 			}
@@ -174,7 +175,7 @@ public class InventoryManagement {
 				ResultSet rs = st.executeQuery();
 				
 				while(rs.next()) {
-					list.add(new Inventory(rs.getString("inventoryId"), rs.getString("productId")+" | "+rs.getString("productName"), rs.getLong("quntityInStock"), rs.getDate("lastStockUpdate")));
+					list.add(new Inventory(rs.getString("inventoryId"), rs.getString("productId")+" | "+rs.getString("productName"), rs.getLong("quntityInStock"), rs.getTimestamp("lastStockUpdate")));
 				}
 				return list;
 			}

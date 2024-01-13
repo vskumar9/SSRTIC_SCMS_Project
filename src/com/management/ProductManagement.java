@@ -632,13 +632,13 @@ public class ProductManagement {
 		try (Connection con = DBConnection.getConnection();) {
 		if("NO".equals(consumerId)) {
 			    try (PreparedStatement st = con.prepareStatement("SELECT * FROM products_information WHERE productId = ? AND supplierId = ? AND industryId = ?");) {
-			        System.out.println("yes");
+			      
 			        st.setString(1, productId);
 			        st.setString(2, supplierId);
 			        st.setString(3, industryId);
 			        ResultSet rs = st.executeQuery();
 			        boolean one = rs.next();
-			        System.out.println(one);
+
 			        return one;
 			    }
 			}

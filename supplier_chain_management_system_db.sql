@@ -52,10 +52,27 @@ CONSTRAINT FK_consumerGoods FOREIGN KEY (consumerId) REFERENCES consumer_goods(c
 CREATE TABLE inventory(
 inventoryId varchar(25) PRIMARY KEY,
 productId varchar(25),
-quntityStock bigint DEFAULT 0,
-lastUpdate datetime DEFAULT NOW(),
+quntityInStock bigint DEFAULT 0,
+lastStockUpdate datetime DEFAULT NOW(),
 CONSTRAINT Fk_inventory_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT
 );
+
+-- Creaate warehouse table
+CREATE TABLE warehouse(
+warehouseId varchar(25) PRIMARY KEY,
+warehouseName varchar(30),
+location varchar(100),
+capacity bigint,
+currentCapacity bigint
+);
+
+CREATE TABLE warehouseStorage(
+warehouseId varchar(25),
+inventoryId varchar(25),
+CONSTRAINT Fk_warehouseId FOREIGN KEY (warehouseId) REFERENCES warehouse(warehouseId) ON DELETE RESTRICT,
+CONSTRAINT Fk_inventoryId FOREIGN KEY (inventoryId) REFERENCES inventory(inventoryId) ON DELETE RESTRICT
+);
+
 
 DROP TABLE inventory;
 
@@ -86,90 +103,6 @@ select * from products;
 select * from supplier;
 select * from industrial_goods;
 select * from consumer_goods;
+select * from inventory;
 
-
-SELECT 
-    productInfoId,
-    productId,
-    productName,
-    productDescription,
-    unitPrice,
-    supplierName,
-    industry,
-    consumerGoods
-FROM 
-    products_information
-NATURAL JOIN 
-    products
-NATURAL JOIN 
-    supplier
-NATURAL JOIN 
-    industrial_goods
-NATURAL JOIN 
-    consumer_goods;
-
-
-
-SELECT 
-    pi.productInfoId,
-    p.productId,
-    p.productName,
-    p.productDescription,
-    p.unitPrice,
-    s.supplierName,
-    ig.industry,
-    cg.consumerGoods
-FROM 
-    products_information pi
-JOIN 
-    products p ON pi.productId = p.productId
-JOIN 
-    supplier s ON pi.supplierId = s.supplierId
-JOIN 
-    industrial_goods ig ON pi.industryId = ig.industryId
-JOIN 
-    consumer_goods cg ON pi.consumerId = cg.consumerId;
-
-
-SELECT 
-    pi.productInfoId,
-    p.productId,
-    p.productName,
-    p.productDescription,
-    p.unitPrice,
-    s.supplierName,
-    ig.industry,
-    cg.consumerGoods
-FROM 
-    products_information pi
-JOIN 
-    products p ON pi.productId = p.productId
-JOIN 
-    supplier s ON pi.supplierId = s.supplierId
-JOIN 
-    industrial_goods ig ON pi.industryId = ig.industryId
-JOIN 
-    consumer_goods cg ON pi.consumerId = cg.consumerId
-WHERE 
-    pi.productInfoId = 'your_specific_productInfoId';
-
-SELECT 
-    pi.productInfoId,
-    p.productId,
-    p.productName,
-    p.productDescription,
-    p.unitPrice,
-    s.supplierName,
-    ig.industry
-FROM 
-    products_information pi
-JOIN 
-    products p ON pi.productId = p.productId
-JOIN 
-    supplier s ON pi.supplierId = s.supplierId
-JOIN 
-    industrial_goods ig ON pi.industryId = ig.industryId
-WHERE 
-    p.productName = 'your_specific_productName';
-
-
+truncate table inventory;

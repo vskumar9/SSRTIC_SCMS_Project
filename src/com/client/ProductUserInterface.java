@@ -583,7 +583,7 @@ public class ProductUserInterface {
 					productDetails = sc.nextLine();
 				}while(productDetails.isEmpty());
 				String productInfo = service.addProduct(productDetails);
-				if(!productInfo.isEmpty()) {
+				if( productInfo != null) {
 					System.out.println(productInfo);
 					successProducts++;
 				}
@@ -760,7 +760,7 @@ public class ProductUserInterface {
 		
 		try {
 			
-			System.out.println("--------------UPDATE PRODUCT INFORMATION DETAILS--------------\nSelect Product Type......\n1. IndustrialGoods\n2. ConsumerGoods\n3. <- Go Back");
+			System.out.print("--------------UPDATE PRODUCT INFORMATION DETAILS--------------\nSelect Product Type......\n1. IndustrialGoods\n2. ConsumerGoods\n3. <- Go Back\nEnter your option: ");
 			String typeOfGoods = goodsType();
 			if(typeOfGoods == null) {
 				return;
@@ -926,7 +926,7 @@ public class ProductUserInterface {
 					productInfo = service.addProductInfo(productDetails+":"+goodsId+":"+"IndustrialGoods");
 				else if("ConsumerGoods".equals(typeOfGoods))
 					productInfo = service.addProductInfo(productDetails+":"+goodsId+":"+"ConsumerGoods");
-				if(!productInfo.isEmpty()) {
+				if(productInfo != null) {
 					System.out.println(productInfo);
 					successProducts++;
 				}
