@@ -23,7 +23,6 @@ public class WarehouseManagement {
 			st.setInt(5, warehouse.getCurrentCapacity());
 			
 			return st.executeUpdate()>0;
-			
 		}
 	}
 	
@@ -36,7 +35,6 @@ public class WarehouseManagement {
 			st.setString(1, warehouseId);
 			
 			return st.executeUpdate()>0;
-		
 		}
 	}
 	
@@ -52,7 +50,6 @@ public class WarehouseManagement {
 			st.setString(4, warehouse.getWarehouseId());
 			
 			return st.executeUpdate()>0;
-			
 		}
 	}
 	
@@ -72,13 +69,66 @@ public class WarehouseManagement {
 				
 				list.add(wh);
 			}
-			
 			return list;
 		}
-		
 	}
 	
+	public ArrayList<Warehouse> searchWarehouseById(String warehouseId) throws ClassNotFoundException, SQLException{
+		ArrayList<Warehouse> list = new ArrayList<Warehouse>();
+		
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM warehouse WHERE LOWER(warehouseId) = LOWER(?)")
+			){
+			
+			st.setString(1, warehouseId);
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()) {
+				Warehouse wh = new Warehouse(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+				wh.setCurrentCapacity(rs.getInt(5));
+				
+				list.add(wh);
+			}
+			return list;
+		}
+	}
 	
+	public ArrayList<Warehouse> searchWarehouseByName(String warehouseName) throws ClassNotFoundException, SQLException{
+		ArrayList<Warehouse> list = new ArrayList<Warehouse>();
+		
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM warehouse WHERE LOWER(warehouseName) LIKE  LOWER(?)")
+			){
+			
+			st.setString(1,  "%"+warehouseName+"%");
+			ResultSet rs = st.executeQuery();
+			
+			while(rs.next()) {
+				Warehouse wh = new Warehouse(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
+				wh.setCurrentCapacity(rs.getInt(5));
+				
+				list.add(wh);
+			}
+			return list;
+		}
+	}
+	
+	public boolean checkingWarehouse(String warehouseName, String location) throws ClassNotFoundException, SQLException {
+		
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM warehouse WHERE LOWER(warehouseName) = LOWER(?) AND LOWER(location) = LOWER(?)");
+			){
+			
+			st.setString(1, warehouseName);
+			st.setString(2, location);
+			
+			return st.executeQuery().next();
+			
+		} 
+	}
 	
 
 }

@@ -57,7 +57,7 @@ lastStockUpdate datetime DEFAULT NOW(),
 CONSTRAINT Fk_inventory_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT
 );
 
--- Creaate warehouse table
+-- Create warehouse table
 CREATE TABLE warehouse(
 warehouseId varchar(25) PRIMARY KEY,
 warehouseName varchar(30),
@@ -66,7 +66,7 @@ capacity bigint,
 currentCapacity bigint
 );
 
-CREATE TABLE warehouseStorage(
+CREATE TABLE warehouse_storage(
 warehouseId varchar(25),
 inventoryId varchar(25),
 CONSTRAINT Fk_warehouseId FOREIGN KEY (warehouseId) REFERENCES warehouse(warehouseId) ON DELETE RESTRICT,
@@ -74,7 +74,7 @@ CONSTRAINT Fk_inventoryId FOREIGN KEY (inventoryId) REFERENCES inventory(invento
 );
 
 
-DROP TABLE inventory;
+DROP TABLE warehousestorage;
 
 -- Show tables in database
 SHOW TABLES;
@@ -104,5 +104,7 @@ select * from supplier;
 select * from industrial_goods;
 select * from consumer_goods;
 select * from inventory;
+select * from warehouse;
+select * from warehouse_storage;
 
-truncate table inventory;
+truncate table warehouse;

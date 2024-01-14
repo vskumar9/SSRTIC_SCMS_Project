@@ -48,19 +48,19 @@ public class ApplicationUtil {
 		throw new InvalidException("Already exists phone number: "+phone);
 	}
 		
-	public boolean validateProductId(String productDetails) throws ClassNotFoundException, SQLException, InvalidException {
+	public boolean validateProductId(String productDetails) throws InvalidException {
 		String[] product = productDetails.split(":");
 		if(product[0].matches("^PROD\\d{13,15}$")) {return true;};
 		throw new InvalidException("Product id: "+product[0]+" is not exists");
 	}
 	
-	public boolean validateSupplierId(String supplierDetails) throws ClassNotFoundException, SQLException, InvalidException {
+	public boolean validateSupplierId(String supplierDetails) throws InvalidException {
 		String[] supplier = supplierDetails.split(":");
 		if(supplier[0].matches("^SUPP\\d{13,15}$")) {return true;};
 		throw new InvalidException("Supplier id: "+supplier[0]+" is not exists");
 	}
 	
-	public boolean validateProductinfoId(String productDetails) throws ClassNotFoundException, SQLException, InvalidException {
+	public boolean validateProductinfoId(String productDetails) throws InvalidException {
 		String[] product = productDetails.split(":");
 		if(product[0].matches("^PROI\\d{13,15}$")) {return true;};
 		throw new InvalidException("Product id: "+product[0]+" is not exists");
@@ -69,6 +69,11 @@ public class ApplicationUtil {
 	public boolean validateInventoryId(String inventoryId) throws InvalidException {
 		if(inventoryId.matches("^INVT\\d{13,15}$")) return true;
 		throw new InvalidException("Inventory id: "+inventoryId+" is not exists");
+	}
+	
+	public boolean validateWarehouseId(String warehouseId) throws InvalidException {
+		if(warehouseId.matches("^WRHS\\d{13,15}$")) return true;
+		throw new InvalidException("Warehouse Id: "+warehouseId+" is not exists");
 	}
 	
 	

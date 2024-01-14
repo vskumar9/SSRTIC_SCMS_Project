@@ -1,6 +1,5 @@
 package com.client;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -99,8 +98,6 @@ public class SupplierUerInterface {
 					System.out.println();
 				}catch(InvalidException e) {
 					System.out.println(e.getMessage());
-				} catch(ClassNotFoundException | SQLException e) {
-					System.out.println(e.getMessage());
 				}
 				break;
 			case 2:
@@ -183,9 +180,9 @@ public class SupplierUerInterface {
 				}
 			}
 			
-			if(success==0) System.out.println("suppliers/supplier not added....");
-			else if(success==1) System.out.println("Successfully "+success+" supplier added.");
-			else if(success>1) System.out.println("Successfully "+success+" suppliers added.");			
+			if(success==0) System.out.println("suppliers/supplier not updated....");
+			else if(success==1) System.out.println("Successfully "+success+" supplier updated.");
+			else if(success>1) System.out.println("Successfully "+success+" suppliers updated.");			
 		} catch(Exception e) {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");

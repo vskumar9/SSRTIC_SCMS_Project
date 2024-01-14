@@ -44,11 +44,15 @@ public class Warehouse {
 		this.currentCapacity = currentCapacity;
 	}
 	
+	public int availableCapacity() {
+		return capacity -currentCapacity;
+	}
+	
 	
 	@Override
 	public String toString() {
-		return "WarehouseManagement [warehouseId=" + warehouseId + ", warehouseName=" + warehouseName + ", location="
-				+ location + ", capacity=" + capacity + "]";
+		System.out.printf("%-25s%-30s%-30s%-30d%-30d%-30d", warehouseId, warehouseName, location, capacity, currentCapacity, availableCapacity());
+		return "";
 	}
 	
 
