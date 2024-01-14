@@ -70,6 +70,55 @@ public class WarehouseUserInterface {
 		}
 	}
 	
+	
+	
+	
+	private void addInventory() {
+		try {
+			
+			System.out.println("--------------ADDING INVENTORY DETAILS IN WAREHOUSE--------------");
+			System.out.println("Enter warehouse Id: ");
+			String warehouseId = sc.nextLine();
+			if(!util.validateWarehouseId(warehouseId)&& service.searchWarehouseById(warehouseId)== null) {
+				System.out.println("Invalid warehouse id: "+warehouseId);
+				return;
+			}
+			
+			System.out.print("Enter number of invetories: ");
+			int noOfInventory= sc.nextInt();
+			sc.nextLine();
+			while(noOfInventory<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfInventory = sc.nextInt();
+				sc.nextLine();
+			}
+			System.out.println("Enter the warehouse details formate is : \n[INVENTORY_ID]");
+			int success = 0;
+			for(int i = 0; i < noOfInventory; i++) {
+				String inventoryId;
+				do {
+					inventoryId = sc.nextLine();
+				}while(inventoryId.isEmpty());
+				if( service.addInventory(warehouseId, inventoryId)) {
+					success++;
+				}
+			}
+			
+			if(success==0) System.out.println("warehouses/warehouse not added....");
+			else if(success==1) System.out.println("Successfully "+success+" warehouse added.");
+			else if(success>1) System.out.println("Successfully "+success+" warehouses added.");
+			
+		} catch(InvalidException e) {
+			System.out.println(e.getMessage());
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			sc.nextLine();
+			addInventory();
+		}
+	}
+	
 	private void searchWarehouse() {
 		try {
 			int search;

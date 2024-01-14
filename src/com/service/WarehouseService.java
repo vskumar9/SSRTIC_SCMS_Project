@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.exception.InvalidException;
+import com.management.InventoryManagement;
 import com.management.WarehouseManagement;
+import com.model.Inventory;
 import com.model.Warehouse;
 import com.util.ApplicationUtil;
 
@@ -14,6 +16,7 @@ public class WarehouseService {
 	
 	WarehouseManagement wm = new WarehouseManagement();
 	ApplicationUtil util = new ApplicationUtil();
+	InventoryManagement im = new InventoryManagement();
 
 	public String addWarehouse(String warehouseDetails) {
 		String[] warehouse = warehouseDetails.split(":");
@@ -90,6 +93,49 @@ public class WarehouseService {
 		}
 		return null;
 	}
+	
+	public boolean addInventory(String warehouseId, String inventoryId) {
+		try {
+			if(util.validateInventoryId(inventoryId) && im.searchInventoryById(inventoryId) != null) {
+				return wm.addInventory(warehouseId, inventoryId);				
+			}
+			System.out.println("Invalid inventory id or not exists invenotry: "+inventoryId);
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		} catch(InvalidException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public boolean deleteInventory(String warehouseId, String inventoryId) {
+		try {
+			if(util.validateInventoryId(inventoryId) && im.searchInventoryById(inventoryId) != null) {
+				return wm.deleteInventory(warehouseId, inventoryId);				
+			}
+			System.out.println("Invalid inventory id or not exists invenotry: "+inventoryId);
+			
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		} catch(InvalidException e) {
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public ArrayList<Inventory> viewInventoryDetails(String warehouseId) {
+		try {
+			if(util.validateWarehouseId(warehouseId)) {
+				return wm.viewInventoryDetails(warehouseId);				
+			}
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		} catch(InvalidException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
 	
 	// Helper method to generate warehouse unique id
 		public String generateUniqueId() {

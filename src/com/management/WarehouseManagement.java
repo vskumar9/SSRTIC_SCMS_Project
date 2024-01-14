@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import com.model.Inventory;
 import com.model.Warehouse;
 
 public class WarehouseManagement {
@@ -112,6 +113,92 @@ public class WarehouseManagement {
 				list.add(wh);
 			}
 			return list;
+		}
+	}
+	
+	public boolean addInventory(String warehouseId, String inventoryId) throws ClassNotFoundException, SQLException {
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("INSERT INTO warehouse_storage VALUES(?, ?)");
+			){
+			
+			st.setString(1, warehouseId);
+			st.setString(2, inventoryId);
+			
+			return st.executeUpdate()>0;
+			
+		}
+	}
+	
+	public boolean deleteInventory(String warehouseId, String inventoryId) throws ClassNotFoundException, SQLException {
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("DELTE FROM warehouse_storage WHERE LOWER(warehouseId) = LOWER(?) AND LOWER(inventoryId) = LOWER(?)");
+			){
+			
+			st.setString(1, warehouseId);
+			st.setString(2, inventoryId);
+			
+			return st.executeUpdate()>0;
+			
+		}
+	}
+	
+	public ArrayList<Inventory> viewInventoryDetails(String warehouseId) throws ClassNotFoundException, SQLException{
+		
+		ArrayList<Inventory> list = new ArrayList<Inventory>();
+		
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("select inventoryId, productId, productName, unitPrice, quntityInStock, lastStockUpdate from warehouse_storage natural join warehouse natural join inventory natural join products where LOWER(warehouseId) = LOWER(?)");
+			){
+			
+			st.setString(1, warehouseId);
+			ResultSet rs = st.executeQuery();
+			while(rs.next()) {
+				String inventoryId = rs.getString("inventoryId");
+				
+				
+			}
+			return list;
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	public boolean addCapacity(String warehouseId, int capacity) throws ClassNotFoundException, SQLException {
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("UPDATE FROM warehouse SET currentCapacity = currentCapacity + ? WHERE LOWER(warehouseId) = LOWER(?)");
+			){
+			
+			st.setInt(1, capacity);
+			st.setString(2, warehouseId);
+			
+			return st.executeUpdate()>0;
+		}
+	}
+	
+	public boolean deleteCapacity(String warehouseId, int capacity) throws ClassNotFoundException, SQLException {
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("UPDATE FROM warehouse SET currentCapacity = currentCapacity - ? WHERE LOWER(warehouseId) = LOWER(?)")
+			){
+			
+			st.setInt(1, capacity);
+			st.setString(2, warehouseId);
+			
+			return st.executeUpdate()>0;
+			
 		}
 	}
 	
