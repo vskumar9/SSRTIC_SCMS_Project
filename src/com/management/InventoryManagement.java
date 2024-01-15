@@ -1,7 +1,6 @@
 package com.management;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -51,8 +50,8 @@ public class InventoryManagement {
 				
 				st.setString(1, inventory.getProductId());
 				st.setLong(2, inventory.getQuantityInStock());
-				Date sqlDate = new Date(inventory.getLastStockUpdate().getTime());
-				st.setDate(3, sqlDate);
+				Timestamp sqlTimestamp = new Timestamp(inventory.getLastStockUpdate().getTime());
+		        st.setTimestamp(3, sqlTimestamp);
 				st.setString(4, inventory.getInventoryId());
 				
 				return st.executeUpdate()>0;

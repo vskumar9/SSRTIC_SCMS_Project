@@ -97,6 +97,9 @@ DESC products_information;
 -- describe inventory table structure
 DESC inventory;
 
+DESC warehouse;
+
+DESC warehouse_storage;
 
 select * from products_information;
 select * from products;
@@ -108,3 +111,31 @@ select * from warehouse;
 select * from warehouse_storage;
 
 truncate table warehouse;
+
+select inventoryId, productId, productName, unitPrice, quntityInStock, lastStockUpdate from warehouse_storage natural join warehouse natural join inventory natural join products where warehouseId = 'WRHS241141023834582';
+
+delete from warehouse where warehouseId = 'WRHS241141023834582';
+
+
+-- Assuming you have a product table named 'products' with columns: productId, productName, quantity
+-- Adjust the product table and column names accordingly based on your actual schema.
+
+-- Update currentCapacity in the warehouse_storage table based on the product quantity
+UPDATE warehouse
+SET currentCapacity = currentCapacity + (SELECT quntityInStock
+                                         FROM inventory
+                                         WHERE inventoryId = 'INVT241131812192654') -- Replace with the actual product ID
+WHERE warehouseId = 'WRHS241141023834582'; -- Replace with the actual warehouse ID
+
+DELIMITER //
+CREATE TRIGGER update_current_capacity
+AFTER UPDATE ON inventory
+FOR EACH ROW
+BEGIN
+    -- Update currentCapacity in warehouse_storage for the corresponding warehouse
+    UPDATE warehouse_storage
+    SET currentCapacity = currentCapacity + (NEW.quantityInStock - OLD.quantityInStock)
+    WHERE warehouseId = (SELECT warehouseId FROM inventory WHERE inventoryId = NEW.inventoryId);
+END;
+//
+DELIMITER ;

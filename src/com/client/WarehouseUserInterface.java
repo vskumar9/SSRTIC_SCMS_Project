@@ -12,7 +12,52 @@ public class WarehouseUserInterface {
 	WarehouseService service = new WarehouseService();
 	ApplicationUtil util = new ApplicationUtil();
 	
+	
 	public void warehouseSection() {
+		
+		try {
+			char warehouseChoice;
+			do {
+				System.out.print("--------------WAREHOUSE SECTION--------------\nA. Warehouses Management\nB. warehouse Storage Management\nC. <- Go to Main Section");
+				System.out.print("\nEnter your option: ");
+				
+				warehouseChoice = sc.next().charAt(0);				
+				
+				switch(warehouseChoice) {
+				case 'A':
+				case 'a':
+					// call addWarehouse method
+					warehouseManagement();
+					break;
+				case 'B':
+				case 'b':
+					// call deleteWarehouse method
+					warehouseStorageManagement();
+					break;
+				case 'C':
+				case 'c':
+					// print string and exits the Warehouse method this choice
+					System.out.println("-----Complete Warehouse Section-----");
+					return;
+				default:
+					// print the select wrong choice
+					System.out.println("Your choice is wrong.");
+					
+				}
+				
+			}while(warehouseChoice != 'C' || warehouseChoice != 'c');
+			
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			sc.nextLine();
+			warehouseSection();
+		}
+		
+	}
+	
+	public void warehouseManagement() {
 		
 		try {
 			char warehouseChoice;
@@ -66,12 +111,134 @@ public class WarehouseUserInterface {
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
 			sc.nextLine();
-			warehouseSection();
+			warehouseManagement();
 		}
 	}
 	
+	private void warehouseStorageManagement() {
+		
+		try {
+			char warehouseChoice;
+			do {
+				System.out.print("--------------WAREHOUSE SECTION--------------\nA. Add Inventory\nB. Delete Inventory\nC. Inventory Management\nD. Display Warehouse inventories\nE. <- Go to Main Section");
+				System.out.print("\nEnter your option: ");
+				
+				warehouseChoice = sc.next().charAt(0);
+				sc.nextLine();
+				
+				switch(warehouseChoice) {
+				case 'A':
+				case 'a':
+					// call addWarehouse method
+					addInventory();
+					break;
+				case 'B':
+				case 'b':
+					// call deleteWarehouse method
+					deleteInventory();
+					break;
+				case 'C':
+				case 'c':
+					// call updateWarehouse method
+					new InventoryUserInterface().inventorySection();
+					break;
+				case 'D':
+				case 'd':
+					// call updateWarehouse method
+					viewWarehouseInventory();
+					break;
+				case 'E':
+				case 'e':
+					// print string and exits the Warehouse method this choice
+					System.out.println("-----Complete Warehouse Section-----");
+					return;
+				default:
+					// print the select wrong choice
+					System.out.println("Your choice is wrong.");
+					
+				}
+				
+			}while(warehouseChoice != 'E' || warehouseChoice != 'f');
+			
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			sc.nextLine();
+			warehouseStorageManagement();
+		}
+		
+	}
 	
+	private void viewWarehouseInventory() {
+		
+		try {
+			System.out.println("Enter warehouse Id: ");
+			String warehouseId = sc.nextLine();
+			if(!util.validateWarehouseId(warehouseId)&& service.searchWarehouseById(warehouseId)== null) {
+				System.out.println("Invalid warehouse id: "+warehouseId);
+				return;
+			}
+			System.out.println("--------------DISPLAY INVENTORY DETAILS--------------");
+			System.out.printf("%-25s%-50s%-15s%-15s","Inventory ID", "Product information", "quntityInStock", "lastStockUpdate");
+			System.out.println();
+			System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+			service.viewInventoryDetails(warehouseId).forEach(e -> {
+				System.out.println(e);
+			});
+			System.out.println();			
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+		} 
+	}
 	
+	private void deleteInventory() {
+		try {
+			
+			System.out.println("--------------DELETE INVENTORY DETAILS IN WAREHOUSE--------------");
+			System.out.println("Enter warehouse Id: ");
+			String warehouseId = sc.nextLine();
+			if(!util.validateWarehouseId(warehouseId)&& service.searchWarehouseById(warehouseId)== null) {
+				System.out.println("Invalid warehouse id: "+warehouseId);
+				return;
+			}
+			
+			System.out.print("Enter number of invetories: ");
+			int noOfInventory= sc.nextInt();
+			sc.nextLine();
+			while(noOfInventory<=0) {
+				System.out.println("Your enter number is wrong... ");
+				noOfInventory = sc.nextInt();
+				sc.nextLine();
+			}
+			System.out.println("Enter the inventory id : \n[INVENTORY_ID]");
+			int success = 0;
+			for(int i = 0; i < noOfInventory; i++) {
+				String inventoryId;
+				do {
+					inventoryId = sc.nextLine();
+				}while(inventoryId.isEmpty());
+				if( service.deleteInventory(warehouseId, inventoryId)) {
+					success++;
+				}
+			}
+			
+			if(success==0) System.out.println("Inventories/Inventory not deleted....");
+			else if(success==1) System.out.println("Successfully "+success+" Inventory deleted.");
+			else if(success>1) System.out.println("Successfully "+success+" Inventories deleted.");
+			
+		} catch(InvalidException e) {
+			System.out.println(e.getMessage());
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			sc.nextLine();
+			deleteInventory();
+		}
+	}
 	
 	private void addInventory() {
 		try {
@@ -92,7 +259,7 @@ public class WarehouseUserInterface {
 				noOfInventory = sc.nextInt();
 				sc.nextLine();
 			}
-			System.out.println("Enter the warehouse details formate is : \n[INVENTORY_ID]");
+			System.out.println("Enter the inventory id : \n[INVENTORY_ID]");
 			int success = 0;
 			for(int i = 0; i < noOfInventory; i++) {
 				String inventoryId;
@@ -104,9 +271,9 @@ public class WarehouseUserInterface {
 				}
 			}
 			
-			if(success==0) System.out.println("warehouses/warehouse not added....");
-			else if(success==1) System.out.println("Successfully "+success+" warehouse added.");
-			else if(success>1) System.out.println("Successfully "+success+" warehouses added.");
+			if(success==0) System.out.println("Inventories/Inventory not added....");
+			else if(success==1) System.out.println("Successfully "+success+" Inventory added.");
+			else if(success>1) System.out.println("Successfully "+success+" Inventories added.");
 			
 		} catch(InvalidException e) {
 			System.out.println(e.getMessage());

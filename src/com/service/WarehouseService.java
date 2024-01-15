@@ -97,7 +97,10 @@ public class WarehouseService {
 	public boolean addInventory(String warehouseId, String inventoryId) {
 		try {
 			if(util.validateInventoryId(inventoryId) && im.searchInventoryById(inventoryId) != null) {
-				return wm.addInventory(warehouseId, inventoryId);				
+				if(wm.checkingInventory(warehouseId, inventoryId))
+						return wm.addInventory(warehouseId, inventoryId);
+				System.out.println("Already Exist Inventory in Warehouse.");
+				return false;
 			}
 			System.out.println("Invalid inventory id or not exists invenotry: "+inventoryId);
 		} catch(ClassNotFoundException | SQLException e) {
@@ -135,6 +138,7 @@ public class WarehouseService {
 		}
 		return null;
 	}
+	
 	
 	
 	// Helper method to generate warehouse unique id
