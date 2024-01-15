@@ -66,6 +66,7 @@ capacity bigint,
 currentCapacity bigint
 );
 
+-- Create warehouse_storage table
 CREATE TABLE warehouse_storage(
 warehouseId varchar(25),
 inventoryId varchar(25),
@@ -73,8 +74,44 @@ CONSTRAINT Fk_warehouseId FOREIGN KEY (warehouseId) REFERENCES warehouse(warehou
 CONSTRAINT Fk_inventoryId FOREIGN KEY (inventoryId) REFERENCES inventory(inventoryId) ON DELETE RESTRICT
 );
 
+-- Create customer table
+CREATE TABLE customer (
+customerID VARCHAR(25) PRIMARY KEY,
+firstName VARCHAR(50) NOT NULL,
+lastName VARCHAR(50) NOT NULL,
+email VARCHAR(100) UNIQUE NOT NULL,
+phone BIGINT UNIQUE NOT NULL,
+address VARCHAR(255),
+city VARCHAR(50),
+state VARCHAR(50),
+zipCode VARCHAR(20)
+);
 
-DROP TABLE warehousestorage;
+
+-- Create orders table
+CREATE TABLE orders(
+orderId VARCHAR(25) PRIMARY KEY,
+customerId VARCHAR(25),
+orderDate  datetime DEFAULT NOW(),
+totalAmount BIGINT DEFAULT 0,
+orderStatus VARCHAR(25),
+CONSTRAINT Fk_customerId FOREIGN KEY (customerId) REFERENCES customer(customerId) ON DELETE RESTRICT
+);
+
+CREATE TABLE order_details(
+orderId VARCHAR(25),
+productId VARCHAR(25),
+CONSTRAINT Fk_orderId FOREIGN KEY (orderId) REFERENCES orders(orderId) ON DELETE RESTRICT,
+CONSTRAINT Fk_order_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT
+);
+
+-- Sample data for the Customer table
+INSERT INTO customer VALUES
+('CUMR123456789098765','John', 'Doe', 'john.doe@example.com', 9874586325, '123 Main St', 'Anytown', 'CA', '12345'),
+('CUMR123456789098764','Jane', 'Smith', 'jane.smith@example.com', 9874586328, '456 Oak Ave', 'Somewhere', 'NY', '67890'),
+('CUMR123456789098763','Bob', 'Johnson', 'bob.johnson@example.com', 9874586327, '789 Pine Rd', 'Nowhere', 'TX', '54321');
+
+DROP TABLE customer;
 
 -- Show tables in database
 SHOW TABLES;
@@ -109,8 +146,9 @@ select * from consumer_goods;
 select * from inventory;
 select * from warehouse;
 select * from warehouse_storage;
+select * from customer;
 
-truncate table warehouse;
+truncate table customer;
 
 select inventoryId, productId, productName, unitPrice, quntityInStock, lastStockUpdate from warehouse_storage natural join warehouse natural join inventory natural join products where warehouseId = 'WRHS241141023834582';
 

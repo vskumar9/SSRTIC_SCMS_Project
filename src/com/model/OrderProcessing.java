@@ -58,8 +58,8 @@ public class OrderProcessing {
 	}
 	@Override
 	public String toString() {
-		return "OrderProcessing [orderId=" + orderId + ", customerId=" + customerId + ", orderDate=" + orderDate
-				+ ", totalAmount=" + totalAmount + ", status=" + status + "]";
+		System.out.printf("%-25s%-30s%-30s%-30d%-30s", orderId, customerId, orderDate, totalAmount, status);
+		return "";
 	}
 	
 	
