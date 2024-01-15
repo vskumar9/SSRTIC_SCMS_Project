@@ -179,8 +179,18 @@ public class WarehouseUserInterface {
 				System.out.println("Invalid warehouse id: "+warehouseId);
 				return;
 			}
-			System.out.println("--------------DISPLAY INVENTORY DETAILS--------------");
-			System.out.printf("%-25s%-50s%-15s%-15s","Inventory ID", "Product information", "quntityInStock", "lastStockUpdate");
+			System.out.println("--------------DISPLAY WAREHOUSE INVENTORY DETAILS--------------");
+			System.out.println();
+			System.out.printf("%-25s%-30s%-30s%-30s%-30s%-30s","Warehouse ID", "Warehouse Name", "Location", "Total Capacity", "Current Capacity", "Available Capacity");
+			System.out.println();
+			System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+			service.searchWarehouseById(warehouseId).forEach(e -> {
+				System.out.println(e);
+			});	
+			System.out.println();
+			System.out.println("--------------------------****************************Stock Inventory Details***************************--------------------------");
+			System.out.println();
+			System.out.printf("%-25s%-50s%-15s%-15s","Inventory ID", "Product information(ID, Name, Unit Price)", "quntityInStock", "lastStockUpdate");
 			System.out.println();
 			System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
 			service.viewInventoryDetails(warehouseId).forEach(e -> {

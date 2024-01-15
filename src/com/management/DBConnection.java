@@ -16,6 +16,8 @@ public class DBConnection {
 	    String tableName3 = "consumer_goods";
 	    String tableName4 = "products";
 	    String tableName5 = "products_information";
+	    
+	    String triggerName = "update_current_capacity";
 
 	    try (FileInputStream file = new FileInputStream("src/DB.properties")) {
 	        prop.load(file);
@@ -36,6 +38,12 @@ public class DBConnection {
 	            createTables(con);
 //	            System.out.println("SUCCESSFULLY CREATED TABLES.");
 	        }
+	        
+//	        System.out.println(!triggerExists(con, triggerName));
+	        if (!triggerExists(con, triggerName)) {
+//	        	Create trigger if they do not exist
+	        	createTrigger(con);
+            }
 	        
 	    } catch (IOException e) {
 	        e.printStackTrace();
@@ -153,6 +161,52 @@ public class DBConnection {
 	    	}
 	        }
 	    }
+	private static boolean triggerExists(Connection connection, String triggerName) throws SQLException {
+        ResultSet resultSet = null;
+
+        try {
+//            DatabaseMetaData metaData = connection.getMetaData();
+            String query = "SELECT * FROM information_schema.TRIGGERS WHERE TRIGGER_NAME = ? AND EVENT_OBJECT_SCHEMA = ?";
+            
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setString(1, triggerName);
+                statement.setString(2, connection.getCatalog()); // Use the current database as the schema
+
+                resultSet = statement.executeQuery();
+                return resultSet.next();
+            }
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+        }
+    }
+	
+	private static void createTrigger(Connection connection) throws SQLException {
+	    try (Statement statement = connection.createStatement()) {
+	        try {
+	            // Define the trigger without DELIMITER
+	            String triggerSQL = 
+	                "CREATE TRIGGER update_current_capacity " +
+	                "AFTER UPDATE ON inventory " +
+	                "FOR EACH ROW " +
+	                "BEGIN " +
+	                "    DECLARE deltaQuantity INT; " +
+	                "    SET deltaQuantity = NEW.quntityInStock - OLD.quntityInStock; " +
+	                "    UPDATE warehouse " +
+	                "    SET currentCapacity = currentCapacity + deltaQuantity " +
+	                "    WHERE warehouseId = (SELECT warehouseId FROM warehouse_storage WHERE inventoryId = NEW.inventoryId); " +
+	                "END";
+
+	            statement.executeUpdate(triggerSQL);
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
+
+
+	
 	
 	
 	//Class main method

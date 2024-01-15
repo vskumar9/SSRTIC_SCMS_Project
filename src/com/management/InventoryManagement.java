@@ -20,9 +20,9 @@ public class InventoryManagement {
 	        st.setString(1, inventory.getInventoryId());
 	        st.setString(2, inventory.getProductId());
 	        st.setLong(3, inventory.getQuantityInStock());
-	        
-	        Timestamp timestamp = new Timestamp(inventory.getLastStockUpdate().getTime());
-	        st.setTimestamp(4, timestamp);
+	        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            st.setTimestamp(4, timestamp);
+
 
 	        return st.executeUpdate() > 0;
 	    }
@@ -50,8 +50,8 @@ public class InventoryManagement {
 				
 				st.setString(1, inventory.getProductId());
 				st.setLong(2, inventory.getQuantityInStock());
-				Timestamp sqlTimestamp = new Timestamp(inventory.getLastStockUpdate().getTime());
-		        st.setTimestamp(3, sqlTimestamp);
+				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+	            st.setTimestamp(4, timestamp);
 				st.setString(4, inventory.getInventoryId());
 				
 				return st.executeUpdate()>0;

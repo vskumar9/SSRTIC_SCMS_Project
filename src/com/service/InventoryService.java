@@ -9,6 +9,7 @@ import java.util.Date;
 import com.exception.InvalidException;
 import com.management.InventoryManagement;
 import com.management.ProductManagement;
+import com.management.WarehouseManagement;
 import com.model.Inventory;
 import com.util.ApplicationUtil;
 
@@ -17,6 +18,7 @@ public class InventoryService {
 	ProductManagement pm = new ProductManagement();
 	InventoryManagement im = new InventoryManagement();
 	ApplicationUtil util = new ApplicationUtil();
+	WarehouseManagement wm = new WarehouseManagement();
 	
 	public String addInventory(String inventoryDetails) {
 		String[] inventory = inventoryDetails.split(":");
@@ -49,9 +51,10 @@ public class InventoryService {
 	public boolean deleteInventory(String inventoryId) {
 		try {
 			
-			if(util.validateInventoryId(inventoryId)) {
+			if(util.validateInventoryId(inventoryId) && !wm.existsInventoryInWarehouse_storage(inventoryId)) {
 				return im.deleteInventory(inventoryId);
 			}
+			System.out.println("This inventory doesn't delete. This is stored in the warehouse.");
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
 		} catch(InvalidException e) {

@@ -39,10 +39,10 @@ public class WarehouseService {
 	
 	public boolean deleteWarehouse(String warehouseId) {
 		try {
-			if(util.validateWarehouseId(warehouseId)) {
+			if(util.validateWarehouseId(warehouseId) && !wm.existsWarehouseInWarehouse_storage(warehouseId)) {
 				return wm.deleteWarehouse(warehouseId);
 			}
-			
+			System.out.println("Warehouse doesn't delete. In the warehouse inventories are stored.");
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
 		} catch(InvalidException e) {
@@ -97,7 +97,7 @@ public class WarehouseService {
 	public boolean addInventory(String warehouseId, String inventoryId) {
 		try {
 			if(util.validateInventoryId(inventoryId) && im.searchInventoryById(inventoryId) != null) {
-				if(wm.checkingInventory(warehouseId, inventoryId))
+				if(!wm.checkingInventory(warehouseId, inventoryId))
 						return wm.addInventory(warehouseId, inventoryId);
 				System.out.println("Already Exist Inventory in Warehouse.");
 				return false;
@@ -105,6 +105,7 @@ public class WarehouseService {
 			System.out.println("Invalid inventory id or not exists invenotry: "+inventoryId);
 		} catch(ClassNotFoundException | SQLException e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		} catch(InvalidException e) {
 			System.out.println(e.getMessage());
 		}

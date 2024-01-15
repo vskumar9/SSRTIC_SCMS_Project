@@ -132,10 +132,21 @@ CREATE TRIGGER update_current_capacity
 AFTER UPDATE ON inventory
 FOR EACH ROW
 BEGIN
-    -- Update currentCapacity in warehouse_storage for the corresponding warehouse
-    UPDATE warehouse_storage
-    SET currentCapacity = currentCapacity + (NEW.quantityInStock - OLD.quantityInStock)
-    WHERE warehouseId = (SELECT warehouseId FROM inventory WHERE inventoryId = NEW.inventoryId);
+    DECLARE deltaQuantity INT;
+    
+    -- Calculate the change in quantity
+    SET deltaQuantity = NEW.quntityInStock - OLD.quntityInStock;
+
+    -- Update currentCapacity in warehouse for the corresponding warehouse
+    UPDATE warehouse
+    SET currentCapacity = currentCapacity + deltaQuantity
+    WHERE warehouseId = (SELECT warehouseId FROM warehouse_storage WHERE inventoryId = NEW.inventoryId);
 END;
 //
 DELIMITER ;
+
+
+DROP TRIGGER IF EXISTS update_current_capacity;
+
+
+UPDATE warehouse SET currentCapacity = 0 where warehouseId = 'WRHS241150955252519';

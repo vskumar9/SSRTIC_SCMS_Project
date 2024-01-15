@@ -42,13 +42,15 @@ public class WarehouseManagement {
 	public boolean updateWarehouse(Warehouse warehouse) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement st = con.prepareStatement("UPDATE warehouse SET warehouseName = ?, location = ?, capacity = ? WHERE LOWER(warehouseId) = LOWER(?)");
+				PreparedStatement st = con.prepareStatement("UPDATE warehouse SET warehouseName = ?, location = ?, capacity = ? WHERE LOWER(warehouseId) = LOWER(?) AND currentCapacity < ?");
 			){
 			
 			st.setString(1, warehouse.getWarehouseName());
 			st.setString(2, warehouse.getLocation());
 			st.setInt(3, warehouse.getCapacity());
 			st.setString(4, warehouse.getWarehouseId());
+			st.setInt(5, warehouse.getCapacity());
+
 			
 			return st.executeUpdate()>0;
 		}
@@ -119,20 +121,39 @@ public class WarehouseManagement {
 	public boolean addInventory(String warehouseId, String inventoryId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
+				PreparedStatement capacityCheckStmt = con.prepareStatement("SELECT capacity, currentCapacity FROM warehouse WHERE warehouseId = ?");
+				PreparedStatement Inv = con.prepareStatement("SELECT quntityInStock FROM inventory WHERE LOWER(inventoryId) = LOWER(?)");
 				PreparedStatement st = con.prepareStatement("INSERT INTO warehouse_storage VALUES(?, ?)");
 				PreparedStatement up = con.prepareStatement("UPDATE warehouse SET currentCapacity = currentCapacity + (SELECT quntityInStock FROM inventory WHERE inventoryId = ?) WHERE warehouseId = ?");
 			){
 			
-			st.setString(1, warehouseId);
-			st.setString(2, inventoryId);
+			Inv.setString(1, inventoryId);
+
+			ResultSet rs_inv = Inv.executeQuery();
 			
-			
-			if(st.executeUpdate()>0) {
-				up.setString(1, inventoryId);
-				up.setString(2, warehouseId);
-				return up.executeUpdate()>0;				
+			if(rs_inv.next()) {
+				long InventoryCapacity = rs_inv.getLong("quntityInStock");
+				
+				capacityCheckStmt.setString(1, warehouseId);
+				ResultSet rs_capacity = capacityCheckStmt.executeQuery();
+				if(rs_capacity.next()) {
+					long totalCapacity = rs_capacity.getLong("capacity");
+					long currentCapacity = rs_capacity.getLong("currentCapacity");
+					
+					long availableCapacity = totalCapacity - currentCapacity;
+					
+					if (availableCapacity >= InventoryCapacity) {
+						st.setString(1, warehouseId);
+						st.setString(2, inventoryId);
+						
+						if(st.executeUpdate()>0) {
+							up.setString(1, inventoryId);
+							up.setString(2, warehouseId);
+							return up.executeUpdate()>0;				
+						}									
+					}
+				}
 			}
-			
 			return false;
 			
 		}
@@ -141,8 +162,8 @@ public class WarehouseManagement {
 	public boolean deleteInventory(String warehouseId, String inventoryId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement st = con.prepareStatement("DELTE FROM warehouse_storage WHERE LOWER(warehouseId) = LOWER(?) AND LOWER(inventoryId) = LOWER(?)");
-				PreparedStatement up = con.prepareStatement("UPDATE warehouse SET currentCapacity = currentCapacity - (SELECT quntityInStock FROM inventory WHERE inventoryId = ?) WHERE warehouseId = ?");
+				PreparedStatement st = con.prepareStatement("DELETE FROM warehouse_storage WHERE LOWER(warehouseId) = LOWER(?) AND LOWER(inventoryId) = LOWER(?)");
+				PreparedStatement up = con.prepareStatement("UPDATE warehouse SET currentCapacity = currentCapacity - (SELECT quntityInStock FROM inventory WHERE LOWER(inventoryId) = LOWER(?)) WHERE LOWER(warehouseId) = LOWER(?)");
 			){
 			
 			st.setString(1, warehouseId);
@@ -203,9 +224,32 @@ public class WarehouseManagement {
 			st.setString(1, warehouseId);
 			st.setString(2, inventoryId);
 			
-			return st.executeUpdate()>0;
+			return st.executeQuery().next();
 		}
 	}
 	
+	public boolean existsInventoryInWarehouse_storage(String inventoryId) throws SQLException, ClassNotFoundException {
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM warehouse_storage WHERE LOWER(inventoryId) = LOWER(?)");
+			){
+			
+			st.setString(1, inventoryId);
+			
+			return st.executeQuery().next();
+		}
+	}
+	
+	public boolean existsWarehouseInWarehouse_storage(String warehouseId) throws SQLException, ClassNotFoundException {
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT * FROM warehouse_storage WHERE LOWER(warehouseId) = LOWER(?)");
+			){
+			
+			st.setString(1, warehouseId);
+			
+			return st.executeQuery().next();
+		}
+	}
 
 }
