@@ -671,6 +671,21 @@ public class ProductManagement {
 		}
 	}
 	
+	public int productPrice(String productId) throws ClassNotFoundException, SQLException {
+		try(
+				Connection con = DBConnection.getConnection();
+				PreparedStatement st = con.prepareStatement("SELECT unitPrice FROM products WHERE LOWER(productId) = LOWER(?)");
+			){
+			
+			st.setString(1, productId);
+			
+			ResultSet rs = st.executeQuery();
+			if(rs.next())
+				return rs.getInt("unitPrice");	
+			return 0;
+		}
+	}
+	
  
 }
 

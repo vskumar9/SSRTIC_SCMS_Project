@@ -9,13 +9,13 @@ public class OrderProcessing {
 	private Timestamp orderDate;
 	private double totalAmount;
 	private String status;
-	public OrderProcessing(String orderId, String customerId, double totalAmount) {
+	public OrderProcessing(String orderId, String customerId, Timestamp orderDate, double totalAmount, String status) {
 		super();
 		this.orderId = orderId;
 		this.customerId = customerId;
-		this.orderDate = new Timestamp(0);
+		this.orderDate = orderDate;
 		this.totalAmount = totalAmount;
-		this.status = "Processing";
+		this.status = status;
 	}
 	public String getOrderId() {
 		return orderId;
@@ -58,7 +58,7 @@ public class OrderProcessing {
 	}
 	@Override
 	public String toString() {
-		System.out.printf("%-25s%-30s%-30s%-30d%-30s", orderId, customerId, orderDate, totalAmount, status);
+		System.out.printf("%-25s%-30s%-30s%-30.2f%-30s", orderId, customerId, orderDate, totalAmount, status);
 		return "";
 	}
 	

@@ -101,6 +101,7 @@ CONSTRAINT Fk_customerId FOREIGN KEY (customerId) REFERENCES customer(customerId
 CREATE TABLE order_details(
 orderId VARCHAR(25),
 productId VARCHAR(25),
+quantity INT,
 CONSTRAINT Fk_orderId FOREIGN KEY (orderId) REFERENCES orders(orderId) ON DELETE RESTRICT,
 CONSTRAINT Fk_order_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT
 );
@@ -111,7 +112,7 @@ INSERT INTO customer VALUES
 ('CUMR123456789098764','Jane', 'Smith', 'jane.smith@example.com', 9874586328, '456 Oak Ave', 'Somewhere', 'NY', '67890'),
 ('CUMR123456789098763','Bob', 'Johnson', 'bob.johnson@example.com', 9874586327, '789 Pine Rd', 'Nowhere', 'TX', '54321');
 
-DROP TABLE customer;
+DROP TABLE order_details;
 
 -- Show tables in database
 SHOW TABLES;
@@ -138,6 +139,12 @@ DESC warehouse;
 
 DESC warehouse_storage;
 
+DESC customer;
+
+DESC orders;
+
+DESC order_details;
+
 select * from products_information;
 select * from products;
 select * from supplier;
@@ -147,8 +154,10 @@ select * from inventory;
 select * from warehouse;
 select * from warehouse_storage;
 select * from customer;
+select * from orders;
+select * from order_details;
 
-truncate table customer;
+truncate table orders;
 
 select inventoryId, productId, productName, unitPrice, quntityInStock, lastStockUpdate from warehouse_storage natural join warehouse natural join inventory natural join products where warehouseId = 'WRHS241141023834582';
 
@@ -183,8 +192,24 @@ END;
 //
 DELIMITER ;
 
-
 DROP TRIGGER IF EXISTS update_current_capacity;
 
-
 UPDATE warehouse SET currentCapacity = 0 where warehouseId = 'WRHS241150955252519';
+
+SELECT o.orderId, o.customerId, o.orderDate, o.totalAmount, o.orderStatus
+FROM orders o
+JOIN order_details od ON o.orderId = od.orderId
+JOIN products p ON od.productId = p.productId
+WHERE p.productName = 'microwave';
+
+SELECT o.orderId, o.customerId, o.orderDate, o.totalAmount, o.orderStatus
+FROM orders o
+JOIN order_details od ON o.orderId = od.orderId
+WHERE od.productId = 'PROD241101950105936';
+
+SELECT p.productName, p.productName, p.unitPrice, od.qunatity 
+FROM orders o
+JOIN customer c ON o.customerId = c.customerId
+JOIN order_details od ON o.orderId = od.orderId
+JOIN products p ON od.productId = p.productId
+WHERE LOWER(o.orderId) = LOWER('ID');

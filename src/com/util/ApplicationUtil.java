@@ -76,6 +76,15 @@ public class ApplicationUtil {
 		throw new InvalidException("Warehouse Id: "+warehouseId+" is not exists");
 	}
 	
+	public boolean validateCustomerId(String customerId) throws InvalidException {
+		if(customerId.matches("^CUMR\\d{13,15}$")) return true;
+		throw new InvalidException("Customer Id: "+customerId+" is invalid");
+	}
+	
+	public boolean validateOrderId(String orderId) throws InvalidException {
+		if(orderId.matches("^ORDR\\d{13,15}")) return true;
+		throw new InvalidException("Order Id: "+orderId+" is invalid");
+	}
 	
 
 

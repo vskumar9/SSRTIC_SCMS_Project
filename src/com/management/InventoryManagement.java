@@ -51,7 +51,7 @@ public class InventoryManagement {
 				st.setString(1, inventory.getProductId());
 				st.setLong(2, inventory.getQuantityInStock());
 				Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-	            st.setTimestamp(4, timestamp);
+	            st.setTimestamp(3, timestamp);
 				st.setString(4, inventory.getInventoryId());
 				
 				return st.executeUpdate()>0;

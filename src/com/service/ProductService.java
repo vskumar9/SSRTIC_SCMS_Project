@@ -373,6 +373,16 @@ public class ProductService {
 		return new ProductManagement().searchConsumer(consumer);
 	}
 	
+	public boolean checkingProductId(String productId) {
+		try {
+			return pm.checkingProductId(productId);
+			
+		} catch(ClassNotFoundException | SQLException e) {
+			System.out.println(e.getLocalizedMessage());
+		}
+		return false;
+	}
+	
 	public String generateUniqueId() {
 	       return generateSCMId();
 	    }

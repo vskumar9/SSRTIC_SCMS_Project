@@ -149,7 +149,7 @@ public class InventoryUserInterface {
 				default:
 					System.out.println("Please select correct option....");
 				}
-			}while(search != 3);
+			}while(search != 4);
 			} catch(Exception e) {
 				System.out.println();
 				System.out.println("Something error. Please try again.....");
@@ -191,7 +191,7 @@ public class InventoryUserInterface {
 				noOfInventories = sc.nextInt();
 				sc.nextLine();
 			}
-			System.out.println("Enter the inventory details formate is : \n[INVENTORY_ID:SUPPLIER_ID:QUNTITY_IN_STOCK(NUMBER)]");
+			System.out.println("Enter the inventory details formate is : \n[INVENTORY_ID:PRODUCT_ID:QUNTITY_IN_STOCK(NUMBER)]");
 			int success = 0;
 			for(int i = 0; i < noOfInventories; i++) {
 				String inventoryDetails;
@@ -284,7 +284,6 @@ public class InventoryUserInterface {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
-			e.printStackTrace();
 			sc.nextLine();
 			addInventory();
 		} 
