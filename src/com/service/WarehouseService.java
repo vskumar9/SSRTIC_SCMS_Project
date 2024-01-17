@@ -14,18 +14,21 @@ import com.util.ApplicationUtil;
 
 public class WarehouseService {
 	
+	// Create objects. it's help's to accessing class inside methods
 	WarehouseManagement wm = new WarehouseManagement();
 	ApplicationUtil util = new ApplicationUtil();
 	InventoryManagement im = new InventoryManagement();
 
+	// Helper method to add new Warehouse
 	public String addWarehouse(String warehouseDetails) {
 		String[] warehouse = warehouseDetails.split(":");
 		try {
 			if(warehouse.length == 3) {
 				if(!wm.checkingWarehouse(warehouse[0], warehouse[1])) {
 					String warehouseId = generateUniqueId();
-					wm.addWarehouse(new Warehouse(warehouseId, warehouse[0], warehouse[1], Integer.valueOf(warehouse[2])));
-					return warehouse[0]+" Warehouse Id: "+warehouseId;
+					if(wm.addWarehouse(new Warehouse(warehouseId, warehouse[0], warehouse[1], Integer.valueOf(warehouse[2]))))
+						return warehouse[0]+" Warehouse Id: "+warehouseId;
+					return null;
 				}
 				System.out.println("Already Exists Warehouse Details.");
 				return null;
@@ -37,6 +40,7 @@ public class WarehouseService {
 		return null;
 	}
 	
+	// Helper method to Delete Warehouse
 	public boolean deleteWarehouse(String warehouseId) {
 		try {
 			if(util.validateWarehouseId(warehouseId) && !wm.existsWarehouseInWarehouse_storage(warehouseId)) {
@@ -51,6 +55,7 @@ public class WarehouseService {
 		return false;
 	}
 	
+	// Helper method to Update Warehouse
 	public boolean updateWarehouse(String warehouseDetails) {
 		String[] warehouse = warehouseDetails.split(":");
 		try {
@@ -67,6 +72,7 @@ public class WarehouseService {
 		return false;
 	}
 	
+	// Helper method to Retrieve All Warehouses
 	public ArrayList<Warehouse> viewWarehouse(){
 		try {
 			return wm.viewWarehouse();
@@ -76,6 +82,7 @@ public class WarehouseService {
 		return null;
 	}
 	
+	// Helper method to Retrieve Warehouse specific Id
 	public ArrayList<Warehouse> searchWarehouseById(String warehouseId){
 		try {
 			return wm.searchWarehouseById(warehouseId);
@@ -85,6 +92,7 @@ public class WarehouseService {
 		return null;
 	}
 	
+	// Helper method to Retrieve Warehouse Specific Name
 	public ArrayList<Warehouse> searchWarehouseByName(String warehouseName){
 		try {
 			return wm.searchWarehouseByName(warehouseName);
@@ -94,6 +102,7 @@ public class WarehouseService {
 		return null;
 	}
 	
+	// Helper method to add new Inventory in Specific Warehouse
 	public boolean addInventory(String warehouseId, String inventoryId) {
 		try {
 			if(util.validateInventoryId(inventoryId) && im.searchInventoryById(inventoryId) != null) {
@@ -112,6 +121,7 @@ public class WarehouseService {
 		return false;
 	}
 	
+	// Helper method to Delete Inventory in Specific Warehouse
 	public boolean deleteInventory(String warehouseId, String inventoryId) {
 		try {
 			if(util.validateInventoryId(inventoryId) && im.searchInventoryById(inventoryId) != null) {
@@ -127,6 +137,7 @@ public class WarehouseService {
 		return false;
 	}
 	
+	// Helper method to Retrieve all Inventories Specific Warehouse
 	public ArrayList<Inventory> viewInventoryDetails(String warehouseId) {
 		try {
 			if(util.validateWarehouseId(warehouseId)) {
@@ -139,8 +150,6 @@ public class WarehouseService {
 		}
 		return null;
 	}
-	
-	
 	
 	// Helper method to generate warehouse unique id
 		public String generateUniqueId() {

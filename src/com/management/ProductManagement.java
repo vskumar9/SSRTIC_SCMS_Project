@@ -153,9 +153,9 @@ public class ProductManagement {
 		
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement pro = con.prepareStatement("SELECT industryId FROM industrial_goods WHERE LOWER(industry) = LOWER(?)")
+				PreparedStatement pro = con.prepareStatement("SELECT industryId FROM industrial_goods WHERE LOWER(industry) LIKE LOWER(?)")
 			){
-			pro.setString(1, industry);
+			pro.setString(1, "%"+industry+"%");
 			ResultSet rs = pro.executeQuery();
 			if(rs.next())
 				return rs.getString(1);
@@ -167,9 +167,9 @@ public class ProductManagement {
 		
 		try(
 				Connection con = DBConnection.getConnection();
-				PreparedStatement pro = con.prepareStatement("SELECT consumerId FROM consumer_goods WHERE LOWER(consumerGoods) = LOWER(?)")
+				PreparedStatement pro = con.prepareStatement("SELECT consumerId FROM consumer_goods WHERE LOWER(consumerGoods) LIKE LOWER(?)")
 			){
-			pro.setString(1, consumer);
+			pro.setString(1, "%"+consumer+"%");
 			ResultSet rs = pro.executeQuery();
 			if(rs.next())
 				return rs.getString(1);
@@ -380,7 +380,7 @@ public class ProductManagement {
 	            st.setString(1, productInfoId);
 	            ResultSet rs = st.executeQuery();
 	            while (rs.next()) {
-	                String supplier = rs.getString("supplierName") + "|" + rs.getString("email") + "|" + rs.getString("phone");
+	                String supplier = rs.getString("supplierName") + " | " + rs.getString("email") + " | " + rs.getString("phone");
 	                String productInfo = rs.getString("productInfoId") + ":" + rs.getString("productName") + ":" + rs.getString("productDescription") + ":" + rs.getDouble("unitPrice") + ":" + supplier + ":" + rs.getString("consumerId") + ":" + rs.getString("consumerGoods") + ":" + rs.getString("consumer_description") + ":" + "ConsumerGoods";
 	                list.add(new ProductService().parseProductDetails(productInfo));
 	            }
@@ -397,23 +397,23 @@ public class ProductManagement {
 	
 	    try (Connection con = DBConnection.getConnection();) {
 	
-	        try (PreparedStatement st = con.prepareStatement("SELECT pi.productInfoId, p.productName, p.productDescription, p.unitPrice, s.supplierName, s.email, s.phone, ig.industryId, ig.industry, ig.industry_description FROM products_information pi JOIN products p ON pi.productId = p.productId JOIN supplier s ON pi.supplierId = s.supplierId JOIN industrial_goods ig ON pi.industryId = ig.industryId WHERE p.productName = ?");) {
+	        try (PreparedStatement st = con.prepareStatement("SELECT pi.productInfoId, p.productName, p.productDescription, p.unitPrice, s.supplierName, s.email, s.phone, ig.industryId, ig.industry, ig.industry_description FROM products_information pi JOIN products p ON pi.productId = p.productId JOIN supplier s ON pi.supplierId = s.supplierId JOIN industrial_goods ig ON pi.industryId = ig.industryId WHERE LOWER(p.productName) LIKE LOWER(?)");) {
 	
-	            st.setString(1, productName);
+	            st.setString(1, "%"+productName+"%");
 	            ResultSet rs = st.executeQuery();
 	            while (rs.next()) {
-	                String supplier = rs.getString("supplierName") + "|" + rs.getString("email") + "|" + rs.getString("phone");
+	                String supplier = rs.getString("supplierName") + " | " + rs.getString("email") + " | " + rs.getString("phone");
 	                String productInfo = rs.getString("productInfoId") + ":" + rs.getString("productName") + ":" + rs.getString("productDescription") + ":" + rs.getDouble("unitPrice") + ":" + supplier + ":" + rs.getString("industryId") + ":" + rs.getString("industry") + ":" + rs.getString("industry_description") + ":" + "IndustrialGoods";
 	                list.add(new ProductService().parseProductDetails(productInfo));
 	            }
 	        }
 	
-	        try (PreparedStatement st = con.prepareStatement("SELECT pi.productInfoId, p.productName, p.productDescription, p.unitPrice, s.supplierName, s.email, s.phone, cg.consumerId, cg.consumerGoods, cg.consumer_description FROM products_information pi JOIN products p ON pi.productId = p.productId JOIN supplier s ON pi.supplierId = s.supplierId JOIN consumer_goods cg ON pi.consumerId = cg.consumerId WHERE p.productName = ?");) {
+	        try (PreparedStatement st = con.prepareStatement("SELECT pi.productInfoId, p.productName, p.productDescription, p.unitPrice, s.supplierName, s.email, s.phone, cg.consumerId, cg.consumerGoods, cg.consumer_description FROM products_information pi JOIN products p ON pi.productId = p.productId JOIN supplier s ON pi.supplierId = s.supplierId JOIN consumer_goods cg ON pi.consumerId = cg.consumerId WHERE LOWER(p.productName) LIKE LOWER(?)");) {
 	
-	            st.setString(1, productName);
+	            st.setString(1, "%"+productName+"%");
 	            ResultSet rs = st.executeQuery();
 	            while (rs.next()) {
-	                String supplier = rs.getString("supplierName") + "|" + rs.getString("email") + "|" + rs.getString("phone");
+	                String supplier = rs.getString("supplierName") + " | " + rs.getString("email") + " | " + rs.getString("phone");
 	                String productInfo = rs.getString("productInfoId") + ":" + rs.getString("productName") + ":" + rs.getString("productDescription") + ":" + rs.getDouble("unitPrice") + ":" + supplier + ":" + rs.getString("consumerId") + ":" + rs.getString("consumerGoods") + ":" + rs.getString("consumer_description") + ":" + "ConsumerGoods";
 	                list.add(new ProductService().parseProductDetails(productInfo));
 	            }
@@ -448,13 +448,13 @@ public class ProductManagement {
 					+ "JOIN \r\n"
 					+ "    industrial_goods ig ON pi.industryId = ig.industryId\r\n"
 					+ "WHERE \r\n"
-					+ "    s.supplierName = ?\r\n"
+					+ "    LOWER(s.supplierName) LIKE LOWER(?)\r\n"
 					+ "");)
 			{
-				st.setString(1, supplierName);
+				st.setString(1, "%"+supplierName+"%");
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
-					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
+					String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
 					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
@@ -479,13 +479,13 @@ public class ProductManagement {
 					+ "JOIN \r\n"
 					+ "    consumer_goods cg ON pi.consumerId = cg.consumerId\r\n"
 					+ "WHERE \r\n"
-					+ "    s.supplierName = ?\r\n"
+					+ "    LOWER(s.supplierName) LIKE LOWER(?)\r\n"
 					+ "");)
 			{
-				st.setString(1, supplierName);
+				st.setString(1, "%"+supplierName+"%");
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
-					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
+					String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
 					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 					}
@@ -520,14 +520,14 @@ public class ProductManagement {
 						+ "JOIN \r\n"
 						+ "    industrial_goods ig ON pi.industryId = ig.industryId\r\n"
 						+ "WHERE \r\n"
-						+ "     ig.industry = ?\r\n"
+						+ "     LOWER(ig.industry) LIKE LOWER(?)\r\n"
 						+ "");
 				){
 
-				st.setString(1, industry);
+				st.setString(1, "%"+industry+"%");
 				ResultSet rs = st.executeQuery();
 				while(rs.next()) {
-					String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
+					String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
 					String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("industryId")+":"+rs.getString("industry")+":"+rs.getString("industry_description")+":"+"IndustrialGoods";
 					list.add(new ProductService().parseProductDetails(productInfo));
 				}
@@ -561,14 +561,14 @@ public class ProductManagement {
 						+ "JOIN \r\n"
 						+ "    consumer_goods cg ON pi.consumerId = cg.consumerId\r\n"
 						+ "WHERE \r\n"
-						+ "     cg.consumerGoods = ?\r\n"
+						+ "     LOWER(cg.consumerGoods) LIKE LOWER(?)\r\n"
 						+ "");
 				){
 
-			st.setString(1, consumer);
+			st.setString(1, "%"+consumer+"%");
 			ResultSet rs = st.executeQuery();
 			while(rs.next()) {
-				String supplier = rs.getString("supplierName")+"|"+rs.getString("email")+"|"+rs.getString("phone");
+				String supplier = rs.getString("supplierName")+" | "+rs.getString("email")+" | "+rs.getString("phone");
 				String productInfo = rs.getString("productInfoId")+":"+rs.getString("productName")+":"+rs.getString("productDescription")+":"+rs.getDouble("unitPrice")+":"+supplier+":"+rs.getString("consumerId")+":"+rs.getString("consumerGoods")+":"+rs.getString("consumer_description")+":"+"ConsumerGoods";
 				list.add(new ProductService().parseProductDetails(productInfo));
 				}

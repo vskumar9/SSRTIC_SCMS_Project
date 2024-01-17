@@ -11,6 +11,7 @@ import com.model.Warehouse;
 
 public class WarehouseManagement {
 
+	// Helper method to add new Warehouse details
 	public boolean addWarehouse(Warehouse warehouse) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -27,6 +28,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Delete Warehouse details
 	public boolean deleteWarehouse(String warehouseId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -39,6 +41,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Update Warehouse details
 	public boolean updateWarehouse(Warehouse warehouse) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -56,6 +59,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Retrieve Warehouses details
 	public ArrayList<Warehouse> viewWarehouse() throws ClassNotFoundException, SQLException {
 		ArrayList<Warehouse> list = new ArrayList<Warehouse>();
 		
@@ -76,6 +80,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Searching Warehouse details Specific ID
 	public ArrayList<Warehouse> searchWarehouseById(String warehouseId) throws ClassNotFoundException, SQLException{
 		ArrayList<Warehouse> list = new ArrayList<Warehouse>();
 		
@@ -97,6 +102,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Searching Warehouse details Specific Name
 	public ArrayList<Warehouse> searchWarehouseByName(String warehouseName) throws ClassNotFoundException, SQLException{
 		ArrayList<Warehouse> list = new ArrayList<Warehouse>();
 		
@@ -118,6 +124,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Add New Inventory In Warehouse specific WarehouseId and InventoryId
 	public boolean addInventory(String warehouseId, String inventoryId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -159,6 +166,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method Delete Inventory In Warehouse specific WarehouseId and InventoryId
 	public boolean deleteInventory(String warehouseId, String inventoryId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -180,6 +188,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Retrieve Inventory details specific WarehouseId
 	public ArrayList<Inventory> viewInventoryDetails(String warehouseId) throws ClassNotFoundException, SQLException{
 		
 		ArrayList<Inventory> list = new ArrayList<Inventory>();
@@ -200,6 +209,7 @@ public class WarehouseManagement {
 		
 	}
 	
+	// Helper method to Checking Warehouse is exists or not
 	public boolean checkingWarehouse(String warehouseName, String location) throws ClassNotFoundException, SQLException {
 		
 		try(
@@ -214,7 +224,7 @@ public class WarehouseManagement {
 			
 		} 
 	}
-	
+	// Helper method to Checking Inventory is exists or not in Specific Warehouse
 	public boolean checkingInventory(String warehouseId, String inventoryId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -228,6 +238,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Checking Inventory is exists or not in warehouse_details_storage
 	public boolean existsInventoryInWarehouse_storage(String inventoryId) throws SQLException, ClassNotFoundException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -240,6 +251,7 @@ public class WarehouseManagement {
 		}
 	}
 	
+	// Helper method to Checking Warehouse is exists or not in warehouse_details_storage
 	public boolean existsWarehouseInWarehouse_storage(String warehouseId) throws SQLException, ClassNotFoundException {
 		try(
 				Connection con = DBConnection.getConnection();

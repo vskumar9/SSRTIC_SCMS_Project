@@ -163,17 +163,6 @@ select inventoryId, productId, productName, unitPrice, quntityInStock, lastStock
 
 delete from warehouse where warehouseId = 'WRHS241141023834582';
 
-
--- Assuming you have a product table named 'products' with columns: productId, productName, quantity
--- Adjust the product table and column names accordingly based on your actual schema.
-
--- Update currentCapacity in the warehouse_storage table based on the product quantity
-UPDATE warehouse
-SET currentCapacity = currentCapacity + (SELECT quntityInStock
-                                         FROM inventory
-                                         WHERE inventoryId = 'INVT241131812192654') -- Replace with the actual product ID
-WHERE warehouseId = 'WRHS241141023834582'; -- Replace with the actual warehouse ID
-
 DELIMITER //
 CREATE TRIGGER update_current_capacity
 AFTER UPDATE ON inventory
@@ -193,23 +182,3 @@ END;
 DELIMITER ;
 
 DROP TRIGGER IF EXISTS update_current_capacity;
-
-UPDATE warehouse SET currentCapacity = 0 where warehouseId = 'WRHS241150955252519';
-
-SELECT o.orderId, o.customerId, o.orderDate, o.totalAmount, o.orderStatus
-FROM orders o
-JOIN order_details od ON o.orderId = od.orderId
-JOIN products p ON od.productId = p.productId
-WHERE p.productName = 'microwave';
-
-SELECT o.orderId, o.customerId, o.orderDate, o.totalAmount, o.orderStatus
-FROM orders o
-JOIN order_details od ON o.orderId = od.orderId
-WHERE od.productId = 'PROD241101950105936';
-
-SELECT p.productName, p.productName, p.unitPrice, od.qunatity 
-FROM orders o
-JOIN customer c ON o.customerId = c.customerId
-JOIN order_details od ON o.orderId = od.orderId
-JOIN products p ON od.productId = p.productId
-WHERE LOWER(o.orderId) = LOWER('ID');

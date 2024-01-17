@@ -10,11 +10,13 @@ import com.util.ApplicationUtil;
 
 public class OrderUserInterface {
 	
+	// Create objects. it's help's to accessing class inside methods
 	Scanner sc = new Scanner(System.in);
 	ApplicationUtil util = new ApplicationUtil();
 	OrderProcessingService service = new OrderProcessingService();
 	ProductService productService = new ProductService();
 	
+	// Helper method to order section Console user interface method
 	public void orderSection() {
 		
 		try {
@@ -74,8 +76,10 @@ public class OrderUserInterface {
 		
 	}
 
+	// Helper method to searching based on specific order id, customer id, product id, product name
 	private void searchOrder() {
 		try {
+//			create two different Array lists
 			ArrayList<String> listPro = new ArrayList<String>();
 			ArrayList<OrderProcessing> list = new ArrayList<OrderProcessing>();
 			int search;
@@ -84,6 +88,7 @@ public class OrderUserInterface {
 				search = sc.nextInt();
 				switch(search) {
 				case 1: 
+//					searching order details specific order id
 					System.out.print("Enter Order Id: ");
 					String orderId;
 					do {
@@ -100,10 +105,11 @@ public class OrderUserInterface {
 							System.out.println(e);
 						});
 						System.out.println();
-						System.out.println("--------------------------****************************Order Details***************************--------------------------");
+						System.out.println("-------------------------------------****************************Order Details***************************-------------------------------------");
 						System.out.println();
 						System.out.printf("%-30s%-30s%-15s%-15s%-15s", "Product Id", "Product Name", "Price", "Quantity", "Amount");
-						System.out.println("\n------------------------------------------------------------------------------------------------------------------------");
+						System.out.println();
+						System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
 						service.searchProductsByOrderId(orderId).forEach(e -> {
 							System.out.println(e);
 						});
@@ -111,6 +117,7 @@ public class OrderUserInterface {
 					System.out.println();
 					break;
 				case 2:
+//					searching order details specific customer id
 					System.out.print("Enter Customer Id: ");
 					String customerId;
 					do {
@@ -122,7 +129,7 @@ public class OrderUserInterface {
 					}else {
 						System.out.printf("%-25s%-30s%-30s%-30s%-30s","Order ID", "Customer Id", "Order Date", "Total Amount", "Status");
 						System.out.println();
-						System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+						System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
 						list.forEach(e -> {
 							System.out.println(e);
 						});
@@ -130,6 +137,7 @@ public class OrderUserInterface {
 					System.out.println();
 					break;
 				case 3:
+//					searching order details specific product id
 					System.out.print("Enter the Product Id: ");
 					String productId;
 					do {
@@ -142,7 +150,7 @@ public class OrderUserInterface {
 					else {
 						System.out.printf("%-25s%-25s%-30s%-30s%-15s%-20s%-20s","Order ID", "Customer Id", "Order Date", "Product Name", "Quantity", "Unit Price", "Status");
 						System.out.println();
-						System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+						System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
 						listPro.forEach(e->{
 							System.out.println(e);
 						});	
@@ -150,6 +158,7 @@ public class OrderUserInterface {
 					System.out.println();
 					break;
 				case 4:
+//					seaching order details specific product name
 					System.out.print("Enter the Product Name: ");
 					String productName;
 					do {
@@ -163,7 +172,7 @@ public class OrderUserInterface {
 					else {
 						System.out.printf("%-25s%-25s%-30s%-30s%-15s%-20s%-20s","Order ID", "Customer Id", "Order Date", "Product Name", "Quantity", "Unit Price", "Status");
 						System.out.println();
-						System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+						System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
 						listPro.forEach(e->{
 							System.out.println(e);
 						});	
@@ -190,12 +199,13 @@ public class OrderUserInterface {
 		
 	}
 
+	// Helper method to retrieve all orders
 	private void displayOrder() {
 		try {
 			System.out.println("--------------DISPLAY ORDER DETAILS--------------");
 			System.out.printf("%-25s%-30s%-30s%-30s%-30s","Order ID", "Customer Id", "Order Date", "Total Amount", "Status");
 			System.out.println();
-			System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+			System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
 			if(service.viewOrders() == null) {
 				System.out.println(service.viewOrders());
 			}
@@ -212,6 +222,7 @@ public class OrderUserInterface {
 		}
 	}
 
+	// Helper method to update order status specific orders
 	private void updateOrder() {
 		try {
 			System.out.print("Enter number of orders: ");
@@ -263,6 +274,7 @@ public class OrderUserInterface {
 		}
 	}
 
+	// Helper method to delete order and ordered products
 	private void deleteOrder() {
 		try {
 			System.out.print("Enter number of orders: ");
@@ -310,6 +322,7 @@ public class OrderUserInterface {
 		}
 	}
 
+	// Helper method to add new order details
 	private void addOrder() {
 		try {
 			System.out.print("Enter customerID: ");

@@ -11,6 +11,7 @@ import com.model.OrderProcessing;
 
 public class OrderProcessingManagement {
 
+	// Helper method to add new Orders details
 	public boolean addOrder(OrderProcessing order) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -29,6 +30,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to add new Order products details
 	public boolean addOrderDetails(String orderId, String productId, int quantity) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -44,6 +46,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to delete Orders details
 	public boolean deleteOrder(String orderId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -57,6 +60,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to delete Order products details
 	public boolean deleteOrderDetails(String orderId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -69,6 +73,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to update Orders status
 	public boolean updateOrder(OrderProcessing order) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -83,6 +88,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to retrieve Orders details
 	public ArrayList<OrderProcessing> viewOrders() throws ClassNotFoundException, SQLException{
 		ArrayList<OrderProcessing> list = new ArrayList<OrderProcessing>();
 		
@@ -100,6 +106,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to retrieve Orders details specific orderId
 	public ArrayList<OrderProcessing> searchOrdersByOrderId(String orderId) throws ClassNotFoundException, SQLException{
 		ArrayList<OrderProcessing> list = new ArrayList<OrderProcessing>();
 		
@@ -119,6 +126,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to retrieve Orders product details specific order
 	public ArrayList<String> searchProductsByOrderId(String orderId) throws ClassNotFoundException, SQLException{
 		ArrayList<String> list = new ArrayList<String>();
 		
@@ -150,6 +158,7 @@ public class OrderProcessingManagement {
 		
 	}
 	
+	// Helper method to retrieve Orders details specific customer
 	public ArrayList<OrderProcessing> searchOrdersByCustomerId(String customerId) throws ClassNotFoundException, SQLException{
 		ArrayList<OrderProcessing> list = new ArrayList<OrderProcessing>();
 		
@@ -170,6 +179,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to retrieve Orders details specific ProductId
 	public ArrayList<String> searchOrdersByProductId(String ProductId) throws ClassNotFoundException, SQLException{
 		ArrayList<String> list = new ArrayList<String>();
 		
@@ -190,12 +200,13 @@ public class OrderProcessingManagement {
 			
 			while(rs.next()) {
 				
-				list.add(String.format(OrderDetails, rs.getString("orderId"), rs.getString("customerId"), rs.getTime("orderDate"), rs.getString("productName"), rs.getInt("quantity"), rs.getDouble("unitPrice"), rs.getString("orderStatus")));
+				list.add(String.format(OrderDetails, rs.getString("orderId"), rs.getString("customerId"), rs.getTimestamp("orderDate"), rs.getString("productName"), rs.getInt("quantity"), rs.getDouble("unitPrice"), rs.getString("orderStatus")));
 			}
 			return list;			
 		}
 	}
 	
+	// Helper method to retrieve Orders details specific Product Name
 	public ArrayList<String> searchOrdersByProductName(String ProductName) throws ClassNotFoundException, SQLException{
 		ArrayList<String> list = new ArrayList<String>();
 		
@@ -222,6 +233,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to customer exists or not checking
 	public boolean ExistCustomerId(String customerId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -234,6 +246,7 @@ public class OrderProcessingManagement {
 		}
 	}
 	
+	// Helper method to exists orders checking order details specific orderId
 	public boolean ExistOrdersInOrderDetails(String orderId) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();

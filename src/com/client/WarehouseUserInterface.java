@@ -8,11 +8,12 @@ import com.util.ApplicationUtil;
 
 public class WarehouseUserInterface {
 	
+	// Create objects. it's help's to accessing class inside methods
 	Scanner sc = new Scanner(System.in);
 	WarehouseService service = new WarehouseService();
 	ApplicationUtil util = new ApplicationUtil();
 	
-	
+	// Helper method to Warehouse section user Console interface method
 	public void warehouseSection() {
 		
 		try {
@@ -26,12 +27,12 @@ public class WarehouseUserInterface {
 				switch(warehouseChoice) {
 				case 'A':
 				case 'a':
-					// call addWarehouse method
+					// call Warehouse Management method
 					warehouseManagement();
 					break;
 				case 'B':
 				case 'b':
-					// call deleteWarehouse method
+					// call Warehouse Storage Management method
 					warehouseStorageManagement();
 					break;
 				case 'C':
@@ -57,6 +58,7 @@ public class WarehouseUserInterface {
 		
 	}
 	
+	// Helper method to Warehouse Management Console User Interface
 	public void warehouseManagement() {
 		
 		try {
@@ -115,6 +117,7 @@ public class WarehouseUserInterface {
 		}
 	}
 	
+	// Helper method to Warehouse Storage Management Console User Interface
 	private void warehouseStorageManagement() {
 		
 		try {
@@ -129,22 +132,22 @@ public class WarehouseUserInterface {
 				switch(warehouseChoice) {
 				case 'A':
 				case 'a':
-					// call addWarehouse method
+					// call addInventory method
 					addInventory();
 					break;
 				case 'B':
 				case 'b':
-					// call deleteWarehouse method
+					// call deleteInventory method
 					deleteInventory();
 					break;
 				case 'C':
 				case 'c':
-					// call updateWarehouse method
+					// call to InventoryUserInterface inventorySection method
 					new InventoryUserInterface().inventorySection();
 					break;
 				case 'D':
 				case 'd':
-					// call updateWarehouse method
+					// call viewWarehouseInventory method
 					viewWarehouseInventory();
 					break;
 				case 'E':
@@ -169,7 +172,7 @@ public class WarehouseUserInterface {
 		}
 		
 	}
-	
+	// Helper method to Retrieve all Inventoies Specific warehouse
 	private void viewWarehouseInventory() {
 		
 		try {
@@ -204,6 +207,7 @@ public class WarehouseUserInterface {
 		} 
 	}
 	
+	// Helper method to Delete Inventories specific warehouse
 	private void deleteInventory() {
 		try {
 			
@@ -250,6 +254,7 @@ public class WarehouseUserInterface {
 		}
 	}
 	
+	// Helper method to Add New Inventory in Specific Warehouse
 	private void addInventory() {
 		try {
 			
@@ -296,6 +301,7 @@ public class WarehouseUserInterface {
 		}
 	}
 	
+	// Helper method to Search warehouse details specific Id or Name
 	private void searchWarehouse() {
 		try {
 			int search;
@@ -359,6 +365,7 @@ public class WarehouseUserInterface {
 		
 	}
 
+	// Helper method to Retrieve All Warehouse Details
 	private void displayWarehouse() {
 		
 		try {
@@ -378,6 +385,7 @@ public class WarehouseUserInterface {
 		
 	}
 
+	// Helper method to Update Warehouse Details
 	private void updateWarehouse() {
 		
 		try {
@@ -415,6 +423,7 @@ public class WarehouseUserInterface {
 		
 	}
 
+	// Helper method to Delete Warehouse Details
 	private void deleteWarehouse() {
 		
 		try {
@@ -451,6 +460,7 @@ public class WarehouseUserInterface {
 		
 	}
 
+	// Helper method to Add New Warehouse
 	private void addWarehouse() {
 		
 		try {
