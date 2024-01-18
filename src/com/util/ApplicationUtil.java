@@ -86,6 +86,16 @@ public class ApplicationUtil {
 		throw new InvalidException("Order Id: "+orderId+" is invalid");
 	}
 	
+	public boolean validateShipmentId(String orderId) throws InvalidException {
+		if(orderId.matches("^SHIP\\d{13,15}")) return true;
+		throw new InvalidException("Order Id: "+orderId+" is invalid");
+	}
+	
+	public boolean validateCarrierId(String orderId) throws InvalidException {
+		if(orderId.matches("^CARR\\d{13,15}")) return true;
+		throw new InvalidException("Order Id: "+orderId+" is invalid");
+	}
+	
 
 
 }
