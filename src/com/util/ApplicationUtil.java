@@ -159,6 +159,15 @@ public class ApplicationUtil {
         if(matcher.matches()) return true;
         throw new InvalidException("Invalid UPI");
     }
-
+	
+	public boolean isValidCarrier(String carrierId) throws InvalidException {
+		if(carrierId.matches("^CAIR\\d{13,15}")) return true;
+		throw new InvalidException("Carrier Id: "+carrierId+" is invalid");
+	}
+	
+	public boolean isValidShipment(String shipment) throws InvalidException {
+		if(shipment.matches("^SHIP\\d{13,15}")) return true;
+		throw new InvalidException("Shipment Id: "+shipment+" is Invalid.");
+	}
 
 }

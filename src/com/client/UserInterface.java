@@ -16,7 +16,7 @@ public class UserInterface {
     		try {
     			int choice;
     			do {
-    				System.out.print("1. Products\n2. Suppliers\n3. Inventory\n4. Warehouse\n5. Orders\n6. Exit\nEnter your choice: ");
+    				System.out.print("1. Products\n2. Suppliers\n3. Inventory\n4. Warehouse\n5. Orders\n6. Transport\n7. Exit\nEnter your choice: ");
     				choice = sc.nextInt();
     				
     				switch(choice) {
@@ -41,6 +41,10 @@ public class UserInterface {
     					new OrderUserInterface().orderSection();
     					break;
     				case 6:
+    					// Call the OrderUserInterface class method order
+    					new TransportationUserInterface().shipmentSection();
+    					break;
+    				case 7:
     					System.out.println("Closing Application.......\nThank you.");
     					return;
     				default:

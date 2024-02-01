@@ -23,7 +23,7 @@ public class OrderUserInterface {
 		try {
 			char orderChoice;
 			do {
-				System.out.print("--------------ORDER SECTION--------------\nA. Add order\nB. Update order\nC. Show order\nD. Search order\nE. <- Go to Main Section");
+				System.out.print("--------------ORDER SECTION--------------\nA. Add order\nB. Show order\nC. Search order\nD. <- Go to Main Section");
 				System.out.print("\nEnter your option: ");
 				
 				orderChoice = sc.next().charAt(0);				
@@ -36,24 +36,24 @@ public class OrderUserInterface {
 					break;
 				case 'B':
 				case 'b':
-					// call updateOrder method
-					updateOrder();
-					break;
-				case 'C':
-				case 'c':
 					// call displayOrder method
 					displayOrder();
 					break;
-				case 'D':
-				case 'd':
+//					// call updateOrder method
+//					updateOrder();
+//					break;
+				case 'C':
+				case 'c':
 					// call searchOrder method
 					searchOrder();
 					break;
-				case 'E':
-				case 'e':
+				case 'D':
+				case 'd':
 					// print string and exits the Order method this choice
 					System.out.println("-----Complete Order Section-----");
 					return;
+//				case 'E':
+//				case 'e':
 //				case 'F':
 //				case 'f':
 //					// call deleteOrder method

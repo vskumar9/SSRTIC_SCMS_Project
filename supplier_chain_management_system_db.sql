@@ -116,6 +116,20 @@ contactEmail VARCHAR(100) UNIQUE,
 contactPhone VARCHAR(20) UNIQUE
 );
 
+CREATE TABLE transport (
+shipmentId VARCHAR(25) PRIMARY KEY,
+carrierID VARCHAR(25),
+shipmentStatus VARCHAR(15),
+CONSTRAINT Fk_carriedId FOREIGN KEY (carrierID) REFERENCES carriers(carrierID) ON DELETE RESTRICT
+);
+
+CREATE TABLE shipment (
+shipmentId VARCHAR(25),
+orderId VARCHAR(25),
+CONSTRAINT Fk_shipmentId FOREIGN KEY (shipmentId) REFERENCES transport(shipmentId) ON DELETE RESTRICT,
+CONSTRAINT Fk_shipment_orderId FOREIGN KEY (orderId) REFERENCES orders(orderId) ON DELETE RESTRICT
+);
+
 -- Sample data for the Customer table
 INSERT INTO customer VALUES
 ('CUMR123456789098765','John', 'Doe', 'john.doe@example.com', 9874586325, '123 Main St', 'Anytown', 'CA', '12345'),
@@ -128,10 +142,9 @@ INSERT INTO carriers VALUES
 ('CAIR098765678909873', 'UPS', 'Jane Doe', 'jane.doe@ups.com', '+91 9856475631'),
 ('CAIR098765678909879', 'DHL', 'Bob Johnson', 'bob.johnson@dhl.com', '+91 9856475633');
 
+DROP TABLE transport;
 
 
-
-DROP TABLE order_details;
 
 -- Show tables in database
 SHOW TABLES;
@@ -178,6 +191,11 @@ select * from customer;
 select * from orders;
 select * from order_details;
 select * from carriers;
+select * from transport;
+select * from shipment;
+
+
+
 truncate table orders;
 
 select inventoryId, productId, productName, unitPrice, quntityInStock, lastStockUpdate from warehouse_storage natural join warehouse natural join inventory natural join products where warehouseId = 'WRHS241141023834582';
