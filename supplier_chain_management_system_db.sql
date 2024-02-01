@@ -98,6 +98,7 @@ orderStatus VARCHAR(25),
 CONSTRAINT Fk_customerId FOREIGN KEY (customerId) REFERENCES customer(customerId) ON DELETE RESTRICT
 );
 
+-- Create order_details table
 CREATE TABLE order_details(
 orderId VARCHAR(25),
 productId VARCHAR(25),
@@ -106,11 +107,29 @@ CONSTRAINT Fk_orderId FOREIGN KEY (orderId) REFERENCES orders(orderId) ON DELETE
 CONSTRAINT Fk_order_productId FOREIGN KEY (productId) REFERENCES products(productId) ON DELETE RESTRICT
 );
 
+-- Create carriers table
+CREATE TABLE carriers (
+carrierID VARCHAR(25) PRIMARY KEY,
+carrierName VARCHAR(255) NOT NULL,
+contactPerson VARCHAR(100),
+contactEmail VARCHAR(100) UNIQUE,
+contactPhone VARCHAR(20) UNIQUE
+);
+
 -- Sample data for the Customer table
 INSERT INTO customer VALUES
 ('CUMR123456789098765','John', 'Doe', 'john.doe@example.com', 9874586325, '123 Main St', 'Anytown', 'CA', '12345'),
 ('CUMR123456789098764','Jane', 'Smith', 'jane.smith@example.com', 9874586328, '456 Oak Ave', 'Somewhere', 'NY', '67890'),
 ('CUMR123456789098763','Bob', 'Johnson', 'bob.johnson@example.com', 9874586327, '789 Pine Rd', 'Nowhere', 'TX', '54321');
+
+-- Sample data for the Customer table
+INSERT INTO carriers VALUES
+('CAIR098765678909876', 'FedEx', 'John Smith', 'john.smith@fedex.com', '+91 9856475632'),
+('CAIR098765678909873', 'UPS', 'Jane Doe', 'jane.doe@ups.com', '+91 9856475631'),
+('CAIR098765678909879', 'DHL', 'Bob Johnson', 'bob.johnson@dhl.com', '+91 9856475633');
+
+
+
 
 DROP TABLE order_details;
 
@@ -145,6 +164,8 @@ DESC orders;
 
 DESC order_details;
 
+DESC carriers;
+
 select * from products_information;
 select * from products;
 select * from supplier;
@@ -156,7 +177,7 @@ select * from warehouse_storage;
 select * from customer;
 select * from orders;
 select * from order_details;
-
+select * from carriers;
 truncate table orders;
 
 select inventoryId, productId, productName, unitPrice, quntityInStock, lastStockUpdate from warehouse_storage natural join warehouse natural join inventory natural join products where warehouseId = 'WRHS241141023834582';

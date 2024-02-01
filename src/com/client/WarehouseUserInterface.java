@@ -237,6 +237,8 @@ public class WarehouseUserInterface {
 				if( service.deleteInventory(warehouseId, inventoryId)) {
 					success++;
 				}
+				else
+					System.out.println("inventory Id not exists.");
 			}
 			
 			if(success==0) System.out.println("Inventories/Inventory not deleted....");
@@ -317,39 +319,44 @@ public class WarehouseUserInterface {
 					}while(warehouseId.isEmpty());
 					try {
 						if(util.validateWarehouseId(warehouseId)) {
-							System.out.printf("%-25s%-30s%-30s%-30s%-30s%-30s","Warehouse ID", "Warehouse Name", "Location", "Total Capacity", "Current Capacity", "Available Capacity");
-							System.out.println();
-							System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-							service.searchWarehouseById(warehouseId).forEach(e -> {
-								System.out.println(e);
-							});						
+							if(service.searchWarehouseById(warehouseId) != null) {
+								System.out.printf("%-25s%-30s%-30s%-30s%-30s%-30s","Warehouse ID", "Warehouse Name", "Location", "Total Capacity", "Current Capacity", "Available Capacity");
+								System.out.println();
+								System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+								service.searchWarehouseById(warehouseId).forEach(e -> {
+									System.out.println(e);
+								});														
+							}
+							else {
+								System.out.println("Warehouse Id not exists.");
+							}
 						}
 						System.out.println();
 					}catch(InvalidException e) {
 						System.out.println(e.getMessage());
 					}
 					break;
+//				case 3:
+//					System.out.print("Enter the Warehouse Name: ");
+//					String warehouseName;
+//					do {
+//						warehouseName = sc.nextLine();
+//					}while(warehouseName.isEmpty());
+//					
+//					if(service.searchWarehouseByName(warehouseName) == null) {
+//						System.out.println("There is no WarehouseName on this name: "+warehouseName);
+//					}
+//					else {
+//						System.out.printf("%-25s%-30s%-30s%-30s%-30s%-30s","Warehouse ID", "Warehouse Name", "Location", "Total Capacity", "Current Capacity", "Available Capacity");
+//						System.out.println();
+//						System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+//						service.searchWarehouseByName(warehouseName).forEach(e->{
+//							System.out.println(e);
+//						});	
+//					}
+//					System.out.println();
+//					break;
 				case 2:
-					System.out.print("Enter the Warehouse Name: ");
-					String warehouseName;
-					do {
-						warehouseName = sc.nextLine();
-					}while(warehouseName.isEmpty());
-					
-					if(service.searchWarehouseByName(warehouseName) == null) {
-						System.out.println("There is no WarehouseName on this name: "+warehouseName);
-					}
-					else {
-						System.out.printf("%-25s%-30s%-30s%-30s%-30s%-30s","Warehouse ID", "Warehouse Name", "Location", "Total Capacity", "Current Capacity", "Available Capacity");
-						System.out.println();
-						System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-						service.searchWarehouseByName(warehouseName).forEach(e->{
-							System.out.println(e);
-						});	
-					}
-					System.out.println();
-					break;
-				case 3:
 					System.out.println("Welcome Back Warehouse Section......!!!");
 					return ;
 				default:
@@ -444,6 +451,8 @@ public class WarehouseUserInterface {
 				if(service.deleteWarehouse(warehousesId)) {
 					success++;
 				}
+				else
+					System.out.println("Warehouse Id not exists.");
 			}
 			
 			

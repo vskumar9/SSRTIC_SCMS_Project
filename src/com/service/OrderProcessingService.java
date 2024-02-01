@@ -42,7 +42,8 @@ public class OrderProcessingService {
 					om.addOrderDetails(orderId, products[i], quantities[i]);
 				}
 //				return customer id and order id
-				return customerId+" Order Id: "+orderId;
+//				return customerId+" Order Id: "+orderId;
+				return orderId;
 			}
 			return null;
 			

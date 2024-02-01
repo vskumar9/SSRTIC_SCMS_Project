@@ -244,6 +244,8 @@ public class ProductUserInterface {
 				}while(consumerDetails.isEmpty());
 				if(service.updateConsumer(consumerDetails)) 
 					success++;
+				else
+					System.out.println("category Id not exists.");
 				}
 			
 			if(success==0) System.out.println("categories/category not deleted....");
@@ -282,6 +284,8 @@ public class ProductUserInterface {
 				if(service.deleteConsumer(consumerId)) {
 					success++;
 				}
+				else
+					System.out.println("consumer Id not exists.");
 			}
 			
 			if(success==0) System.out.println("categories/category not deleted....");
@@ -379,6 +383,7 @@ public class ProductUserInterface {
 					success++;
 				}
 			
+			
 			if(success==0) System.out.println("industries/industry not deleted....");
 			else if(success==1) System.out.println("Successfully "+success+" industry deleted.");
 			else if(success>1) System.out.println("Successfully "+success+" industries deleted.");
@@ -415,6 +420,8 @@ public class ProductUserInterface {
 				if(service.deleteIndustry(industryId)) {
 					success++;
 				}
+				else
+					System.out.println("industry Id not exists.");
 			}
 			
 			if(success==0) System.out.println("industries/industry not deleted....");
@@ -546,6 +553,8 @@ public class ProductUserInterface {
 				if(service.deleteProduct(productId)) {
 					successProducts++;
 				}
+				else
+					System.out.println("Product Id not exists.");
 			}
 			
 			if(successProducts==0) System.out.println("products/product not deleted....");
@@ -853,7 +862,9 @@ public class ProductUserInterface {
 				if(deleteProductInfo != null) {
 					System.out.println(deleteProductInfo);
 					successfull++;
-				}	
+				}
+				else
+					System.out.println("Product information Id not exists.");
 			}
 			if(successfull==0) System.out.println("products/product information not deleted....");
 			else if(successfull==1) System.out.println("Successfully "+successfull+" product information deleted.");

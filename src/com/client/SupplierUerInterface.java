@@ -77,7 +77,7 @@ public class SupplierUerInterface {
 		try {
 		int search;
 		do {
-			System.out.print("--------------SEARCH SUPPLIER DETAILS--------------\n1. Supplier ID\n2. Supplier Name\n3. <- Go Back\nEnter your option: ");
+			System.out.print("--------------SEARCH SUPPLIER DETAILS--------------\n1. Supplier ID\n2. <- Go Back\nEnter your option: ");
 			search = sc.nextInt();
 			switch(search) {
 			case 1: 
@@ -100,27 +100,27 @@ public class SupplierUerInterface {
 					System.out.println(e.getMessage());
 				}
 				break;
+//			case 2:
+//				System.out.print("Enter the Supplier Name: ");
+//				String supplierName;
+//				do {
+//					supplierName = sc.nextLine();
+//				}while(supplierName.isEmpty());
+//				
+//				if(service.searchBySupplierName(supplierName) == null) {
+//					System.out.println("There is no supplier on this name: "+supplierName);
+//				}
+//				else {
+//					System.out.printf("%-25s%-30s%-30s%-30s%-15s","Supplier ID", "Supplier Name", "Contact Person", "Email", "Phone Number");
+//					System.out.println();
+//					System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+//					service.searchBySupplierName(supplierName).forEach(e->{
+//						System.out.println(e);
+//					});	
+//				}
+//				System.out.println();
+//				break;
 			case 2:
-				System.out.print("Enter the Supplier Name: ");
-				String supplierName;
-				do {
-					supplierName = sc.nextLine();
-				}while(supplierName.isEmpty());
-				
-				if(service.searchBySupplierName(supplierName) == null) {
-					System.out.println("There is no supplier on this name: "+supplierName);
-				}
-				else {
-					System.out.printf("%-25s%-30s%-30s%-30s%-15s","Supplier ID", "Supplier Name", "Contact Person", "Email", "Phone Number");
-					System.out.println();
-					System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
-					service.searchBySupplierName(supplierName).forEach(e->{
-						System.out.println(e);
-					});	
-				}
-				System.out.println();
-				break;
-			case 3:
 				System.out.println("Welcome Back Product Section......!!!");
 				return ;
 			default:
@@ -214,6 +214,8 @@ public class SupplierUerInterface {
 				if(service.deleteSupplier(supplierId)) {
 					successSupplier++;
 				}
+				else
+					System.out.println("Supplier Id not exists.");
 			}
 			
 			

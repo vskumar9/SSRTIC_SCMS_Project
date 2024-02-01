@@ -3,6 +3,7 @@ package com.client;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.exception.InvalidException;
 import com.model.OrderProcessing;
 import com.service.OrderProcessingService;
 import com.service.ProductService;
@@ -22,7 +23,7 @@ public class OrderUserInterface {
 		try {
 			char orderChoice;
 			do {
-				System.out.print("--------------ORDER SECTION--------------\nA. Add order\nB. Update order\nC. Show order\nD. Search order\nE. <- Go to Main Section\nF. Delete Orders");
+				System.out.print("--------------ORDER SECTION--------------\nA. Add order\nB. Update order\nC. Show order\nD. Search order\nE. <- Go to Main Section");
 				System.out.print("\nEnter your option: ");
 				
 				orderChoice = sc.next().charAt(0);				
@@ -53,11 +54,11 @@ public class OrderUserInterface {
 					// print string and exits the Order method this choice
 					System.out.println("-----Complete Order Section-----");
 					return;
-				case 'F':
-				case 'f':
-					// call deleteOrder method
-					deleteOrder();
-					break;
+//				case 'F':
+//				case 'f':
+//					// call deleteOrder method
+//					deleteOrder();
+//					break;
 				default:
 					// print the select wrong choice
 					System.out.println("Your choice is wrong.");
@@ -84,7 +85,7 @@ public class OrderUserInterface {
 			ArrayList<OrderProcessing> list = new ArrayList<OrderProcessing>();
 			int search;
 			do {
-				System.out.print("--------------SEARCH ORDER DETAILS--------------\n1. Order ID\n2. Customer Id\n3. Product Id\n4. Product Name\n5. <- Go Back\nEnter your option: ");
+				System.out.print("--------------SEARCH ORDER DETAILS--------------\n1. Order ID\n2. Customer Id\n3. Product Id\n4. <- Go Back\nEnter your option: ");
 				search = sc.nextInt();
 				switch(search) {
 				case 1: 
@@ -157,29 +158,29 @@ public class OrderUserInterface {
 					}
 					System.out.println();
 					break;
+//				case 5:
+////					seaching order details specific product name
+//					System.out.print("Enter the Product Name: ");
+//					String productName;
+//					do {
+//						productName = sc.nextLine();
+//					}while(productName.isEmpty());
+//					
+//					listPro = service.searchOrdersByProductName(productName);
+//					if(listPro == null) {
+//						System.out.println("There is no Orders on this Product name: "+productName);
+//					}
+//					else {
+//						System.out.printf("%-25s%-25s%-30s%-30s%-15s%-20s%-20s","Order ID", "Customer Id", "Order Date", "Product Name", "Quantity", "Unit Price", "Status");
+//						System.out.println();
+//						System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
+//						listPro.forEach(e->{
+//							System.out.println(e);
+//						});	
+//					}
+//					System.out.println();
+//					break;
 				case 4:
-//					seaching order details specific product name
-					System.out.print("Enter the Product Name: ");
-					String productName;
-					do {
-						productName = sc.nextLine();
-					}while(productName.isEmpty());
-					
-					listPro = service.searchOrdersByProductName(productName);
-					if(listPro == null) {
-						System.out.println("There is no Orders on this Product name: "+productName);
-					}
-					else {
-						System.out.printf("%-25s%-25s%-30s%-30s%-15s%-20s%-20s","Order ID", "Customer Id", "Order Date", "Product Name", "Quantity", "Unit Price", "Status");
-						System.out.println();
-						System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------");
-						listPro.forEach(e->{
-							System.out.println(e);
-						});	
-					}
-					System.out.println();
-					break;
-				case 5:
 					System.out.println("Welcome Back Main Section......!!!");
 					return ;
 				default:
@@ -239,20 +240,20 @@ public class OrderUserInterface {
 				do {
 					orderId = sc.nextLine();
 				}while(orderId == null);
-				System.out.println("Select Order Status: 1. Pending 2. Processing 3. Shipped 4. Dispatched 5. Delivered 6. Return 7.Completed 8.Cancel");
+				System.out.println("Select Order Status: 1. Shipped 2. Dispatched 3. Delivered 4. Return 5.Completed 6.Cancel");
 				int choice = sc.nextInt();
 				sc.nextLine();
 				String status = null;
 				do {
 					switch(choice) {
-					case 1: status = "Pending";break;
-					case 2: status = "Processing";break;
-					case 3: status = "Shipped";break;
-					case 4: status = "Dispatched";break;
-					case 5: status = "Delivered";break;
-					case 6: status = "Return";break;
-					case 7: status = "Completed";break;
-					case 8: status = "Cancel";break;
+//					case 1: status = "Pending";break;
+//					case 2: status = "Processing";break;
+					case 1: status = "Shipped";break;
+					case 2: status = "Dispatched";break;
+					case 3: status = "Delivered";break;
+					case 4: status = "Return";break;
+					case 5: status = "Completed";break;
+					case 6: status = "Cancel";break;
 					default: System.out.println("Wrong selection order status. Try again.");
 					}					
 				}while(status == null);
@@ -260,7 +261,7 @@ public class OrderUserInterface {
 					success++;
 				}
 			}
-			if(success==0) System.out.println("Orders/Order not Updated....");
+			if(success==0) System.out.println("Orders/Order is not Updated....");
 			else if(success==1) System.out.println("Successfully "+success+" Order Updated.");
 			else if(success>1) System.out.println("Successfully "+success+" Orders Updated.");			
 			
@@ -369,7 +370,11 @@ public class OrderUserInterface {
 				if(order == null) {
 					System.out.println("Order failed.");
 				}
-				System.out.println(order);
+				else {
+					if(paymentOptions(order)) {
+						System.out.println(customerId+" Order Id: "+order);						
+					}
+				}
 			}
 		} catch(Exception e) {
 			System.out.println();
@@ -379,5 +384,121 @@ public class OrderUserInterface {
 			addOrder();
 		}
 	}
+	
+	private boolean paymentOptions(String order) {
+		int pay = 0;
+		ArrayList<OrderProcessing> list = service.searchOrdersByOrderId(order);
+		if(list.get(0).getStatus().equals("Pending") || list.get(0).getStatus().equals("Processing")) {
+			System.out.println("Select payment methods: \n1. CREDIT & DEBITCARDS\n2. NET BANKING\n3. OTHER UPI APPS\n4. EMI\n5. CASH ON DELIVERY/PAY ON DELIVERY");
+			String payment = null;
+			int choice = sc.nextInt();
+			sc.nextLine();
+			switch(choice) {
+			case 1:
+				System.out.println("Enter format of card details :[CARD_NUMBER:HOLDER_NAME:EXPIRE_DATE:CVV_NUMBER]");
+				payment = sc.nextLine();
+				String[] cardDetails = payment.split(":");
+				if(cardDetails.length == 4) {
+					try {
+						if(util.isValidCardNumber(cardDetails[0]) && util.isExpired(cardDetails[2]) && util.isValidCVV(cardDetails[3])) {
+							pay = 1;
+						}
+					} catch (InvalidException e) {
+						System.out.println(e.getMessage());
+					}
+				}
+				break;
+			case 2:
+				
+				System.out.print("Enter your net banking username: ");
+				String username = sc.nextLine();
+				System.out.print("Enter your net banking password: ");
+				String password = sc.nextLine();
+				
+				if (authenticateUser(username, password)) {
+					System.out.println("Authentication successful. Proceed with net banking operations.");
+					
+					System.out.println("Your Payment: "+list.get(0).getTotalAmount()+"\nPay amount: Yes or No");
+					String payment1 =sc.nextLine();
+					if("yes".equalsIgnoreCase(payment1)) {
+						System.out.println("Successfull payment done.");
+						pay = 1;
+					}
+					else {
+						System.out.println("failed payment.");
+					}
+				} else {
+					System.out.println("Authentication failed. Please check your credentials.");
+				}
+			case 3:
+				System.out.print("Enter your UPI ID: ");
+				String upiId = sc.nextLine();
+				
+				try {
+					if(util.isValidUPI(upiId)) {
+						System.out.print("The amount to order: "+list.get(0).getTotalAmount());
+						System.out.print("Enter UPI PIN: ");
+						int pin = sc.nextInt();
+						if (performUpiPayment(upiId, pin)) {
+							System.out.println("UPI payment successful. Transaction ID: " + generateTransactionId());
+							pay = 1;
+						} else {
+							System.out.println("UPI payment failed. Please check your UPI ID and try again.");
+						}
+					}
+				} catch (InvalidException e) {
+					System.out.println(e.getMessage());
+				}
+			case 4:
+				System.out.println("Unavailable payment.");
+			case 5:
+				System.out.println("Successful order completed.");
+			default:
+				System.out.println("Your select Wrong option. Please try again......");
+			}
+			if(pay == 1) {
+				if(service.updateOrder(order, "Paid")) {
+					System.out.println("Your order is successful completed.");	
+					return true;
+				}
+				else {
+					System.out.println("Something wrong try again..... your amount 2 to 7 days return....");
+				}
+			}
+			else {
+				System.out.println("Retry payment: yes/no");
+				String retry = sc.nextLine();
+				if("yes".equalsIgnoreCase(retry) || "y".equalsIgnoreCase(retry)) {
+					paymentOptions(order);
+				}
+				else {
+					if(service.updateOrder(order, "Cancel")){
+						System.out.println("Your order is Cancel.....");
+						return true;
+					}
+					else {
+						System.out.println("Something wrong try again.....");
+					}
+				}
+			}
+			
+		}
+		else {
+			
+		}
+		return false;
+	}
+	
+	private static boolean authenticateUser(String username, String password) {
+        return "demoUser".equals(username) && "demoPassword".equals(password);
+    }
+	
+	private static boolean performUpiPayment(String upiId, double amount) {
+        return true;
+    }
+	
+	private static String generateTransactionId() {
+		return "TXN" + System.currentTimeMillis();
+		}
 
 }

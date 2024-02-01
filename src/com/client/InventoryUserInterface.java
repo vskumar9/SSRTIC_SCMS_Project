@@ -76,7 +76,7 @@ public class InventoryUserInterface {
 		try {
 			int search;
 			do {
-				System.out.print("--------------SEARCH INVENTORY DETAILS--------------\n1. Inventory ID\n2. Product Id\n3 Product Name\n4. <- Go Back\nEnter your option: ");
+				System.out.print("--------------SEARCH INVENTORY DETAILS--------------\n1. Inventory ID\n2. Product Id\n3 <- Go Back\nEnter your option: ");
 				search = sc.nextInt();
 				switch(search) {
 				case 1: 
@@ -123,27 +123,27 @@ public class InventoryUserInterface {
 					}
 					System.out.println();
 					break;
+//				case 4:
+//					System.out.print("Enter the Product Name: ");
+//					String productName;
+//					do {
+//						productName = sc.nextLine();
+//					}while(productName.isEmpty());
+//					
+//					if(service.searchInventoryByProductName(productName) == null) {
+//						System.out.println("There is no product on this name: "+productName);
+//					}
+//					else {
+//						System.out.printf("%-25s%-50s%-15s%-15s","Inventory ID", "Product information", "quntityInStock", "lastStockUpdate");
+//						System.out.println();
+//						System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+//						service.searchInventoryByProductName(productName).forEach(e->{
+//							System.out.println(e);
+//						});	
+//					}
+//					System.out.println();
+//					break;
 				case 3:
-					System.out.print("Enter the Product Name: ");
-					String productName;
-					do {
-						productName = sc.nextLine();
-					}while(productName.isEmpty());
-					
-					if(service.searchInventoryByProductName(productName) == null) {
-						System.out.println("There is no product on this name: "+productName);
-					}
-					else {
-						System.out.printf("%-25s%-50s%-15s%-15s","Inventory ID", "Product information", "quntityInStock", "lastStockUpdate");
-						System.out.println();
-						System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
-						service.searchInventoryByProductName(productName).forEach(e->{
-							System.out.println(e);
-						});	
-					}
-					System.out.println();
-					break;
-				case 4:
 					System.out.println("Welcome Back Main Section......!!!");
 					return ;
 				default:
@@ -235,6 +235,9 @@ public class InventoryUserInterface {
 				}while(inventoryId.isEmpty());
 				if(service.deleteInventory(inventoryId)) {
 					success++;
+				}
+				else {
+					System.out.println("inventory Id is not exists.");
 				}
 			}
 			
