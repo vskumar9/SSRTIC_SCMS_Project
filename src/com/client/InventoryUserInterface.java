@@ -149,7 +149,7 @@ public class InventoryUserInterface {
 				default:
 					System.out.println("Please select correct option....");
 				}
-			}while(search != 4);
+			}while(search != 3);
 			} catch(Exception e) {
 				System.out.println();
 				System.out.println("Something error. Please try again.....");

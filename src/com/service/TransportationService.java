@@ -53,10 +53,38 @@ public class TransportationService {
 	}
 	
 	public ArrayList<Transportation> viewShipment() {
+		try {
+			return tm.viewShipment();
+		} catch (ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
 		return null;
 	}
 	
 	public ArrayList<Transportation> searchShipmentById(String shipmentId) {
+		try {
+			return tm.searchShipmentById(shipmentId);
+		} catch (ClassNotFoundException | SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
+	public ArrayList<Transportation> searchTransportByCarrierId(String carrierId){
+		try {
+			return searchTransportByCarrierId(carrierId);				
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+	
+	public ArrayList<String> searchCarrierById(String carrierId){
+		try {
+			return searchCarrierById(carrierId);			
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 		return null;
 	}
 	

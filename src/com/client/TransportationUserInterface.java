@@ -1,7 +1,10 @@
 package com.client;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
+import com.exception.InvalidException;
+import com.model.Transportation;
 import com.service.OrderProcessingService;
 import com.service.TransportationService;
 import com.util.ApplicationUtil;
@@ -13,51 +16,168 @@ public class TransportationUserInterface {
 	TransportationService service = new TransportationService();
 	OrderProcessingService orderService = new OrderProcessingService();
 	
+	
 	public void shipmentSection() {
-		System.out.print("--------------TRNASPORT SECTION--------------\nA. Add Trnasport\nB. Update Transport\nC. Show Trnasport\nD. Search Trnasport\nE. <- Go to Main Section");
-		System.out.print("\nEnter your option: ");
-		char choice;
-		choice = sc.next().charAt(0);
-		sc.nextLine();
-		switch(choice) {
-		case 'a':
-		case 'A':
-			// call addShipment method
-			addShipment();
-			break;
-		case 'b':
-		case 'B':
-			// call updateShipment method
-			updateShipment();
-			break;
-
-		case 'c':
-		case 'C':
-			// call viewShipment method
-			viewShipment();
-			break;
-		case 'd':
-		case 'D':
-			// call searchShipment method
-			searchShipment();
-			break;
-		case 'e':
-		case 'E':
-			// print string and exits the Transport method this choice
-			System.out.println("-----Complete Transport Section-----");
-			return;
-		default:
-			// print the select wrong choice
-			System.out.println("Your choice is wrong.");
+		try {
+			char choice;
+			do{
+			System.out.print("--------------TRNASPORT SECTION--------------\nA. Add Trnasport\nB. Update Transport\nC. Show Trnasport\nD. Search Trnasport\nE. <- Go to Main Section");
+			System.out.print("\nEnter your option: ");
+				choice = sc.next().charAt(0);
+				sc.nextLine();
+				switch(choice) {
+				case 'a':
+				case 'A':
+					// call addShipment method
+					addShipment();
+					break;
+				case 'b':
+				case 'B':
+					// call updateShipment method
+					updateShipment();
+					break;
+				case 'c':
+				case 'C':
+					// call viewShipment method
+					viewShipment();
+					break;
+				case 'd':
+				case 'D':
+					// call searchShipment method
+					searchShipment();
+					break;
+				case 'e':
+				case 'E':
+					// print string and exits the Transport method this choice
+					System.out.println("-----Complete Transport Section-----");
+					return;
+				default:
+					// print the select wrong choice
+					System.out.println("Your choice is wrong.");
+				}
+			}while(choice != 'e' || choice != 'E');
+			
+			
+		} catch (Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			sc.nextLine();
+			shipmentSection();
 		}
-		
 	}
 	
 	private void searchShipment() {
+		ArrayList<Transportation> list = new ArrayList<Transportation>();
+		ArrayList<String> list2 = new ArrayList<String>();
+		
+		try {
+			int search;
+			do {
+				System.out.print("--------------SEARCH TRNASPORT DETAILS--------------\n1. Trnasport ID\n2. Carrier Id\n3 Order Id <- Go Back\nEnter your option: ");
+				search = sc.nextInt();
+				switch(search) {
+				case 1: 
+					System.out.print("Enter Trnasport Id: ");
+					String trnasportId;
+					do {
+						trnasportId = sc.nextLine();
+					}while(trnasportId.isEmpty());
+					try {
+						if(util.isValidShipment(trnasportId)) {
+							list = service.searchShipmentById(trnasportId);
+							if(list == null) {
+								System.out.println("There is no shipment on this Id: "+trnasportId);
+							}else {
+								System.out.println("--------------DISPLAY TRNASPORT DETAILS--------------");
+								System.out.printf("%-25s%-25s%-25s%-25s", "shipmentId", "orderId", "carrierId", "shipmentStatus");
+								System.out.println();
+								System.out.println("----------------------------------------------------------------------------------------------------------------------");
+								list.forEach(e -> {
+									System.out.println(e);
+								});															
+							}
+						}
+						System.out.println();
+					}catch(InvalidException e) {
+						System.out.println(e.getMessage());
+					}
+					break;
+				case 2:
+					System.out.print("Enter the Carrier Id: ");
+					String carrierId;
+					do {
+						carrierId = sc.nextLine();
+					}while(carrierId.isEmpty());
+					System.out.println("Yes");
+					list2 = service.searchCarrierById(carrierId);
+					if(!list2.isEmpty()) {
+						System.out.printf("%-30s%-30s%-30s%-30s%-30s", "carrierID", "carrierName", "contactPerson", "contactEmail", "contactPhone");
+						System.out.println();
+						System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+						list2.forEach(e -> {
+							System.out.println(e);
+						});
+						list = service.searchTransportByCarrierId(carrierId);
+						System.out.println();
+						System.out.println("************************************************************************************************************************************");
+						System.out.println();
+						if(list == null) {
+							System.out.println("There is no carrier on this Id: "+carrierId);
+						}
+						else {
+							System.out.printf("%-25s%-50s%-15s%-15s","Inventory ID", "Product information", "quntityInStock", "lastStockUpdate");
+							System.out.println();
+							System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+							list.forEach(e->{
+								System.out.println(e);
+							});	
+						}
+					}
+					System.out.println();
+					break;
+				case 3:
+					System.out.println("Welcome Back Main Section......!!!");
+					return ;
+				default:
+					System.out.println("Please select correct option....");
+				}
+			}while(search != 3);
+			} catch(Exception e) {
+				System.out.println();
+				System.out.println("Something error. Please try again.....");
+				System.out.println();
+				sc.nextLine();
+				searchShipment();
+			} 
+		
 		
 	}
 	
 	private void viewShipment() {
+		ArrayList<Transportation> list = new ArrayList<Transportation>();
+		try {
+			list = service.viewShipment();
+			if(!list.isEmpty()) {
+				System.out.println("--------------DISPLAY TRNASPORT DETAILS--------------");
+				System.out.printf("%-25s%-25s%-25s%-25s", "shipmentId", "orderId", "carrierId", "shipmentStatus");
+				System.out.println();
+				System.out.println("----------------------------------------------------------------------------------------------------------------------");
+				list.forEach(e -> {
+					System.out.println(e);
+				});				
+			}
+			else {
+				System.out.println("No Data.");
+			}
+			System.out.println();
+		} catch(Exception e) {
+			System.out.println();
+			System.out.println("Something error. Please try again.....");
+			System.out.println();
+			e.printStackTrace();
+			shipmentSection();
+		} 
 		
 	}
 
@@ -95,6 +215,9 @@ public class TransportationUserInterface {
 				if(service.updateShipment(transportId, status)) {
 					success++;
 				}
+				else {
+					System.out.println("Transportation Id is not existed.");
+				}
 			}
 			if(success==0) System.out.println("Transport's/Transport is not Updated....");
 			else if(success==1) System.out.println("Successfully "+success+" Transport Updated.");
@@ -106,7 +229,7 @@ public class TransportationUserInterface {
 			System.out.println("Something error. Please try again.....");
 			System.out.println();
 			sc.nextLine();
-			updateShipment();
+			shipmentSection();
 		}
 		
 	}
@@ -149,11 +272,9 @@ public class TransportationUserInterface {
 		} catch(Exception e) {
 			System.out.println();
 			System.out.println("Something error. Please try again.....");
-			System.out.println();
-			e.printStackTrace();
-			
+			System.out.println();			
 			sc.nextLine();
-			addShipment();
+			shipmentSection();
 		}
 		
 		

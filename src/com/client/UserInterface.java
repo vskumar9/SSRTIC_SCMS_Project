@@ -51,7 +51,7 @@ public class UserInterface {
     					System.out.println("Your choice is wrong. Please select correct option.");
     					break;
     				}
-    			}while(choice!=6);    			
+    			}while(choice!=7);    			
     		} catch(Exception e) {
     			System.out.println();
     			System.out.println("Something error. Please try again.....");
