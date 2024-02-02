@@ -15,6 +15,7 @@ public class TransportationService {
 	TransportationManagement tm = new TransportationManagement();
 	ApplicationUtil util = new ApplicationUtil();
 	
+//	Helper method to add shipment transport
 	public String addShipment(String carrierId, String orders) {
 		String shipmentId = generateUniqueShipmentId();
 		try {
@@ -36,6 +37,7 @@ public class TransportationService {
 		return null;
 	}
 	
+//	Helper method to update shipment transport
 	public boolean updateShipment(String shipmentId, String status) {
 		try {
 			if(util.isValidShipment(shipmentId)) {				
@@ -52,6 +54,7 @@ public class TransportationService {
 		return false;
 	}
 	
+//	Helper method to view all transports
 	public ArrayList<Transportation> viewShipment() {
 		try {
 			return tm.viewShipment();
@@ -61,27 +64,34 @@ public class TransportationService {
 		return null;
 	}
 	
+//	Helper method to search shipment by id
 	public ArrayList<Transportation> searchShipmentById(String shipmentId) {
 		try {
-			return tm.searchShipmentById(shipmentId);
-		} catch (ClassNotFoundException | SQLException e) {
+			if(util.isValidShipment(shipmentId)) {
+				return tm.searchShipmentById(shipmentId);				
+			}
+		} catch (ClassNotFoundException | SQLException | InvalidException e) {
 			System.out.println(e.getMessage());
 		}
 		return null;
 	}
 	
+//	Helper method to search shipment by carrier id
 	public ArrayList<Transportation> searchTransportByCarrierId(String carrierId){
 		try {
-			return searchTransportByCarrierId(carrierId);				
+			if(util.isValidCarrier(carrierId)) {
+				return tm.searchTransportByCarrierId(carrierId);								
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		return null;
 	}
 	
+//	Helper method to search carriers by id
 	public ArrayList<String> searchCarrierById(String carrierId){
 		try {
-			return searchCarrierById(carrierId);			
+			return tm.searchCarrierById(carrierId);			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

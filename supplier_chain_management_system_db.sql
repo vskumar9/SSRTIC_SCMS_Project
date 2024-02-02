@@ -167,17 +167,29 @@ DESC products_information;
 -- describe inventory table structure
 DESC inventory;
 
+-- describe warehouse table structure
 DESC warehouse;
 
+-- describe warehouse_storage table structure
 DESC warehouse_storage;
 
+-- describe customer table structure
 DESC customer;
 
+-- describe orders table structure
 DESC orders;
 
+-- describe order_details table structure
 DESC order_details;
 
+-- describe carriers table structure
 DESC carriers;
+
+-- describe transport table structure
+DESC transport;
+
+-- describe shipment table structure
+DESC shipment;
 
 select * from products_information;
 select * from products;
@@ -193,8 +205,6 @@ select * from order_details;
 select * from carriers;
 select * from transport;
 select * from shipment;
-
-
 
 truncate table orders;
 

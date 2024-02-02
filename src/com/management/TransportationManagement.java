@@ -10,6 +10,7 @@ import com.model.Transportation;
 
 public class TransportationManagement {
 
+//	Helper method to add transport
 	public boolean addTransport(String shipmentId, String carrierId, String status) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -25,6 +26,7 @@ public class TransportationManagement {
 		}
 	}
 	
+//	Helper method to add shipment
 	public boolean addShipment(String shipmentId, String order) throws SQLException, ClassNotFoundException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -40,6 +42,7 @@ public class TransportationManagement {
 	}
 
 	
+//	Helper method to update shipment transport
 	public boolean updateShipment(String shipmentId, String status) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();
@@ -54,6 +57,7 @@ public class TransportationManagement {
 		}
 	}
 	
+//	Helper method to view all transports
 	public ArrayList<Transportation> viewShipment() throws ClassNotFoundException, SQLException {
 		ArrayList<Transportation> list = new ArrayList<Transportation>();
 		try(
@@ -72,6 +76,7 @@ public class TransportationManagement {
 		}
 	}
 	
+//	Helper method to search shipment by id
 	public ArrayList<Transportation> searchShipmentById(String shipmentId) throws ClassNotFoundException, SQLException {
 		ArrayList<Transportation> list = new ArrayList<Transportation>();
 		try(
@@ -92,6 +97,7 @@ public class TransportationManagement {
 		}
 	}
 	
+//	Helper method to search shipment by carrier id
 	public ArrayList<Transportation> searchTransportByCarrierId(String carrierId) throws ClassNotFoundException, SQLException {
 		ArrayList<Transportation> list = new ArrayList<Transportation>();
 		try(
@@ -112,6 +118,7 @@ public class TransportationManagement {
 		}
 	}
 	
+//	Helper method to search carriers by id
 	public ArrayList<String> searchCarrierById(String carrierId) throws  SQLException, ClassNotFoundException{
 		ArrayList<String> list = new ArrayList<String>();
 		try(
@@ -146,6 +153,7 @@ public class TransportationManagement {
 		}
 	}
 	
+//	Helper method to checking order by id
 	public boolean isCheckingOrders(String order) throws ClassNotFoundException, SQLException {
 		try(
 				Connection con = DBConnection.getConnection();

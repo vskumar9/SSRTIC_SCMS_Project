@@ -74,7 +74,7 @@ public class TransportationUserInterface {
 		try {
 			int search;
 			do {
-				System.out.print("--------------SEARCH TRNASPORT DETAILS--------------\n1. Trnasport ID\n2. Carrier Id\n3 Order Id <- Go Back\nEnter your option: ");
+				System.out.print("--------------SEARCH TRNASPORT DETAILS--------------\n1. Trnasport ID\n2. Carrier Id\n3 <- Go Back\nEnter your option: ");
 				search = sc.nextInt();
 				switch(search) {
 				case 1: 
@@ -109,7 +109,6 @@ public class TransportationUserInterface {
 					do {
 						carrierId = sc.nextLine();
 					}while(carrierId.isEmpty());
-					System.out.println("Yes");
 					list2 = service.searchCarrierById(carrierId);
 					if(!list2.isEmpty()) {
 						System.out.printf("%-30s%-30s%-30s%-30s%-30s", "carrierID", "carrierName", "contactPerson", "contactEmail", "contactPhone");
@@ -122,17 +121,20 @@ public class TransportationUserInterface {
 						System.out.println();
 						System.out.println("************************************************************************************************************************************");
 						System.out.println();
-						if(list == null) {
-							System.out.println("There is no carrier on this Id: "+carrierId);
+						if(list.isEmpty()) {
+							System.out.println("There is no Transports on this carrier Id: "+carrierId);
 						}
 						else {
-							System.out.printf("%-25s%-50s%-15s%-15s","Inventory ID", "Product information", "quntityInStock", "lastStockUpdate");
+							System.out.printf("%-25s%-25s%-25s%-25s", "shipmentId", "orderId", "carrierId", "shipmentStatus");
 							System.out.println();
-							System.out.println("-----------------------------------------------------------------------------------------------------------------------------------");
+							System.out.println("----------------------------------------------------------------------------------------------------------------------");
 							list.forEach(e->{
 								System.out.println(e);
 							});	
 						}
+					}
+					else {
+						System.out.println("There is no carrier's on this Id: "+carrierId);
 					}
 					System.out.println();
 					break;
